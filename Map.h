@@ -1,7 +1,5 @@
 #include <Windows.h>
 #include "TileMap.h"
-#include <d3d10.h>
-#include <d3dx10.h>
 #include"Textures.h"
 #include "Sprites.h"
 

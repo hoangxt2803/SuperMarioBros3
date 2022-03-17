@@ -2,13 +2,13 @@
 #include "GameObject.h"
 class CTileMap {
 	int id;
-	float indexX;
-	float indexY;
+	int indexX;
+	int indexY;
 
 public:
 	void Render();
 	int GetId() { return this->id; }
-	CTileMap(int id, float x, float y);
+	CTileMap(int id, int x, int y);
 	~CTileMap() {}
 };
 typedef CTileMap* LPTILEMAP;
