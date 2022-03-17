@@ -200,7 +200,19 @@ void CCollision::Filter( LPGAMEOBJECT objSrc,
 		{
 			continue;
 		}
-
+		//Splatform
+		if (c->obj->IsBlocking()) {
+			filterX = 1;
+			filterY = 1;
+		}
+		if (filterBlock == 1 && c->obj->IsSPlatform()) {
+			filterX = 0;
+			filterY = 0;
+			if (c->t < min_ty && c->ny < 0) {
+				min_ty = c->t; min_iy = i;
+			}
+		}
+		//
 		if (c->t < min_tx && c->nx != 0 && filterX == 1) {
 			min_tx = c->t; min_ix = i;
 		}
