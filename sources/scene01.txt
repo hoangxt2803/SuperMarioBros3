@@ -5,13 +5,14 @@ sources\brick.txt
 sources\coin.txt
 sources\goomba.txt
 sources\platform.txt
+sources\pipe.txt
 #
 [MAPS]
 sources\map\map1_1.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
-# type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas
+# type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas,4 coin, 5 platform, 6 pipe
 # See OBJECT_TYPE constants in AssetIDs.h
 
 # MARIO
@@ -91,3 +92,34 @@ sources\map\map1_1.txt
 5	1408	192	16	16	4	21019	21019	21019	
 
 5	1488	176	16	16	13	21019	21019	21019	
+#PIPE
+6 	360	368	1
+6	360	384	2
+6	360	400	2
+
+6	1800	384	1
+6	1800	400	2
+
+6	1864	368	1
+6	1864	384	2
+6	1864	400	2
+
+6	2264	384	2
+6	2264	400	2
+
+6	2264	112	1
+6	2264	128	2
+6	2264	144	2
+6	2264	160	2
+6	2264	176	2
+6	2264	192	2
+6	2264	208	2
+6	2264	224	2
+6	2264	240	2
+6	2264	256	2
+6	2264	272	2
+6	2264	288	2
+
+6	2328	384	1
+6	2328	400	2
+

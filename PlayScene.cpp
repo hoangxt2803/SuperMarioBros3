@@ -9,6 +9,7 @@
 #include "Portal.h"
 #include "Coin.h"
 #include "Platform.h"
+#include "Pipe.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -153,7 +154,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CPortal(x, y, r, b, scene_id);
 	}
 	break;
-
+	case OBJECT_TYPE_PIPE: {
+		int type = atoi(tokens[3].c_str());
+		obj = new CPipe(x, y, type);
+		break;
+	}
 
 	default:
 		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
