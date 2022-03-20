@@ -7,7 +7,7 @@
 void SPlatform::RenderBoundingBox()
 {
 	D3DXVECTOR3 p(x, y, 0);
-	RECT rect;
+	RECT rect{};
 
 	LPTEXTURE bbox = CTextures::GetInstance()->Get(ID_TEX_BBOX);
 
@@ -22,7 +22,7 @@ void SPlatform::RenderBoundingBox()
 	float cx, cy;
 	CGame::GetInstance()->GetCamPos(cx, cy);
 
-	float xx = x - this->cellWidth / 2 + rect.right / 2;
+	float xx = x - this->cellWidth / 2 + (float)rect.right / 2;
 
 	CGame::GetInstance()->Draw(xx - cx, y - cy - this->cellWidth / 2 + 1, bbox, nullptr, BBOX_ALPHA, rect.right - 1, rect.bottom + 1);
 }

@@ -8,7 +8,7 @@ height	240
 [SCENES]
 0	sources\intro.txt
 1	sources\scene01.txt
-
+3	sources\scene03.txt
 # id	file 
 [TEXTURES]
 -100	sources\textures\bbox.png

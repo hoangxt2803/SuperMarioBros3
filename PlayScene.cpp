@@ -19,6 +19,7 @@ using namespace std;
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 	CScene(id, filePath)
 {
+	
 	player = NULL;
 	key_handler = new CSampleKeyHandler(this);
 }
@@ -120,7 +121,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
-	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
+	case OBJECT_TYPE_GOOMBA: {
+		int type = atoi(tokens[3].c_str());
+		int level = atoi(tokens[4].c_str());
+		obj = new CGoomba(x, y, type, level);
+		break;
+	}
 	case OBJECT_TYPE_BRICK: {
 		int type = atoi(tokens[3].c_str());
 		obj = new CBrick(x, y, type);
@@ -301,8 +307,8 @@ void CPlayScene::Update(DWORD dt)
 	player->GetPosition(cx, cy);
 
 	CGame *game = CGame::GetInstance();
-	cx -= game->GetBackBufferWidth() / 2;
-	cy -= game->GetBackBufferHeight() / 2;
+	cx -= (float)game->GetBackBufferWidth() / 2;
+	cy -= (float)game->GetBackBufferHeight() / 2;
 
 	if (cx < 0) cx = 0;
 
