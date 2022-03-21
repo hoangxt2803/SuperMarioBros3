@@ -4,6 +4,7 @@ sources\mario.txt
 sources\brick.txt
 sources\coin.txt
 sources\goomba.txt
+sources\koopa.txt
 sources\platform.txt
 sources\pipe.txt
 #
@@ -141,7 +142,10 @@ sources\map\map1_1.txt
 
 6	2328	384	1
 6	2328	400	2
-
+#Koopa
+3	530	320	1	1
+3	1472	391	1	1
+3	2096	360	1	1
 #Goomba
 2	260	380	1	2
 2	500	340	1	1

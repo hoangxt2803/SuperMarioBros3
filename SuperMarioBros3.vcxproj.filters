@@ -108,6 +108,12 @@
     <ClInclude Include="SPlatform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Koopa.h">
+      <Filter>Header Files\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="BeforeKoopa.h">
+      <Filter>Header Files\Enemies</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp">
@@ -178,6 +184,12 @@
     </ClCompile>
     <ClCompile Include="SPlatform.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Koopa.cpp">
+      <Filter>Source Files\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="BeforeKoopa.cpp">
+      <Filter>Source Files\Enemies</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

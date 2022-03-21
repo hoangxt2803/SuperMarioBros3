@@ -11,6 +11,7 @@
 #include "Platform.h"
 #include "Pipe.h"
 #include "Splatform.h"
+#include "Koopa.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -125,6 +126,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int type = atoi(tokens[3].c_str());
 		int level = atoi(tokens[4].c_str());
 		obj = new CGoomba(x, y, type, level);
+		break;
+	}
+	case OBJECT_TYPE_KOOPA: {
+		int type = atoi(tokens[3].c_str());
+		int level = atoi(tokens[4].c_str());
+		obj = new CKoopa(x, y, type, level);
 		break;
 	}
 	case OBJECT_TYPE_BRICK: {
@@ -355,7 +362,10 @@ void CPlayScene::Unload()
 }
 
 bool CPlayScene::IsGameObjectDeleted(const LPGAMEOBJECT& o) { return o == NULL; }
-
+vector<LPGAMEOBJECT> CPlayScene::GetObjects() { return objects; }
+void CPlayScene::AddObject(CGameObject* obj) {
+	objects.push_back(obj);
+}
 void CPlayScene::PurgeDeletedObjects()
 {
 	vector<LPGAMEOBJECT>::iterator it;
