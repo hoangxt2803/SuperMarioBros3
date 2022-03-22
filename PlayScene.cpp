@@ -12,6 +12,7 @@
 #include "Pipe.h"
 #include "Splatform.h"
 #include "Koopa.h"
+#include "HiddenObject.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -140,7 +141,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
-
+	case OBJECT_TYPE_HIDDEN_OBJ: obj = new CHiddenObject(x, y); break;
 	case OBJECT_TYPE_PLATFORM:
 	{
 
