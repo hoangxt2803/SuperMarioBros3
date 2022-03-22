@@ -7,6 +7,8 @@ sources\goomba.txt
 sources\koopa.txt
 sources\platform.txt
 sources\pipe.txt
+sources\leaf.txt
+sources\mushroom.txt
 #
 [MAPS]
 sources\map\map1_1.txt

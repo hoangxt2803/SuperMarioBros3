@@ -2,6 +2,8 @@
 #include "Mario.h"
 #include "PlayScene.h"
 #include "Coin.h"
+#include "Mushroom.h"
+#include "Leaf.h"
 
 CBrick::CBrick(float x, float y, int type) :CGameObject(x, y) {
 	this->type = type;
@@ -25,12 +27,17 @@ void CBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				obj = new CCoin(oldX, oldY, COIN_TYPE_QBRICK);
 			}
-			/*else if (this->type == BRICK_TYPE_QBRICK_MUSHROOM) {
+			else if (this->type == BRICK_TYPE_QBRICK_MUSHROOM) {
 				if (mario->GetLevel() == MARIO_LEVEL_SMALL)
 					obj = new CMushroom(oldX, oldY, MUSHROOM_TYPE_RED);
 				else if (mario->GetLevel() > MARIO_LEVEL_SMALL)
 					obj = new CLeaf(oldX, oldY);
-			}*/
+			}
+			else if (this->type == BRICK_TYPE_QBRICK_1UP) {
+				obj = new CMushroom(oldX, oldY, MUSHROOM_TYPE_GREEN);
+				// +1up 
+				
+			}
 			LPPLAYSCENE playscreen = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
 			playscreen->AddObject(obj);
 			SetState(BRICK_STATE_QBRICK_EMPTY);
