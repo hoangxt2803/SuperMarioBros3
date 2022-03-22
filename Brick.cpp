@@ -1,4 +1,7 @@
 #include "Brick.h"
+#include "Mario.h"
+#include "PlayScene.h"
+#include "Coin.h"
 
 CBrick::CBrick(float x, float y, int type) :CGameObject(x, y) {
 	this->type = type;
@@ -12,7 +15,28 @@ CBrick::CBrick(float x, float y, int type) :CGameObject(x, y) {
 
 void CBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	
+	if (state == BRICK_STATE_QBRICK_UP) {
+		if (y <= oldY - BRICK_BBOX_HEIGHT / 2) {
+			CGameObject* obj = NULL;
+
+			if (this->type == BRICK_TYPE_QBRICK_COIN)
+			{
+				obj = new CCoin(oldX, oldY, COIN_TYPE_QBRICK);
+			}
+			/*else if (this->type == BRICK_TYPE_QBRICK_MUSHROOM) {
+				if (mario->GetLevel() == MARIO_LEVEL_SMALL)
+					obj = new CMushroom(oldX, oldY, MUSHROOM_TYPE_RED);
+				else if (mario->GetLevel() > MARIO_LEVEL_SMALL)
+					obj = new CLeaf(oldX, oldY);
+			}*/
+			LPPLAYSCENE playscreen = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+			playscreen->AddObject(obj);
+			SetState(BRICK_STATE_QBRICK_EMPTY);
+			SetPosition(oldX, oldY);
+		}
+	}
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
