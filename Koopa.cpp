@@ -92,47 +92,57 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vy += ay * dt;
 	vx += ax * dt;
-	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
-	//shell to koopa
-	if ((this->state == KOOPA_TROOPA_STATE_SHELL || this->state == KOOPA_TROOPA_STATE_HOLED) && GetTickCount64() - release_start > KOOPATROOPA_TIME_RELEASE_KOOPA) {
-		isShellToKoopa = true;
-
-		SetState(KOOPA_TROOPA_STATE_WALKING);
-		mario->SetIsHold(false);
+	//wing koopa
+	if (level == KOOPA_TROOPA_LEVEL_WING) {
+		
+		if (isOnPlatform && level == KOOPA_TROOPA_LEVEL_WING && GetTickCount64() - fly_start > 1000) {
+			fly_start = (DWORD)GetTickCount64();
+			vy = -KOOPATROOPA_FLY_SPEED;
+			ay = KOOPA_TROOPA_GRAVITY;
+			isOnPlatform = false;
+		}
 	}
-	if (isKoopaToShell)
-		beforeKoopa->SetSpeed(0, 0);
-	if (state == KOOPA_TROOPA_STATE_WALKING) {
-		beforeKoopa->setSpeed(vx);
-		if (!beforeKoopa->getIsOnPlatform()) {
-			vx = -vx;
-			if (vx > 0) {
-				beforeKoopa->SetPosition(x + KOOPA_TROOPA_WIDTH / 2, y);
+	else {
+
+		CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+		//shell to koopa
+		if ((this->state == KOOPA_TROOPA_STATE_SHELL || this->state == KOOPA_TROOPA_STATE_HOLED) && GetTickCount64() - release_start > KOOPATROOPA_TIME_RELEASE_KOOPA) {
+			isShellToKoopa = true;
+
+			SetState(KOOPA_TROOPA_STATE_WALKING);
+			mario->SetIsHold(false);
+		}
+		if (isKoopaToShell)
+			beforeKoopa->SetSpeed(0, 0);
+		if (state == KOOPA_TROOPA_STATE_WALKING) {
+			beforeKoopa->setSpeed(vx);
+			if (!beforeKoopa->getIsOnPlatform()) {
+				vx = -vx;
+				if (vx > 0) {
+					beforeKoopa->SetPosition(x + KOOPA_TROOPA_WIDTH / 2, y);
+				}
+				else if (vx < 0) {
+					beforeKoopa->SetPosition(x - KOOPA_TROOPA_WIDTH / 2, y);
+				}
+
 			}
-			else if (vx < 0) {
-				beforeKoopa->SetPosition(x - KOOPA_TROOPA_WIDTH / 2, y);
-			}
+		}
+
+		//mario hold koopa
+		if (isHolded && this->state == KOOPA_TROOPA_STATE_HOLED) {
+			this->IsHolded();
+		}
+		//Mario drop koopa
+		if (mario->GetIsHold() && mario->GetIsDropShell() && this->isHolded) {
+			mario->SetIsHold(false);
+			mario->SetIsDropShell(false);
+			this->IsDroped(mario->GetNX());
+			isHolded = false;
 
 		}
 	}
-	if (isOnPlatform && state == KOOPA_PARATROOPA_STATE_FLY && GetTickCount64() - fly_start > 1000) {
-		fly_start = (DWORD)GetTickCount64();
-		vy = -KOOPATROOPA_FLY_SPEED;
-		ay = KOOPA_TROOPA_GRAVITY;
-		isOnPlatform = false;
-	}
-	//mario hold koopa
-	if (isHolded && this->state == KOOPA_TROOPA_STATE_HOLED) {
-		this->IsHolded();
-	}
-	//Mario drop koopa
-	if (mario->GetIsHold() && mario->GetIsDropShell() && this->isHolded) {
-		mario->SetIsHold(false);
-		mario->SetIsDropShell(false);
-		this->IsDroped(mario->GetNX());
-		isHolded = false;
+	
 
-	}
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -271,7 +281,9 @@ void CKoopa::SetState(int state)
 		ay = KOOPA_TROOPA_GRAVITY;
 		break;
 	case KOOPA_PARATROOPA_STATE_FLY:
-
+		if (beforeKoopa == NULL) {
+			beforeKoopa = new CBeforeKoopa(x - BEFORE_KOOPA_TROOPA_WIDTH, y);
+		}
 		vx = -KOOPA_TROOPA_WALKING_SPEED;
 		ay = KOOPA_TROOPA_GRAVITY;
 		break;
