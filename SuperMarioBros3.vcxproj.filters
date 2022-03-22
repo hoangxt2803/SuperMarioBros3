@@ -120,6 +120,9 @@
     <ClInclude Include="Leaf.h">
       <Filter>Header Files\Items</Filter>
     </ClInclude>
+    <ClInclude Include="HiddenObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp">
@@ -202,6 +205,9 @@
     </ClCompile>
     <ClCompile Include="Leaf.cpp">
       <Filter>Source Files\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="HiddenObject.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

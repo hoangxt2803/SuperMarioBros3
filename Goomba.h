@@ -16,9 +16,9 @@
 #define GOOMBA_BBOX_HEIGHT 14
 #define GOOMBA_BBOX_HEIGHT_DIE 7
 #define GOOMBA_PREPARE_FLY_BBOX_WIDTH 20
-#define GOOMBA_PREPARE_FLY_BBOX_HEIGHT 24
+#define GOOMBA_PREPARE_FLY_BBOX_HEIGHT 22
 #define GOOMBA_FLY_BBOX_WIDTH 20
-#define GOOMBA_FLY_BBOX_HEIGHT 24
+#define GOOMBA_FLY_BBOX_HEIGHT 22
 
 #define GOOMBA_DIE_TIMEOUT 500
 #define GOOMBA_WALKING_TIME	1000
@@ -68,6 +68,8 @@ protected:
 	virtual void OnNoCollision(DWORD dt);
 
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
+
+	void OnCollisionWitHiddenObject(LPCOLLISIONEVENT e);
 
 public: 	
 	CGoomba(float x, float y, int type, int level);

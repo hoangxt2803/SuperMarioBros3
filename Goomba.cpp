@@ -1,4 +1,5 @@
 #include "Goomba.h"
+#include "HiddenObject.h"
 
 CGoomba::CGoomba(float x, float y, int type, int level) :CGameObject(x, y)
 {
@@ -50,20 +51,31 @@ void CGoomba::OnNoCollision(DWORD dt)
 
 void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (!e->obj->IsBlocking()) return;
-	if (dynamic_cast<CGoomba*>(e->obj)) return;
 	
-	if (e->ny != 0)
-	{
-		vy = 0;
-		if (e->ny < 0) {
-			isOnPlatform = true;
+	if (dynamic_cast<CHiddenObject*>(e->obj))
+		OnCollisionWitHiddenObject(e);
+	
+
+	if (e->obj->IsBlocking()) {
+		if (e->ny != 0)
+		{
+			vy = 0;
+			if (e->ny < 0)
+				isOnPlatform = true;
+		}
+		else if (e->nx != 0)
+		{
+			vx = -vx;
 		}
 	}
-	else if (e->nx != 0)
-	{
-		vx = -vx;
-	}
+}
+void CGoomba::OnCollisionWitHiddenObject(LPCOLLISIONEVENT e)
+{
+	if(level == GOOMBA_LEVEL_WING)
+		if (e->nx != 0)
+		{
+			vx = -vx;
+		}
 }
 
 void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -149,7 +161,7 @@ void CGoomba::Render()
 	}
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CGoomba::SetState(int state)
@@ -194,7 +206,7 @@ void CGoomba::SetLevel(int l)
 	level = l;
 	if (level > GOOMBA_LEVEL_NORMAL)
 	{
-		vx = GOOMBA_WALKING_SPEED;
+		vx = -GOOMBA_WALKING_SPEED;
 		countFly = 0;
 		SetState(GOOMBA_STATE_FLY_WALKING);
 	}
