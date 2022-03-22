@@ -1,0 +1,12 @@
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+#FALL LEFT
+41111	39	14	54	29	21
+#FALL RIGHT
+41112	20	14	35	29	21
+# ani_id	sprite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]
+#FALL LEFT
+12110	41112	100
+#FALL RIGHT
+12111	41111	100
