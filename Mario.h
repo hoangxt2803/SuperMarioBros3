@@ -134,7 +134,7 @@ class CMario : public CGameObject
 	bool isKick;
 	bool isJumping;
 	bool isRunning;
-
+	bool isCreatedKoopa;
 	float maxVx;
 	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 
@@ -165,7 +165,7 @@ public:
 		isDropShell = false;
 		isRunning = false;
 		isJumping = false;
-
+		isCreatedKoopa = false;
 		maxVx = 0.0f;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
@@ -181,7 +181,7 @@ public:
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
 	void SetState(int state);
-
+	void EventCreateKoopa();
 	int IsCollidable()
 	{ 
 		return (state != MARIO_STATE_DIE); 

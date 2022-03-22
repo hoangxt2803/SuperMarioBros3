@@ -272,7 +272,7 @@ void CKoopa::SetState(int state)
 		break;
 	case KOOPA_PARATROOPA_STATE_FLY:
 
-		vx = KOOPA_TROOPA_WALKING_SPEED;
+		vx = -KOOPA_TROOPA_WALKING_SPEED;
 		ay = KOOPA_TROOPA_GRAVITY;
 		break;
 	case KOOPA_TROOPA_STATE_HOLED:

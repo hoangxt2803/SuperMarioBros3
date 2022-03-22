@@ -3,7 +3,7 @@
 
 #include "Mario.h"
 #include "Game.h"
-
+#include "PlayScene.h"
 #include "Goomba.h"
 #include "Coin.h"
 #include "Portal.h"
@@ -13,6 +13,7 @@
 #include "Brick.h"
 #include "Mushroom.h"
 #include "Leaf.h"
+#include "AssetIDs.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
@@ -27,7 +28,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		untouchable_start = 0;
 		untouchable = 0;
 	}
-
+	// event create 3 wing koopa and 1 normal koopa
+	if (!isCreatedKoopa) {
+		EventCreateKoopa();
+	}
 	isOnPlatform = false;
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
@@ -504,3 +508,18 @@ void CMario::SetLevel(int l)
 	level = l;
 }
 
+void CMario::EventCreateKoopa() {
+	//x: 1100 - 1500, y: 170
+	if ((this->x >= POSITION_EVENT_CREATE_KOOPA_X1 || this->x <= POSITION_EVENT_CREATE_KOOPA_X1) 
+		&& this->y >= POSITION_EVENT_CREATE_KOOPA_Y) {
+		CGameObject* obj = NULL;
+		LPPLAYSCENE playscreen = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+		for(int i = 0; i < 3; i++) {
+			obj = new CKoopa(POSITION_WING_KOOPA_X + i* DISTANCE_2_KOOPA, POSITION_WING_KOOPA_Y, 2, 1);
+			playscreen->AddObject(obj);
+		}
+		obj = new CKoopa(POSITION_NORMAL_KOOPA_X, POSITION_NORMAL_KOOPA_Y, 2, 1);
+		playscreen->AddObject(obj);
+		isCreatedKoopa = true;
+	}
+}
