@@ -94,7 +94,12 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vx += ax * dt;
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	//shell to koopa
-	
+	if ((this->state == KOOPA_TROOPA_STATE_SHELL || this->state == KOOPA_TROOPA_STATE_HOLED) && GetTickCount64() - release_start > KOOPATROOPA_TIME_RELEASE_KOOPA) {
+		isShellToKoopa = true;
+
+		SetState(KOOPA_TROOPA_STATE_WALKING);
+		mario->SetIsHold(false);
+	}
 	if (isKoopaToShell)
 		beforeKoopa->SetSpeed(0, 0);
 	if (state == KOOPA_TROOPA_STATE_WALKING) {
@@ -117,9 +122,17 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		isOnPlatform = false;
 	}
 	//mario hold koopa
-	
+	if (isHolded && this->state == KOOPA_TROOPA_STATE_HOLED) {
+		this->IsHolded();
+	}
 	//Mario drop koopa
-	
+	if (mario->GetIsHold() && mario->GetIsDropShell() && this->isHolded) {
+		mario->SetIsHold(false);
+		mario->SetIsDropShell(false);
+		this->IsDroped(mario->GetNX());
+		isHolded = false;
+
+	}
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -198,7 +211,31 @@ void CKoopa::IsDroped(int n)
 	vx = nx * KOOPATROOPA_SHELL_SPEED_DROP;
 	vy = KOOPA_TROOPA_WALKING_SPEED;
 }
+void CKoopa::IsHolded()
+{
+	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 
+	float marioX, marioY;
+	mario->GetPosition(marioX, marioY);
+	int levelMario;
+	levelMario = mario->GetLevel();
+	if (levelMario == MARIO_LEVEL_SMALL) {
+		if (mario->GetNX() > 0) {//right
+			this->SetPosition(marioX + MARIO_SMALL_BBOX_WIDTH, marioY - KOOPA_TROOPA_BBOX_HEIGHT_SHELL / 4);
+		}
+		else
+			this->SetPosition(marioX - MARIO_SMALL_BBOX_WIDTH, marioY - KOOPA_TROOPA_BBOX_HEIGHT_SHELL / 4);
+	}
+	else if (levelMario == MARIO_LEVEL_BIG)
+		if (mario->GetNX() > 0) {//right
+			this->SetPosition(marioX + MARIO_BIG_BBOX_WIDTH, marioY);
+		}
+		else
+			this->SetPosition(marioX - MARIO_BIG_BBOX_WIDTH, marioY);
+	
+
+
+}
 void CKoopa::SetKoopaToShell(boolean isKoopaToShell)
 {
 	this->isKoopaToShell = isKoopaToShell;

@@ -12,10 +12,14 @@
 #define MARIO_ACCEL_WALK_X	0.0005f
 #define MARIO_ACCEL_RUN_X	0.0007f
 
-#define MARIO_JUMP_SPEED_Y		0.5f
-#define MARIO_JUMP_RUN_SPEED_Y	0.6f
+#define MARIO_JUMP_SPEED_Y		0.35f
+#define MARIO_JUMP_RUN_SPEED_Y	0.4f
 
-#define MARIO_GRAVITY			0.002f
+#define MARIO_RACCON_FLY_VY		0.3f
+#define MARIO_RACCON_FALL_VY	0.3f
+#define MARIO_GRAVITY			0.0008f
+#define MARIO_GRAVITY_FALL			0.0003f
+#define MARIO_JUMP_DEFLECT_SPEED  0.2f
 
 #define MARIO_JUMP_DEFLECT_SPEED  0.4f
 
@@ -32,6 +36,10 @@
 
 #define MARIO_STATE_SIT				600
 #define MARIO_STATE_SIT_RELEASE		601
+
+#define MARIO_STATE_KICK			700
+
+#define MARIO_STATE_HOLD			800
 
 
 #pragma region ANIMATION_ID
@@ -57,6 +65,15 @@
 #define ID_ANI_MARIO_BRACE_RIGHT 1000
 #define ID_ANI_MARIO_BRACE_LEFT 1001
 
+#define ID_ANI_MARIO_KICK_RIGHT		1010
+#define ID_ANI_MARIO_KICK_LEFT		1011
+
+#define ID_ANI_MARIO_HOLD_WALK_RIGHT	1020
+#define ID_ANI_MARIO_HOLD_WALK_LEFT		1021
+#define ID_ANI_MARIO_HOLD_IDLE_RIGHT	1030
+#define ID_ANI_MARIO_HOLD_IDLE_LEFT		1031
+#define ID_ANI_MARIO_IN_PIPE		1050
+
 #define ID_ANI_MARIO_DIE 999
 
 // SMALL MARIO
@@ -78,6 +95,14 @@
 #define ID_ANI_MARIO_SMALL_JUMP_RUN_RIGHT 1600
 #define ID_ANI_MARIO_SMALL_JUMP_RUN_LEFT 1601
 
+#define ID_ANI_MARIO_SMALL_KICK_RIGHT	1700	
+#define ID_ANI_MARIO_SMALL_KICK_LEFT	1701
+
+#define ID_ANI_MARIO_SMALL_HOLD_WALK_RIGHT	1800	
+#define ID_ANI_MARIO_SMALL_HOLD_WALK_LEFT	1801
+#define ID_ANI_MARIO_SMALL_HOLD_IDLE_RIGHT	1810	
+#define ID_ANI_MARIO_SMALL_HOLD_IDLE_LEFT	1811
+#define ID_ANI_MARIO_SMALL_IN_PIPE		1950
 #pragma endregion
 
 #define GROUND_Y 160.0f
@@ -104,6 +129,13 @@
 class CMario : public CGameObject
 {
 	BOOLEAN isSitting;
+
+	bool isHold;
+	bool isDropShell;
+	bool isKick;
+	bool isJumping;
+	bool isRunning;
+
 	float maxVx;
 	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 
@@ -111,12 +143,15 @@ class CMario : public CGameObject
 	int level; 
 	int untouchable; 
 	ULONGLONG untouchable_start;
+	ULONGLONG kick_start;
 	BOOLEAN isOnPlatform;
 	int coin; 
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
+	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
+
 
 	int GetAniIdBig();
 	int GetAniIdSmall();
@@ -125,6 +160,12 @@ public:
 	CMario(float x, float y) : CGameObject(x, y)
 	{
 		isSitting = false;
+		isKick = false;
+		isHold = false;
+		isDropShell = false;
+		isRunning = false;
+		isJumping = false;
+
 		maxVx = 0.0f;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
@@ -134,6 +175,8 @@ public:
 		untouchable_start = -1;
 		isOnPlatform = false;
 		coin = 0;
+
+		kick_start = 0;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
@@ -153,4 +196,24 @@ public:
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+
+	int GetLevel() { return level; }
+
+	bool GetIsSitting() { return this->isSitting; }
+	void SetIsSitting(bool value) { this->isSitting = value; }
+
+	bool GetIsRunning() { return this->isRunning; }
+	void SetIsRunning(bool value) { this->isRunning = value; }
+
+	bool GetIsJumping() { return this->isJumping; }
+	void SetIsJumping(bool value) { this->isJumping = value; }
+
+	bool GetIsHold() { return this->isHold; }
+	void SetIsHold(bool value) { this->isHold = value; }
+
+	bool GetIsDropShell() { return this->isDropShell; }
+	void SetIsDropShell(bool value) { this->isDropShell = value; }
+
+	bool GetIsKick() { return this->isKick; }
+	void SetIsKick(bool value) { this->isKick = value; }
 };

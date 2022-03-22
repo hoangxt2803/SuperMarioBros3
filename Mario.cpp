@@ -1,4 +1,4 @@
-#include <algorithm>
+﻿#include <algorithm>
 #include "debug.h"
 
 #include "Mario.h"
@@ -9,6 +9,7 @@
 #include "Portal.h"
 
 #include "Collision.h"
+#include "Koopa.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
@@ -50,6 +51,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 
 	if (dynamic_cast<CGoomba*>(e->obj))
 		OnCollisionWithGoomba(e);
+	else if (dynamic_cast<CKoopa*>(e->obj))
+		OnCollisionWithKoopa(e);
 	else if (dynamic_cast<CCoin*>(e->obj))
 		OnCollisionWithCoin(e);
 	else if (dynamic_cast<CPortal*>(e->obj))
@@ -99,6 +102,76 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 		}
 	}
 }
+
+void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
+{
+	CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
+
+	// jump on top >> kill Goomba and deflect a bit 
+	if (e->ny < 0)
+	{
+		if (koopa->GetLevel() > KOOPA_TROOPA_LEVEL_NORMAL) {
+			koopa->SetKoopaToShell(false);
+			koopa->SetLevel(KOOPA_TROOPA_LEVEL_NORMAL);
+		}
+		else if (koopa->GetState() == KOOPA_TROOPA_STATE_WALKING)
+		{
+			koopa->SetKoopaToShell(true);
+			koopa->SetState(KOOPA_TROOPA_STATE_SHELL);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+		else if (koopa->GetState() == KOOPA_TROOPA_STATE_SHELL) {
+			koopa->SetKoopaToShell(false);
+			koopa->SetState(KOOPA_TROOPA_STATE_SHELL_MOVE);
+			koopa->IsKicked(this->nx);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+		else if (koopa->GetState() == KOOPA_TROOPA_STATE_SHELL_MOVE) {
+			koopa->SetKoopaToShell(false);
+			koopa->SetState(KOOPA_TROOPA_STATE_SHELL);
+			koopa->SetSpeed(0, 0);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+	} //đá
+	else if (e->nx != 0 && koopa->GetState() == KOOPA_TROOPA_STATE_SHELL && !isRunning) {
+		this->SetState(MARIO_STATE_KICK);
+		koopa->SetKoopaToShell(false);
+		koopa->SetState(KOOPA_TROOPA_STATE_SHELL_MOVE);
+		koopa->IsKicked(this->nx);
+
+	}//hold
+	else if (e->nx != 0 && koopa->GetState() == KOOPA_TROOPA_STATE_SHELL && isRunning) {
+		koopa->SetIsHolded(true);
+		koopa->SetState(KOOPA_TROOPA_STATE_HOLED);
+		this->isHold = true;
+	}
+	
+	else // hit by KoopaTroopa
+	{
+		if (untouchable == 0)
+		{
+			if (koopa->GetState() != KOOPA_TROOPA_STATE_SHELL)
+			{
+				if (level > MARIO_LEVEL_BIG)
+				{
+					level = MARIO_LEVEL_BIG;
+					StartUntouchable();
+				}
+				else if (level > MARIO_LEVEL_SMALL)
+				{
+					level = MARIO_LEVEL_SMALL;
+					StartUntouchable();
+				}
+				else
+				{
+					DebugOut(L">>> Mario DIE >>> \n");
+					SetState(MARIO_STATE_DIE);
+				}
+			}
+		}
+	}
+}
+
 
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
@@ -278,14 +351,17 @@ void CMario::SetState(int state)
 		maxVx = MARIO_WALKING_SPEED;
 		ax = MARIO_ACCEL_WALK_X;
 		nx = 1;
+		isRunning = false;
 		break;
 	case MARIO_STATE_WALKING_LEFT:
 		if (isSitting) break;
 		maxVx = -MARIO_WALKING_SPEED;
 		ax = -MARIO_ACCEL_WALK_X;
 		nx = -1;
+		isRunning = false;
 		break;
 	case MARIO_STATE_JUMP:
+		isJumping = true;
 		if (isSitting) break;
 		if (isOnPlatform)
 		{
@@ -298,6 +374,7 @@ void CMario::SetState(int state)
 		break;
 
 	case MARIO_STATE_RELEASE_JUMP:
+		isJumping = false;
 		if (vy < 0) vy += MARIO_JUMP_SPEED_Y / 2;
 		ny = -1;
 		break;
@@ -322,16 +399,24 @@ void CMario::SetState(int state)
 		break;
 
 	case MARIO_STATE_IDLE:
+		isKick = false;
+		isRunning = false;
 		ax = 0.0f;
 		vx = 0.0f;
 		break;
 
 	case MARIO_STATE_DIE:
+
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
 		vx = 0;
 		ax = 0;
 		break;
+	case MARIO_STATE_KICK:
+		isKick = true;
+		kick_start = (DWORD)GetTickCount64();
+		break;
 	}
+
 
 	CGameObject::SetState(state);
 }

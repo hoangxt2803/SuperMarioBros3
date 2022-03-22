@@ -72,6 +72,7 @@ public:
 	CKoopa(float x, float y, int type, int level);
 	void IsKicked(int nx);
 	void IsDroped(int nx);
+	void IsHolded();
 	void SetState(int state);
 	void SetKoopaToShell(boolean KoopaToShell);
 	void SetLevel(int l);
