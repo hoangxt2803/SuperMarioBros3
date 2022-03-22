@@ -11,6 +11,8 @@
 #include "Collision.h"
 #include "Koopa.h"
 #include "Brick.h"
+#include "Mushroom.h"
+#include "Leaf.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
@@ -60,6 +62,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPortal(e);
 	else if (dynamic_cast<CBrick*>(e->obj))
 		OnCollisionWithBrick(e);
+	else if (dynamic_cast<CMushroom*>(e->obj))
+		OnCollisionWithMushroom(e);
+	else if (dynamic_cast<CLeaf*>(e->obj))
+		OnCollisionWithLeaf(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -195,6 +201,29 @@ void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 		
 	}
 }
+void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
+{
+	CMushroom* mushroom = dynamic_cast<CMushroom*>(e->obj);
+	if (mushroom->GetType() == MUSHROOM_TYPE_RED) {
+		if (this->level == MARIO_LEVEL_SMALL)
+		{
+			SetLevel(MARIO_LEVEL_BIG);
+		}
+	}
+	else if (mushroom->GetType() == MUSHROOM_TYPE_GREEN) {
+		// +1up
+	}
+	e->obj->Delete();
+}
+void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
+{
+	if (this->level >= MARIO_LEVEL_BIG)
+	{
+		//SetLevel(MARIO_LEVEL_RACCON);
+	}
+	e->obj->Delete();
+}
+
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 {
 	CPortal* p = (CPortal*)e->obj;

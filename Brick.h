@@ -35,6 +35,7 @@ class CBrick : public CGameObject {
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 public:
 	CBrick(float x, float y, int type);
+	CBrick(float x, float y, int type, int state);
 	void Render();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);

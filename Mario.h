@@ -21,7 +21,6 @@
 #define MARIO_GRAVITY_FALL			0.0003f
 #define MARIO_JUMP_DEFLECT_SPEED  0.2f
 
-#define MARIO_JUMP_DEFLECT_SPEED  0.4f
 
 #define MARIO_STATE_DIE				-10
 #define MARIO_STATE_IDLE			0
@@ -152,7 +151,8 @@ class CMario : public CGameObject
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
 	void OnCollisionWithBrick(LPCOLLISIONEVENT e);
-
+	void OnCollisionWithMushroom(LPCOLLISIONEVENT e);
+	void OnCollisionWithLeaf(LPCOLLISIONEVENT e);
 	int GetAniIdBig();
 	int GetAniIdSmall();
 

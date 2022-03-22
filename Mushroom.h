@@ -36,4 +36,5 @@ class CMushroom : public CGameObject
 public:
 	CMushroom(float x, float y, int type);
 	virtual void SetState(int state);
+	int GetType() { return this->type; }
 };

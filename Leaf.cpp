@@ -7,6 +7,7 @@ CLeaf::CLeaf(float x, float y) :CGameObject(x, y)
 	vy = -0.1f;
 	//SetState(MUSHROOM_STATE_INACTIVE);
 	this->positionY = y - LEAF_HEIGHT * 3;
+	change_start = 0;
 }
 
 void CLeaf::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -37,15 +38,15 @@ void CLeaf::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			vy = LEAF_SPEED_Y;
 			vx = LEAF_SPEED_X;
-			change_start = GetTickCount();
+			change_start = (DWORD)GetTickCount64();
 		}
 		else
 		{
-			if ((DWORD)GetTickCount() - change_start > LEAF_TIME_CHANGE)
+			if ((DWORD)GetTickCount64() - change_start > LEAF_TIME_CHANGE)
 			{
 				vx = -vx;
 				this->nx = -this->nx;
-				change_start = GetTickCount();
+				change_start = (DWORD)GetTickCount64();
 			}
 
 		}
@@ -93,7 +94,7 @@ void CLeaf::SetState(int state)
 		vx = LEAF_SPEED_X;
 		ay = LEAF_GRAVITY;
 		vy = LEAF_SPEED_Y;
-		change_start = GetTickCount();
+		change_start = GetTickCount64();
 		break;
 	case LEAF_STATE_INACTIVE:
 		vx = 0;

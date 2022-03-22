@@ -14,7 +14,14 @@ CBrick::CBrick(float x, float y, int type) :CGameObject(x, y) {
 	vy = 0;
 }
 
-
+CBrick::CBrick(float x, float y, int type, int state) :CGameObject(x, y) {
+	this->type = type;
+	this->oldX = x;
+	this->oldY = y;
+	this->SetState(state);
+	vx = 0;
+	vy = 0;
+}
 void CBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
@@ -40,8 +47,9 @@ void CBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			LPPLAYSCENE playscreen = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
 			playscreen->AddObject(obj);
-			SetState(BRICK_STATE_QBRICK_EMPTY);
-			SetPosition(oldX, oldY);
+			obj = new CBrick(oldX, oldY, this->type, BRICK_STATE_QBRICK_EMPTY);
+			playscreen->AddObject(obj);
+			this->Delete();
 		}
 	}
 	CGameObject::Update(dt, coObjects);
