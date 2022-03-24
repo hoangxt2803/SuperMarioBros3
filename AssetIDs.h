@@ -3,6 +3,8 @@
 //
 // This file contains all IDs of game assets 
 //
+#define SCREEN_WIDTH 320
+#define SCREEN_HEIGHT 240
 
 #define ID_TEX_MARIO 0
 #define ID_TEX_ENEMY 10
@@ -17,6 +19,8 @@
 #define OBJECT_TYPE_PLATFORM 5
 #define OBJECT_TYPE_PIPE 6
 #define OBJECT_TYPE_HIDDEN_OBJ 7
+#define OBJECT_TYPE_PIRANHAPLANT 8
+#define OBJECT_TYPE_VENUSFIRETRAP 9
 #define OBJECT_TYPE_SPLATFORM 10
 
 #define OBJECT_TYPE_PORTAL	50
