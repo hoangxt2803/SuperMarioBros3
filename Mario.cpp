@@ -515,7 +515,7 @@ void CMario::EventCreateKoopa() {
 		CGameObject* obj = NULL;
 		LPPLAYSCENE playscreen = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
 		for(int i = 0; i < 3; i++) {
-			obj = new CKoopa(POSITION_WING_KOOPA_X + i* DISTANCE_2_KOOPA, POSITION_WING_KOOPA_Y, 2, 1);
+			obj = new CKoopa((float)POSITION_WING_KOOPA_X + i* DISTANCE_2_KOOPA, POSITION_WING_KOOPA_Y, 2, 1);
 			playscreen->AddObject(obj);
 		}
 		obj = new CKoopa(POSITION_NORMAL_KOOPA_X, POSITION_NORMAL_KOOPA_Y, 2, 1);

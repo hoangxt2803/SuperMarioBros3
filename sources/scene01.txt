@@ -9,13 +9,16 @@ sources\platform.txt
 sources\pipe.txt
 sources\leaf.txt
 sources\mushroom.txt
+sources/piranhaplant.txt
+sources/venusfiretrap.txt
+sources/fire.txt
 #
 [MAPS]
 sources\map\map1_1.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
-# type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas,4 coin, 5 platform, 6 pipe, 7 HiddenObject, 10 SPlatform
+# type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas,4 coin, 5 platform, 6 pipe, 7 HiddenObject,8 PiranhaPlant, 9 VenusFireTrap 10 SPlatform
 # See OBJECT_TYPE constants in AssetIDs.h
 
 
@@ -114,6 +117,12 @@ sources\map\map1_1.txt
 5	1408	192	16	16	4	21019	21019	21019	
 
 5	1488	176	16	16	13	21019	21019	21019	
+#PiranhaPlant
+8	1800	390
+
+#VenusFireTrap
+9	360	378	1
+9	1864	374	2
 #PIPE
 6 	360	368	1
 6	360	384	2
