@@ -13,6 +13,8 @@
 #include "Splatform.h"
 #include "Koopa.h"
 #include "HiddenObject.h"
+#include "PiranhaPlant.h"
+#include "VenusFireTrap.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -160,7 +162,15 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		break;
 	}
-
+	case OBJECT_TYPE_PIRANHAPLANT: {
+		obj = new CPiranhaPlant(x, y);
+		break;
+	}
+	case OBJECT_TYPE_VENUSFIRETRAP: {
+		int type = atoi(tokens[3].c_str());
+		obj = new CVenusFireTrap(x, y, type);
+		break;
+	}
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = (float)atof(tokens[3].c_str());
