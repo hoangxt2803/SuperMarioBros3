@@ -13,6 +13,8 @@
 #define ID_ANI_FIRE_RIGHT 8102
 class CFireBall : public CGameObject
 {
+	float oldX, oldY;
+	
 protected:
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
@@ -23,7 +25,7 @@ protected:
 
 
 public:
-	CFireBall(float x, float y);
-	virtual void SetState(int state);
-	void SetGravity(int nX, int nY) { this->nx = nX; this->ny = nY; }
+	CFireBall(float x, float y, int nx, int ny);
+	//virtual void SetState(int state);
+	//void SetGravity(int nX, int nY) { this->nx = nX; this->ny = nY; }
 };

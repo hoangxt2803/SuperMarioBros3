@@ -33,10 +33,10 @@
 class CVenusFireTrap : public CGameObject
 {
 protected:
-	CFireBall* fireBall = NULL;
+	
 	float oldX, oldY;
 	int type;
-
+	float marioXX, marioYY;
 	ULONGLONG fire_start;
 	int countFire = 0;
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
@@ -51,5 +51,6 @@ protected:
 public:
 	CVenusFireTrap(float x, float y, int type);
 	virtual void SetState(int state);
-
+	void ShootFireball();
+	void Appear();
 };

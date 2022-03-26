@@ -7,10 +7,9 @@ CVenusFireTrap::CVenusFireTrap(float x, float y, int type) :CGameObject(x, y)
 	this->oldY = y;
 	this->type = type;
 	this->SetState(VENUS_FIRE_TRAP_STATE_MOVE);
-	fireBall = new CFireBall(x, y);
-	LPPLAYSCENE playscreen = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
-	playscreen->AddObject(fireBall);
 	this->ny = 1;
+	marioXX = 0;
+	marioYY = 0;
 }
 
 void CVenusFireTrap::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -39,32 +38,22 @@ void CVenusFireTrap::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 
 }
-
-void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
-{
-	LPPLAYSCENE playscreen = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
-	CMario* mario = (CMario*)playscreen->GetPlayer();
-	float marioXX, marioYY;
-	mario->GetPosition(marioXX, marioYY);
+void CVenusFireTrap::ShootFireball() {
+	SetState(VENUS_FIRE_TRAP_STATE_SHOOT);
+	countFire = 1;
+	CGameObject* obj = NULL;
+	//obj->SetState(FIRE_STATE_ACTIVE);
 	if (marioXX < x) {
-		nx = -1;
-		if (marioYY < y) {
-			ny = -1;
-		}
-		else {
-			ny = 1;
-		}
+		obj = new CFireBall(x - FIRE_BBOX_WIDTH, y - FIRE_BBOX_HEIGHT, nx, ny);
 	}
-	else if (marioXX > x) {
-		nx = 1;
-		if (marioYY < y) {
-			ny = -1;
-		}
-		else {
-			ny = 1;
-		}
+	else {
+		obj = new CFireBall(x + FIRE_BBOX_WIDTH, y - FIRE_BBOX_HEIGHT / 2, nx, ny);
 	}
-	//change state move
+	LPPLAYSCENE playscreen = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+	playscreen->AddObject(obj);
+	vy = VENUS_FIRE_TRAP_SPEED;
+}
+void CVenusFireTrap::Appear() {
 	if (marioXX < x)
 	{
 		if ((marioXX + SCREEN_WIDTH / 2) > x)
@@ -84,43 +73,49 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			SetPosition(oldX, oldY);
 		}
 	}
+}
+void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	LPPLAYSCENE playscreen = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+	CMario* mario = (CMario*)playscreen->GetPlayer();
+	
+	mario->GetPosition(marioXX, marioYY);
+
+	if (marioXX < x) {
+		nx = -1;
+		if (marioYY < y) {
+			ny = -1;
+		}
+		else {
+			ny = 1;
+		}
+	}
+	else if (marioXX > x) {
+		nx = 1;
+		if (marioYY < y) {
+			ny = -1;
+		}
+		else {
+			ny = 1;
+		}
+	}
+	//appear
+	Appear();
 
 	if (this->type == VENUS_FIRE_TRAP_TYPE_RED) {
 		if (state == VENUS_FIRE_TRAP_STATE_MOVE && this->y <= oldY - VENUS_FIRE_TRAP_RED_BBOX_HEIGHT) {
-
-			SetState(VENUS_FIRE_TRAP_STATE_SHOOT);
-			countFire = 1;
-			fireBall->SetGravity(nx, ny);
-			fireBall->SetState(FIRE_STATE_ACTIVE);
-			if (marioXX < x) {
-				fireBall->SetPosition(x - FIRE_BBOX_WIDTH, y - FIRE_BBOX_HEIGHT / 2);
-			}
-			else {
-				fireBall->SetPosition(x + FIRE_BBOX_WIDTH, y - FIRE_BBOX_HEIGHT / 2);
-			}
-
-			vy = VENUS_FIRE_TRAP_SPEED;
-
+			//shoot
+			ShootFireball();
 		}
 		else if (state == VENUS_FIRE_TRAP_STATE_MOVE && this->y >= oldY) {
 			vy = -VENUS_FIRE_TRAP_SPEED;
 		}
 
 	}
-	else if (state == VENUS_FIRE_TRAP_STATE_MOVE && this->type == VENUS_FIRE_TRAP_TYPE_GREEN) {
-		if (this->y <= oldY - VENUS_FIRE_TRAP_GREEN_BBOX_HEIGHT) {
-			SetState(VENUS_FIRE_TRAP_STATE_SHOOT);
-			countFire = 1;
-			fireBall->SetGravity(nx, ny);
-			fireBall->SetState(FIRE_STATE_ACTIVE);
-			if (marioXX < x) {
-				fireBall->SetPosition(x - FIRE_BBOX_WIDTH, y - FIRE_BBOX_HEIGHT / 2);
-			}
-			else {
-				fireBall->SetPosition(x + FIRE_BBOX_WIDTH, y - FIRE_BBOX_HEIGHT / 2);
-			}
-			vy = VENUS_FIRE_TRAP_SPEED;
-
+	else if (this->type == VENUS_FIRE_TRAP_TYPE_GREEN) {
+		if (state == VENUS_FIRE_TRAP_STATE_MOVE && this->y <= oldY - VENUS_FIRE_TRAP_GREEN_BBOX_HEIGHT) {
+			//shoot
+			ShootFireball();
 		}
 		else if (state == VENUS_FIRE_TRAP_STATE_MOVE && this->y >= oldY) {
 			vy = -VENUS_FIRE_TRAP_SPEED;

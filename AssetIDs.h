@@ -6,6 +6,9 @@
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 240
 
+#define MAP1_1_WIDTH	2500
+#define MAP1_1_HEIGHT	432
+
 #define ID_TEX_MARIO 0
 #define ID_TEX_ENEMY 10
 #define ID_TEX_MISC 20
