@@ -17,7 +17,7 @@
 class CPiranhaPlant : public CGameObject
 {
 protected:
-
+	float marioXX, marioYY;
 	float oldX, oldY;
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
@@ -31,5 +31,5 @@ protected:
 public:
 	CPiranhaPlant(float x, float y);
 	virtual void SetState(int state);
-
+	void Appear();
 };

@@ -1,6 +1,7 @@
 #include "PiranhaPlant.h"
 #include "Mario.h"
 #include "PlayScene.h"
+#include "AssetIDs.h"
 CPiranhaPlant::CPiranhaPlant(float x, float y) :CGameObject(x, y)
 {
 	this->oldX = x;
@@ -26,9 +27,35 @@ void CPiranhaPlant::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 
 }
-
+void CPiranhaPlant::Appear() {
+	if (marioXX < x)
+	{
+		if ((marioXX + SCREEN_WIDTH / 2) > x)
+			state = PIRANHAPLANT_STATE_MOVE;
+		else
+		{
+			state = PIRANHAPLANT_STATE_IDE;
+			SetPosition(oldX, oldY);
+		}
+	}
+	else if (marioXX > x) {
+		if ((marioXX - SCREEN_WIDTH / 2) < x)
+			state = PIRANHAPLANT_STATE_MOVE;
+		else
+		{
+			state = PIRANHAPLANT_STATE_IDE;
+			SetPosition(oldX, oldY);
+		}
+	}
+}
 void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	LPPLAYSCENE playscreen = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+	CMario* mario = (CMario*)playscreen->GetPlayer();
+
+	mario->GetPosition(marioXX, marioYY);
+	//appear
+	Appear();
 	if (this->y <= oldY - PIRANHAPLANT_BBOX_HEIGHT || this->y >= oldY) {
 		vy = -vy;
 	}
