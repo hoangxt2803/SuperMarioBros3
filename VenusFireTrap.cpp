@@ -172,7 +172,10 @@ void CVenusFireTrap::Render()
 	}
 	else if (this->type == VENUS_FIRE_TRAP_TYPE_GREEN) {
 		if (this->state == VENUS_FIRE_TRAP_STATE_IDE || this->state == VENUS_FIRE_TRAP_STATE_MOVE)
-			aniId = ID_ANI_VENUS_FIRE_TRAP_GREEN_LEFT_DOWN;
+			if (marioX < x)
+				aniId = ID_ANI_VENUS_FIRE_TRAP_GREEN_LEFT_DOWN;
+			else
+				aniId = ID_ANI_VENUS_FIRE_TRAP_GREEN_RIGHT_DOWN;
 		else if (this->state == VENUS_FIRE_TRAP_STATE_SHOOT) {
 			if (marioX < x) {
 				if (marioY < y)
