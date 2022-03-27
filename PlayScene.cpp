@@ -128,7 +128,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_GOOMBA: {
 		int type = atoi(tokens[3].c_str());
 		int level = atoi(tokens[4].c_str());
-		obj = new CGoomba(x, y, type, level);
+		int isActive = atoi(tokens[5].c_str());
+		obj = new CGoomba(x, y, type, level, isActive);
 		break;
 	}
 	case OBJECT_TYPE_KOOPA: {
