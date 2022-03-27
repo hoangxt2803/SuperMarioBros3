@@ -54,26 +54,30 @@ protected:
 	int type;
 	int level;
 	int countFly = 0;
+	//map 1-1, kiểm tra khi mario đến vị trí (x,y) -> goomba, wing goomba xuất hiện
+	bool isActive;
+
 	BOOLEAN isOnPlatform;
 	ULONGLONG die_start;
 	ULONGLONG walking_start;
 	ULONGLONG prepare_fly_start;
 
-	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects);
-	virtual void Render();
+	void GetBoundingBox(float &left, float &top, float &right, float &bottom);
+	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects);
+	void Render();
 
 	virtual int IsCollidable() { return 1; };
 	virtual int IsBlocking() { return 0; }
 	virtual void OnNoCollision(DWORD dt);
 
-	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
+	void OnCollisionWith(LPCOLLISIONEVENT e);
 
 	void OnCollisionWitHiddenObject(LPCOLLISIONEVENT e);
 
 public: 	
-	CGoomba(float x, float y, int type, int level);
-	virtual void SetState(int state);
+	CGoomba(float x, float y, int type, int level, bool isActive);
+	void SetState(int state);
 	void SetLevel(int l);
 	int GetLevel() { return this->level; }
+	void Appear(bool isActive);
 };

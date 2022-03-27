@@ -1,7 +1,9 @@
 #include "Goomba.h"
 #include "HiddenObject.h"
+#include "PlayScene.h"
+#include "AssetIDs.h"
 
-CGoomba::CGoomba(float x, float y, int type, int level) :CGameObject(x, y)
+CGoomba::CGoomba(float x, float y, int type, int level,bool isActive) :CGameObject(x, y)
 {
 	this->ax = 0;
 	this->ay = GOOMBA_GRAVITY;
@@ -9,6 +11,7 @@ CGoomba::CGoomba(float x, float y, int type, int level) :CGameObject(x, y)
 	this->level = level;
 	this->type = type;
 	SetLevel(level);
+	this->isActive = isActive;
 }
 
 void CGoomba::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -77,9 +80,22 @@ void CGoomba::OnCollisionWitHiddenObject(LPCOLLISIONEVENT e)
 			vx = -vx;
 		}
 }
-
+void CGoomba::Appear(bool isActive) {
+	if (!isActive) {
+		LPPLAYSCENE playscreen = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+		CMario* mario = (CMario*)playscreen->GetPlayer();
+		float marioXX, marioYY;
+		mario->GetPosition(marioXX, marioYY);
+		if (marioXX >= POSITION_GOOMBA_APPEAR_MAP11_X) {
+			this->isActive = true;
+		}
+	}
+}
 void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	Appear(this->isActive);
+	if (!this->isActive)
+		return;
 	vy += ay * dt;
 	vx += ax * dt;
 
@@ -113,6 +129,8 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CGoomba::Render()
 {
+	if (!isActive)
+		return;
 	int aniId = -1;
 	if (this->type == GOOMBA_TYPE_NORMAL) {
 		if (state == GOOMBA_STATE_WALKING)
