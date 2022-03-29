@@ -144,7 +144,7 @@
     <ClInclude Include="Platform.h">
       <Filter>Header Files\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="EndGameItemEffect.h">
+    <ClInclude Include="EndGameEffect.h">
       <Filter>Header Files\Objects</Filter>
     </ClInclude>
   </ItemGroup>
@@ -248,7 +248,7 @@
     <ClCompile Include="Platform.cpp">
       <Filter>Source Files\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="EndGameItemEffect.cpp">
+    <ClCompile Include="EndGameEffect.cpp">
       <Filter>Source Files\Objects</Filter>
     </ClCompile>
   </ItemGroup>

@@ -12,6 +12,7 @@ sources\mushroom.txt
 sources/piranhaplant.txt
 sources/venusfiretrap.txt
 sources/fire.txt
+sources/endgame.txt
 #
 [MAPS]
 sources\map\map1_1.txt
@@ -168,5 +169,7 @@ sources\map\map1_1.txt
 
 #Hidden Object
 7	760	330
+#End game effect
+11	2689	337
 # MARIO
 0	10 	360
