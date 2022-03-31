@@ -211,6 +211,10 @@ void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 		}
 		
 	}
+	if (brick->GetBrickType() == BRICK_TYPE_BROKEN && brick->GetState() == BRICK_STATE_BROKEN_BRICK_COIN) {
+		e->obj->Delete();
+		coin++;
+	}
 }
 void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 {

@@ -5,6 +5,7 @@ CPSwitch::CPSwitch(float x, float y) :CGameObject(x, y)
 	state = P_SWITCH_STATE_APPEAR;
 	vy = -P_SWITCH_SPEED;
 	this->positionY = y - P_SWITCH_WIDTH;
+	transform_start = 0;
 }
 
 void CPSwitch::GetBoundingBox(float& left, float& top, float& right, float& bottom)

@@ -27,12 +27,20 @@ void CBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	
 	// mario press PSwitch
-	if (this->type == BRICK_TYPE_QBRICK_COIN) {
+	if (this->type == BRICK_TYPE_BROKEN) {
 		bool _isTransForm = CBrick::isTranForm;
 		if (_isTransForm)
-			this->SetState(BRICK_STATE_QBRICK_COIN);
+		{
+			this->SetState(BRICK_STATE_BROKEN_BRICK_COIN);
+			this->SetIsBlocking(0);
+		}
+			
 		else
+		{
 			this->SetState(BRICK_STATE_NORMAL);
+			this->SetIsBlocking(1);
+		}
+			
 	}
 	
 	if (state == BRICK_STATE_QBRICK_UP) {
@@ -77,10 +85,10 @@ void CBrick::Render()
 		{
 			aniId = ID_ANI_BRICK;
 		}
-		else if (this->type == BRICK_TYPE_BROKEN || this->type == BRICK_TYPE_BROKEN_P || this->type == BRICK_TYPE_QBRICK_COIN) {
+		else if (this->type == BRICK_TYPE_BROKEN || this->type == BRICK_TYPE_BROKEN_P ) {
 			aniId = ID_ANI_BRICK_BROKEN;
 		}
-		else if (this->type == BRICK_TYPE_QBRICK_1UP || this->type == BRICK_TYPE_QBRICK_MUSHROOM ) {
+		else if (this->type == BRICK_TYPE_QBRICK_1UP || this->type == BRICK_TYPE_QBRICK_MUSHROOM || this->type == BRICK_TYPE_QBRICK_COIN) {
 			aniId = ID_ANI_QBRICK;
 		}
 	}
@@ -92,7 +100,7 @@ void CBrick::Render()
 	{
 		aniId = ID_ANI_QBRICK_EMPTY;
 	}
-	else if (state == BRICK_STATE_QBRICK_COIN)
+	else if (state == BRICK_STATE_BROKEN_BRICK_COIN)
 	{
 		aniId = ID_ANI_QBRICK_COIN;
 
@@ -126,7 +134,7 @@ void CBrick::SetState(int state)
 	case BRICK_STATE_QBRICK_EMPTY:
 		vy = 0;
 		break;
-	case BRICK_STATE_QBRICK_COIN:
+	case BRICK_STATE_BROKEN_BRICK_COIN:
 		
 		break;
 	}

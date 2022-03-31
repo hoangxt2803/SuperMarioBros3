@@ -30,7 +30,7 @@ protected:
 	int state;
 
 	bool isDeleted; 
-
+	int isBlocking = 1;
 public: 
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
 	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
@@ -65,8 +65,8 @@ public:
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e) {};
 	
 	// Is this object blocking other object? If YES, collision framework will automatically push the other object
-	virtual int IsBlocking() { return 1; }
-
+	virtual int IsBlocking() { return isBlocking; }
+	virtual void SetIsBlocking(int value) { isBlocking = value; }
 	virtual int IsSPlatform() { return 0; }
 
 	~CGameObject();
