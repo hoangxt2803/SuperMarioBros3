@@ -2,9 +2,10 @@
 
 CEndGameEffect::CEndGameEffect(float x, float y) :CGameObject(x, y)
 {
-	isColleceted = false;
+	isCollected = false;
 	number = 1;
 	number_start = GetTickCount64();
+	vy = END_GAME_EFFECT_VY;
 }
 
 void CEndGameEffect::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -18,7 +19,7 @@ void CEndGameEffect::GetBoundingBox(float& left, float& top, float& right, float
 
 void CEndGameEffect::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if (!isColleceted) {
+	if (!isCollected) {
 		if (number > 3)
 		{
 			number = 1;
@@ -35,7 +36,7 @@ void CEndGameEffect::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	else
 	{
-		y++;
+		y-=vy*dt;
 	}
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);

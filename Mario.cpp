@@ -14,6 +14,7 @@
 #include "Mushroom.h"
 #include "Leaf.h"
 #include "AssetIDs.h"
+#include "EndGameEffect.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
@@ -70,6 +71,9 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithMushroom(e);
 	else if (dynamic_cast<CLeaf*>(e->obj))
 		OnCollisionWithLeaf(e);
+	else if (dynamic_cast<CEndGameEffect*>(e->obj))
+		OnCollisionWithEndGameEffect(e);
+	
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -227,6 +231,12 @@ void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
 	}
 	e->obj->Delete();
 }
+void CMario::OnCollisionWithEndGameEffect(LPCOLLISIONEVENT e)
+{
+	CEndGameEffect* end = (CEndGameEffect*)e->obj;
+	end->SetIsCollected(true);
+}
+
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 {
