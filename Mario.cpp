@@ -15,6 +15,7 @@
 #include "Leaf.h"
 #include "AssetIDs.h"
 #include "EndGameEffect.h"
+#include "PSwitch.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
@@ -73,6 +74,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithLeaf(e);
 	else if (dynamic_cast<CEndGameEffect*>(e->obj))
 		OnCollisionWithEndGameEffect(e);
+	else if (dynamic_cast<CPSwitch*>(e->obj))
+		OnCollisionWithPSwitch(e);
 	
 }
 
@@ -222,6 +225,13 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 		// +1up
 	}
 	e->obj->Delete();
+}
+
+void CMario::OnCollisionWithPSwitch(LPCOLLISIONEVENT e)
+{
+	CPSwitch* pswitch = dynamic_cast<CPSwitch*>(e->obj);
+	if(pswitch->GetState()== P_SWITCH_STATE_APPEAR)
+		pswitch->SetState(P_SWITCH_STATE_ACTIVATED);
 }
 void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
 {

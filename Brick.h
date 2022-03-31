@@ -9,6 +9,7 @@
 #define ID_ANI_QBRICK 10002
 #define ID_ANI_QBRICK_EMPTY 10003
 #define ID_ANI_QBRICK_UP 10004
+#define ID_ANI_QBRICK_COIN 11000
 
 #define BRICK_WIDTH 16
 #define BRICK_BBOX_WIDTH 16
@@ -24,16 +25,19 @@
 #define BRICK_STATE_NORMAL 100
 #define BRICK_STATE_QBRICK_UP 200
 #define BRICK_STATE_QBRICK_EMPTY 300
+#define BRICK_STATE_QBRICK_COIN 400
 
 #define QBRICK_SPEED_UP 0.1f
 #define QBRICK_GRAVITY 0.0015f
 
 class CBrick : public CGameObject {
 	int type;
+	
 	float oldX, oldY;
 	virtual void OnNoCollision(DWORD dt);
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 public:
+	static bool isTranForm;
 	CBrick(float x, float y, int type);
 	CBrick(float x, float y, int type, int state);
 	void Render();

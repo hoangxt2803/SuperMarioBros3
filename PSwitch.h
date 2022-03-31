@@ -14,10 +14,13 @@
 
 #define P_SWITCH_STATE_APPEAR 100
 #define P_SWITCH_STATE_ACTIVATED 200
+
+#define P_SWITCH_TIME_TRANSFORM 3000
 class CPSwitch : public CGameObject
 {
-	bool isActivated;
+	
 	float positionY;
+	ULONGLONG transform_start;
 	virtual int IsCollidable() { return 1; };
 	virtual int IsBlocking() { return 0; }
 	virtual void OnNoCollision(DWORD dt);

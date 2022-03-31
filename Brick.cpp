@@ -4,7 +4,7 @@
 #include "Coin.h"
 #include "Mushroom.h"
 #include "Leaf.h"
-
+bool CBrick::isTranForm = false;
 CBrick::CBrick(float x, float y, int type) :CGameObject(x, y) {
 	this->type = type;
 	this->oldX = x;
@@ -25,6 +25,15 @@ CBrick::CBrick(float x, float y, int type, int state) :CGameObject(x, y) {
 void CBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	
+	// mario press PSwitch
+	if (this->type == BRICK_TYPE_QBRICK_COIN) {
+		bool _isTransForm = CBrick::isTranForm;
+		if (_isTransForm)
+			this->SetState(BRICK_STATE_QBRICK_COIN);
+		else
+			this->SetState(BRICK_STATE_NORMAL);
+	}
 	
 	if (state == BRICK_STATE_QBRICK_UP) {
 		if (y <= oldY - BRICK_BBOX_HEIGHT / 2) {
@@ -52,6 +61,7 @@ void CBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			this->Delete();
 		}
 	}
+
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -67,10 +77,10 @@ void CBrick::Render()
 		{
 			aniId = ID_ANI_BRICK;
 		}
-		else if (this->type == BRICK_TYPE_BROKEN || this->type == BRICK_TYPE_BROKEN_P) {
+		else if (this->type == BRICK_TYPE_BROKEN || this->type == BRICK_TYPE_BROKEN_P || this->type == BRICK_TYPE_QBRICK_COIN) {
 			aniId = ID_ANI_BRICK_BROKEN;
 		}
-		else if (this->type == BRICK_TYPE_QBRICK_1UP || this->type == BRICK_TYPE_QBRICK_MUSHROOM || this->type == BRICK_TYPE_QBRICK_COIN) {
+		else if (this->type == BRICK_TYPE_QBRICK_1UP || this->type == BRICK_TYPE_QBRICK_MUSHROOM ) {
 			aniId = ID_ANI_QBRICK;
 		}
 	}
@@ -81,6 +91,11 @@ void CBrick::Render()
 	else if (state == BRICK_STATE_QBRICK_EMPTY)
 	{
 		aniId = ID_ANI_QBRICK_EMPTY;
+	}
+	else if (state == BRICK_STATE_QBRICK_COIN)
+	{
+		aniId = ID_ANI_QBRICK_COIN;
+
 	}
 	
 	animations->Get(aniId)->Render(x, y);
@@ -98,7 +113,7 @@ void CBrick::GetBoundingBox(float &l, float &t, float &r, float &b)
 
 void CBrick::SetState(int state)
 {
-	CGameObject::SetState(state);
+	
 	switch (state)
 	{
 	case BRICK_STATE_NORMAL:
@@ -111,7 +126,11 @@ void CBrick::SetState(int state)
 	case BRICK_STATE_QBRICK_EMPTY:
 		vy = 0;
 		break;
+	case BRICK_STATE_QBRICK_COIN:
+		
+		break;
 	}
+	CGameObject::SetState(state);
 }
 void CBrick::OnNoCollision(DWORD dt)
 {

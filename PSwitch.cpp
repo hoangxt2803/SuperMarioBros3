@@ -1,7 +1,7 @@
 #include "PSwitch.h"
+#include "Brick.h"
 CPSwitch::CPSwitch(float x, float y) :CGameObject(x, y)
 {
-	this->isActivated = false;
 	state = P_SWITCH_STATE_APPEAR;
 	vy = -P_SWITCH_SPEED;
 	this->positionY = y - P_SWITCH_WIDTH;
@@ -19,14 +19,19 @@ void CPSwitch::GetBoundingBox(float& left, float& top, float& right, float& bott
 
 void CPSwitch::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	
-	if (GetState() == P_SWITCH_STATE_APPEAR) {
+	if (this->state == P_SWITCH_STATE_APPEAR) {
 
 		if (this->y <= positionY) {
 			vy = 0;
 			this->y = positionY;
 		}
 
+	}
+	if (this->state == P_SWITCH_STATE_ACTIVATED) {
+		CBrick::isTranForm = true;
+		if (GetTickCount64() - transform_start > P_SWITCH_TIME_TRANSFORM) {
+			CBrick::isTranForm = false;
+		}
 	}
 
 	CGameObject::Update(dt, coObjects);
@@ -72,6 +77,7 @@ void CPSwitch::SetState(int state)
 		vy = -P_SWITCH_SPEED;
 		break;
 	case P_SWITCH_STATE_ACTIVATED:
+		transform_start = GetTickCount64();
 		break;
 	}
 	CGameObject::SetState(state);
