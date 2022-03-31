@@ -17,6 +17,7 @@ height	240
 10	sources\textures\enemies.png
 20	sources\textures\misc.png
 21	sources\textures\leaf.png
+22	sources\textures\misc2.png
 30	sources\textures\map1_1.png
 31	sources\textures\extra_map.png
 32	sources\textures\map11.png

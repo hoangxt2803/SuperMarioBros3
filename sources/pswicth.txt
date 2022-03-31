@@ -1,0 +1,13 @@
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+#Apear
+42200	156	144	171	159	22
+42201	178	144	193	159	22
+#Activated
+42202	200	144	215	159	22
+# ani_id	sprite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]
+#Apear
+12500	42200	100	42201	100
+#Activated
+12501	42202	100
