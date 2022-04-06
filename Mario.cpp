@@ -204,9 +204,9 @@ void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 	if (e->ny > 0)
 	{
 		if (brick->GetBrickType() == BRICK_TYPE_QBRICK_1UP || brick->GetBrickType() == BRICK_TYPE_QBRICK_MUSHROOM || brick->GetBrickType() == BRICK_TYPE_QBRICK_COIN) {
-			if (brick->GetState() != BRICK_STATE_QBRICK_EMPTY)
+			if (brick->GetState() != BRICK_STATE_BRICK_EMPTY)
 			{
-				brick->SetState(BRICK_STATE_QBRICK_UP);
+				brick->SetState(BRICK_STATE_BRICK_UP);
 			}
 		}
 		

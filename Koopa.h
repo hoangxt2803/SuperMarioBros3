@@ -68,6 +68,7 @@ protected:
 
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 	virtual void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
+	virtual void OnCollisionWithBrokenBrick(LPCOLLISIONEVENT e);
 public:
 	CKoopa(float x, float y, int type, int level);
 	void IsKicked(int nx);

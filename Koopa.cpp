@@ -5,6 +5,7 @@
 #include "SPlatform.h"
 #include "PlayScene.h"
 #include "Brick.h"
+#include "PSwitch.h"
 CKoopa::CKoopa(float x, float y, int type, int level) :CGameObject(x, y)
 {
 	this->level = level;
@@ -54,6 +55,9 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (dynamic_cast<CGoomba*>(e->obj)) {
 		OnCollisionWithGoomba(e);
 	}
+	else if (dynamic_cast<CBrick*>(e->obj)) {
+		OnCollisionWithBrokenBrick(e);
+	}
 	
 	if (e->obj->IsBlocking()) {
 		if (e->ny != 0)
@@ -82,6 +86,16 @@ void CKoopa::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 		{
 			goomba->SetLevel(GOOMBA_LEVEL_NORMAL);
 		}
+	}
+
+
+}
+void CKoopa::OnCollisionWithBrokenBrick(LPCOLLISIONEVENT e)
+{
+	CBrick* brick = dynamic_cast<CBrick*>(e->obj);
+	if (this->state == KOOPA_TROOPA_STATE_SHELL_MOVE) {
+		if(brick->GetBrickType()== BRICK_TYPE_BROKEN_P)
+			brick->SetState(BRICK_STATE_BRICK_UP);
 	}
 
 

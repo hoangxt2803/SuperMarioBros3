@@ -158,7 +158,7 @@ sources\map\map1_1.txt
 #Koopa
 3	530	320	1	1
 
-3	2096	360	1	1
+3	2116	360	1	1
 #Goomba
 2	224	400	1	1	1
 
@@ -173,6 +173,5 @@ sources\map\map1_1.txt
 #End game effect
 11	2689	337
 
-15	1930	360
 # MARIO
 0	10 	360

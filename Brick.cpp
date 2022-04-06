@@ -4,6 +4,7 @@
 #include "Coin.h"
 #include "Mushroom.h"
 #include "Leaf.h"
+#include "PSwitch.h"
 bool CBrick::isTranForm = false;
 CBrick::CBrick(float x, float y, int type) :CGameObject(x, y) {
 	this->type = type;
@@ -43,7 +44,7 @@ void CBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			
 	}
 	
-	if (state == BRICK_STATE_QBRICK_UP) {
+	if (state == BRICK_STATE_BRICK_UP) {
 		if (y <= oldY - BRICK_BBOX_HEIGHT / 2) {
 			CGameObject* obj = NULL;
 
@@ -62,9 +63,14 @@ void CBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				// +1up 
 				
 			}
+			else if (this->type == BRICK_TYPE_BROKEN_P) {
+				obj = new CPSwitch(oldX, oldY);
+				// +1up 
+
+			}
 			LPPLAYSCENE playscreen = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
 			playscreen->AddObject(obj);
-			obj = new CBrick(oldX, oldY, this->type, BRICK_STATE_QBRICK_EMPTY);
+			obj = new CBrick(oldX, oldY, this->type, BRICK_STATE_BRICK_EMPTY);
 			playscreen->AddObject(obj);
 			this->Delete();
 		}
@@ -92,11 +98,11 @@ void CBrick::Render()
 			aniId = ID_ANI_QBRICK;
 		}
 	}
-	else if (state == BRICK_STATE_QBRICK_UP)
+	else if (state == BRICK_STATE_BRICK_UP)
 	{
 		aniId = ID_ANI_QBRICK_UP;
 	}
-	else if (state == BRICK_STATE_QBRICK_EMPTY)
+	else if (state == BRICK_STATE_BRICK_EMPTY)
 	{
 		aniId = ID_ANI_QBRICK_EMPTY;
 	}
@@ -127,11 +133,11 @@ void CBrick::SetState(int state)
 	case BRICK_STATE_NORMAL:
 		vy = 0;
 		break;
-	case BRICK_STATE_QBRICK_UP:
+	case BRICK_STATE_BRICK_UP:
 		//ay = -QBRICK_GRAVITY;
 		vy = -QBRICK_SPEED_UP;
 		break;
-	case BRICK_STATE_QBRICK_EMPTY:
+	case BRICK_STATE_BRICK_EMPTY:
 		vy = 0;
 		break;
 	case BRICK_STATE_BROKEN_BRICK_COIN:
