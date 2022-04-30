@@ -42,7 +42,7 @@
 
 
 #pragma region ANIMATION_ID
-
+//BIG
 #define ID_ANI_MARIO_IDLE_RIGHT 400
 #define ID_ANI_MARIO_IDLE_LEFT 401
 
@@ -102,6 +102,45 @@
 #define ID_ANI_MARIO_SMALL_HOLD_IDLE_RIGHT	1810	
 #define ID_ANI_MARIO_SMALL_HOLD_IDLE_LEFT	1811
 #define ID_ANI_MARIO_SMALL_IN_PIPE		1950
+
+//RACCON
+#define ID_ANI_MARIO_RACCON_IDLE_RIGHT 2000
+#define ID_ANI_MARIO_RACCON_IDLE_LEFT 2001
+
+#define ID_ANI_MARIO_RACCON_WALKING_RIGHT 2100
+#define ID_ANI_MARIO_RACCON_WALKING_LEFT 2101
+
+#define ID_ANI_MARIO_RACCON_RUNNING_RIGHT 2200
+#define ID_ANI_MARIO_RACCON_RUNNING_LEFT 2201
+
+#define ID_ANI_MARIO_RACCON_BRACE_RIGHT 2300
+#define ID_ANI_MARIO_RACCON_BRACE_LEFT 2301
+
+#define ID_ANI_MARIO_RACCON_JUMP_WALK_RIGHT 2400
+#define ID_ANI_MARIO_RACCON_JUMP_WALK_LEFT 2401
+
+#define ID_ANI_MARIO_RACCON_JUMP_RUN_RIGHT 2500
+#define ID_ANI_MARIO_RACCON_JUMP_RUN_LEFT 2501
+
+#define ID_ANI_MARIO_RACCON_KICK_RIGHT	2600	
+#define ID_ANI_MARIO_RACCON_KICK_LEFT	2601
+
+#define ID_ANI_MARIO_RACCON_HOLD_WALK_RIGHT	2700	
+#define ID_ANI_MARIO_RACCON_HOLD_WALK_LEFT	2701
+
+#define ID_ANI_MARIO_RACCON_HOLD_IDLE_RIGHT	2710	
+#define ID_ANI_MARIO_RACCON_HOLD_IDLE_LEFT	2711
+
+#define ID_ANI_MARIO_RACCON_FLY_RIGHT	2800	
+#define ID_ANI_MARIO_RACCON_FLY_LEFT	2801
+
+#define ID_ANI_MARIO_RACCON_SIT_RIGHT 2900
+#define ID_ANI_MARIO_RACCON_SIT_LEFT 2901
+
+#define ID_ANI_MARIO_RACCON_ATTACK_RIGHT 2950
+#define ID_ANI_MARIO_RACCON_ATTACK_LEFT 2951
+
+#define ID_ANI_MARIO_RACCON_IN_PIPE		2850
 #pragma endregion
 
 #define GROUND_Y 160.0f
@@ -111,6 +150,7 @@
 
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
+#define	MARIO_LEVEL_RACCON	3
 
 #define MARIO_BIG_BBOX_WIDTH  14
 #define MARIO_BIG_BBOX_HEIGHT 24
@@ -122,19 +162,26 @@
 #define MARIO_SMALL_BBOX_WIDTH  13
 #define MARIO_SMALL_BBOX_HEIGHT 12
 
+#define MARIO_RACCON_BBOX_WIDTH  22
+#define MARIO_RACCON_BBOX_HEIGHT 24
+#define MARIO_RACCON_SITTING_BBOX_WIDTH  22
+#define MARIO_RACCON_SITTING_BBOX_HEIGHT 16
 
 #define MARIO_UNTOUCHABLE_TIME 2500
 
 class CMario : public CGameObject
 {
 	BOOLEAN isSitting;
-
-	bool isHold;
-	bool isDropShell;
-	bool isKick;
-	bool isJumping;
-	bool isRunning;
-	bool isCreatedKoopa;
+	BOOLEAN isHold;
+	BOOLEAN isDropShell;
+	BOOLEAN isKick;
+	BOOLEAN isJumping;
+	BOOLEAN isRunning;
+	BOOLEAN isCreatedKoopa;
+	BOOLEAN isFlying;
+	BOOLEAN isCanFly;
+	BOOLEAN isFalling;
+	BOOLEAN isAttack;
 	float maxVx;
 	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 
@@ -142,7 +189,9 @@ class CMario : public CGameObject
 	int level; 
 	int untouchable; 
 	ULONGLONG untouchable_start;
+	ULONGLONG attack_start;
 	ULONGLONG kick_start;
+	ULONGLONG fly_start;
 	BOOLEAN isOnPlatform;
 	int coin; 
 
@@ -159,6 +208,7 @@ class CMario : public CGameObject
 	void OnCollisionWithVenusFireTrap(LPCOLLISIONEVENT e);
 	int GetAniIdBig();
 	int GetAniIdSmall();
+	int GetAniIdRaccon();
 
 public:
 	CMario(float x, float y) : CGameObject(x, y)
