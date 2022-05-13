@@ -122,6 +122,10 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		SetState(GOOMBA_STATE_FLY_WALKING);
 		countFly = 0;
 	}
+	if (this->GetState() == GOOMBA_STATE_DEATH) {
+		if (this->y > MAP1_1_HEIGHT)
+			this->Delete();
+	}
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
