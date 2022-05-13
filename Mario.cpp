@@ -54,8 +54,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		vy = 0;
 		if (e->ny < 0) isOnPlatform = true;
 	}
-	else 
-	if (e->nx != 0 && e->obj->IsBlocking())
+	else if (e->nx != 0 && e->obj->IsBlocking())
 	{
 		vx = 0;
 	}
@@ -193,6 +192,7 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 		if (koopa->GetLevel() > KOOPA_TROOPA_LEVEL_NORMAL) {
 			koopa->SetKoopaToShell(false);
 			koopa->SetLevel(KOOPA_TROOPA_LEVEL_NORMAL);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
 		else if (koopa->GetState() == KOOPA_TROOPA_STATE_WALKING)
 		{
@@ -299,9 +299,9 @@ void CMario::OnCollisionWithPSwitch(LPCOLLISIONEVENT e)
 }
 void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
 {
-	if (this->level >= MARIO_LEVEL_BIG)
+	if (level >= MARIO_LEVEL_BIG)
 	{
-		//SetLevel(MARIO_LEVEL_RACCON);
+		SetLevel(MARIO_LEVEL_RACCON);
 	}
 	e->obj->Delete();
 }
@@ -706,12 +706,12 @@ void CMario::SetLevel(int l)
 
 void CMario::EventCreateKoopa() {
 	//x: 1100 - 1500, y: 170
-	if ((this->x >= POSITION_EVENT_CREATE_KOOPA_X1 || this->x <= POSITION_EVENT_CREATE_KOOPA_X1) 
+	if ((this->x >= POSITION_EVENT_CREATE_KOOPA_X1 && this->x <= POSITION_EVENT_CREATE_KOOPA_X2) 
 		&& this->y >= POSITION_EVENT_CREATE_KOOPA_Y) {
 		CGameObject* obj = NULL;
 		LPPLAYSCENE playscreen = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
 		for(int i = 0; i < 3; i++) {
-			obj = new CKoopa((float)POSITION_WING_KOOPA_X + i* DISTANCE_2_KOOPA, POSITION_WING_KOOPA_Y, 2, 1);
+			obj = new CKoopa((float)POSITION_WING_KOOPA_X + i* DISTANCE_2_KOOPA, POSITION_WING_KOOPA_Y, 2, 2);
 			playscreen->AddObject(obj);
 		}
 		obj = new CKoopa(POSITION_NORMAL_KOOPA_X, POSITION_NORMAL_KOOPA_Y, 2, 1);
