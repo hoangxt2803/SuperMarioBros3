@@ -270,4 +270,7 @@ public:
 
 	bool GetIsKick() { return this->isKick; }
 	void SetIsKick(bool value) { this->isKick = value; }
+
+	bool GetIsOnPlatform() { return this->isOnPlatform; }
+	void SetIsOnPlatform(bool value) { this->isOnPlatform = value; }
 };

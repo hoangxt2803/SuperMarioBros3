@@ -16,31 +16,29 @@
 #include "PiranhaPlant.h"
 #include "VenusFireTrap.h"
 #include "EndGameEffect.h"
-
 #include "SampleKeyEventHandler.h"
 
 using namespace std;
-
-CPlayScene::CPlayScene(int id, LPCWSTR filePath):
-	CScene(id, filePath)
-{
-	
-	player = NULL;
-	key_handler = new CSampleKeyHandler(this);
-}
-
 
 #define SCENE_SECTION_UNKNOWN -1
 #define SCENE_SECTION_ASSETS	1
 #define SCENE_SECTION_OBJECTS	2
 #define SCENE_SECTION_MAPS	3
-
+#define SCENE_SECTION_HUD	4
 
 #define ASSETS_SECTION_UNKNOWN -1
 #define ASSETS_SECTION_SPRITES 1
 #define ASSETS_SECTION_ANIMATIONS 2
 
 #define MAX_SCENE_LINE 1024
+
+CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
+	CScene(id, filePath)
+{
+	hud = NULL;
+	player = NULL;
+	key_handler = new CSampleKeyHandler(this);
+}
 
 void CPlayScene::_ParseSection_SPRITES(string line)
 {
@@ -233,6 +231,16 @@ void CPlayScene::_ParseSection_MAPS(string line)
 	map->LoadMapSprites(map->getIdTextureMap());
 
 }
+
+void CPlayScene::_ParseSection_HUD(string line)
+{
+	vector<string> tokens = split(line);
+
+	if (tokens.size() < 1) return;
+
+	hud = new CHUD();
+
+}
 void CPlayScene::LoadAssets(LPCWSTR assetFile)
 {
 	DebugOut(L"[INFO] Start loading assets from : %s \n", assetFile);
@@ -284,6 +292,7 @@ void CPlayScene::Load()
 		string line(str);
 
 		if (line[0] == '#') continue;	// skip comment lines	
+		if (line == "[HUD]") { section = SCENE_SECTION_HUD; continue; };
 		if (line == "[ASSETS]") { section = SCENE_SECTION_ASSETS; continue; };
 		if (line == "[OBJECTS]") { section = SCENE_SECTION_OBJECTS; continue; };
 		if (line == "[MAPS]") { section = SCENE_SECTION_MAPS; continue; };
@@ -294,6 +303,7 @@ void CPlayScene::Load()
 		//
 		switch (section)
 		{ 
+			case SCENE_SECTION_HUD: _ParseSection_HUD(line); break;
 			case SCENE_SECTION_ASSETS: _ParseSection_ASSETS(line); break;
 			case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
 			case SCENE_SECTION_MAPS: _ParseSection_MAPS(line); break;
@@ -335,7 +345,7 @@ void CPlayScene::Update(DWORD dt)
 	if (cx < 0) cx = 0;
 
 	CGame::GetInstance()->SetCamPos(cx, 260.0f /*cy*/);
-
+	hud->Update(dt, &coObjects);
 	PurgeDeletedObjects();
 }
 
@@ -344,6 +354,7 @@ void CPlayScene::Render()
 	map->Render();
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
+	hud->Render();
 }
 
 /*

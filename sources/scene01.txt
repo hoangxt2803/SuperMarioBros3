@@ -1,14 +1,15 @@
 # list of object assets to load in this scene
 [ASSETS]
-sources\mario.txt
-sources\brick.txt
-sources\coin.txt
-sources\goomba.txt
-sources\koopa.txt
-sources\platform.txt
-sources\pipe.txt
-sources\leaf.txt
-sources\mushroom.txt
+sources/hud.txt
+sources/mario.txt
+sources/brick.txt
+sources/coin.txt
+sources/goomba.txt
+sources/koopa.txt
+sources/platform.txt
+sources/pipe.txt
+sources/leaf.txt
+sources/mushroom.txt
 sources/piranhaplant.txt
 sources/venusfiretrap.txt
 sources/fire.txt
@@ -16,7 +17,7 @@ sources/endgame.txt
 sources/pswicth.txt
 #
 [MAPS]
-sources\map\map1_1.txt
+sources/map/map1_1.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -175,3 +176,7 @@ sources\map\map1_1.txt
 
 # MARIO
 0	10 	360
+#
+[HUD]
+
+#
