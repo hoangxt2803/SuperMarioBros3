@@ -28,6 +28,7 @@
 #define KOOPA_TROOPA_STATE_WALKING_LEFT 500
 #define KOOPA_TROOPA_STATE_WALKING_RIGHT 600
 #define KOOPA_TROOPA_STATE_HOLED 700
+#define KOOPA_TROOPA_STATE_DEATH 800
 
 #define ID_ANI_RED_KOOPA_TROOPA_WALKING_LEFT 5100
 #define ID_ANI_RED_KOOPA_TROOPA_WALKING_RIGHT 5101
@@ -35,6 +36,7 @@
 #define ID_ANI_RED_KOOPA_TROOPA_SHELL_MOVE 5103
 #define ID_ANI_RED_KOOPA_PARATROOPA_FLY_LEFT 5104
 #define ID_ANI_RED_KOOPA_PARATROOPA_FLY_RIGHT 5105
+#define ID_ANI_RED_KOOPA_TROOPA_DEATH 5106
 
 #define ID_ANI_GREEN_KOOPA_TROOPA_WALKING_LEFT 5110
 #define ID_ANI_GREEN_KOOPA_TROOPA_WALKING_RIGHT 5111
@@ -42,6 +44,7 @@
 #define ID_ANI_GREEN_KOOPA_TROOPA_SHELL_MOVE 5113
 #define ID_ANI_GREEN_KOOPA_PARATROOPA_FLY_LEFT 5114
 #define ID_ANI_GREEN_KOOPA_PARATROOPA_FLY_RIGHT 5115
+#define ID_ANI_GREEN_KOOPA_TROOPA_DEATH 5116
 
 class CKoopa : public CGameObject
 {
@@ -58,17 +61,18 @@ protected:
 	BOOLEAN isOnPlatform;
 	ULONGLONG fly_start;
 	CBeforeKoopa* beforeKoopa = NULL;
-	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
-	virtual void Render();
+	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+	void Render();
 
-	virtual int IsCollidable() { return 1; };
-	virtual int IsBlocking() { return 0; }
-	virtual void OnNoCollision(DWORD dt);
+	int IsCollidable() { return 1; };
+	int IsBlocking() { return 0; }
+	void OnNoCollision(DWORD dt);
 
-	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
-	virtual void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
-	virtual void OnCollisionWithBrokenBrick(LPCOLLISIONEVENT e);
+	void OnCollisionWith(LPCOLLISIONEVENT e);
+	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
+	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
+	void OnCollisionWithBrokenBrick(LPCOLLISIONEVENT e);
 public:
 	CKoopa(float x, float y, int type, int level);
 	void IsKicked(int nx);

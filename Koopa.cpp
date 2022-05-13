@@ -32,6 +32,13 @@ void CKoopa::GetBoundingBox(float& left, float& top, float& right, float& bottom
 		right = left + KOOPA_TROOPA_BBOX_WIDTH_SHELL;
 		bottom = top + KOOPA_TROOPA_BBOX_HEIGHT_SHELL;
 	}
+	else if (state == KOOPA_TROOPA_STATE_DEATH)
+	{
+		left = x - KOOPA_TROOPA_BBOX_WIDTH_SHELL / 2;
+		top = y - KOOPA_TROOPA_BBOX_HEIGHT_SHELL / 2;
+		right = left + KOOPA_TROOPA_BBOX_WIDTH_SHELL;
+		bottom = top + KOOPA_TROOPA_BBOX_HEIGHT_SHELL;
+	}
 	else
 	{
 		left = x - KOOPA_TROOPA_BBOX_WIDTH / 2;
@@ -51,7 +58,9 @@ void CKoopa::OnNoCollision(DWORD dt)
 void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 
-	if (dynamic_cast<CKoopa*>(e->obj)) return;
+	/*if (dynamic_cast<CKoopa*>(e->obj)) {
+		OnCollisionWithKoopa(e);
+	}*/
 	if (dynamic_cast<CGoomba*>(e->obj)) {
 		OnCollisionWithGoomba(e);
 	}
@@ -77,7 +86,7 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 void CKoopa::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
 	CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
-	if (this->state == KOOPA_TROOPA_STATE_SHELL_MOVE || this->state == KOOPA_TROOPA_STATE_SHELL) {
+	if (this->state == KOOPA_TROOPA_STATE_SHELL_MOVE) { // || this->state == KOOPA_TROOPA_STATE_SHELL
 		if (goomba->GetState() == GOOMBA_STATE_WALKING)
 		{
 			goomba->SetState(GOOMBA_STATE_DEATH);
@@ -87,8 +96,20 @@ void CKoopa::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 			goomba->SetLevel(GOOMBA_LEVEL_NORMAL);
 		}
 	}
-
-
+}
+void CKoopa::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
+{
+	CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
+	if (this->state == KOOPA_TROOPA_STATE_SHELL_MOVE) {
+		if (koopa->GetLevel() == KOOPA_TROOPA_LEVEL_WING)
+		{
+			koopa->SetLevel(KOOPA_TROOPA_LEVEL_NORMAL);
+		}
+		else if (koopa->GetLevel() == KOOPA_TROOPA_LEVEL_NORMAL)
+		{
+			koopa->SetState(KOOPA_TROOPA_STATE_DEATH);
+		}
+	}
 }
 void CKoopa::OnCollisionWithBrokenBrick(LPCOLLISIONEVENT e)
 {
@@ -189,6 +210,10 @@ void CKoopa::Render()
 		{
 			aniId = ID_ANI_RED_KOOPA_PARATROOPA_FLY_RIGHT;
 		}
+		else if (state == KOOPA_TROOPA_STATE_DEATH)
+		{
+			aniId = ID_ANI_RED_KOOPA_TROOPA_DEATH;
+		}
 	}
 	else if ((this->type == KOOPA_TROOPA_TYPE_GREEN)) {
 		if (vx > 0 && state == KOOPA_TROOPA_STATE_WALKING)
@@ -213,6 +238,10 @@ void CKoopa::Render()
 		else if (state == KOOPA_TROOPA_STATE_SHELL_MOVE)
 		{
 			aniId = ID_ANI_GREEN_KOOPA_TROOPA_SHELL_MOVE;
+		}
+		else if (state == KOOPA_TROOPA_STATE_DEATH)
+		{
+			aniId = ID_ANI_GREEN_KOOPA_TROOPA_DEATH;
 		}
 
 	}
@@ -256,7 +285,14 @@ void CKoopa::IsHolded()
 		}
 		else
 			this->SetPosition(marioX - MARIO_BIG_BBOX_WIDTH, marioY);
-	
+	else if (levelMario == MARIO_LEVEL_RACCON)
+	{
+		if (mario->GetNX() > 0) {//right
+			this->SetPosition(marioX + MARIO_RACCON_BBOX_WIDTH * 9 / 11, marioY);
+		}
+		else
+			this->SetPosition(marioX - MARIO_RACCON_BBOX_WIDTH * 9 / 11, marioY);
+	}
 
 
 }
@@ -266,6 +302,8 @@ void CKoopa::SetKoopaToShell(boolean isKoopaToShell)
 }
 void CKoopa::SetState(int state)
 {
+	
+	if (this->state == KOOPA_TROOPA_STATE_DEATH) return;
 	CGameObject::SetState(state);
 	switch (state)
 	{
@@ -304,6 +342,11 @@ void CKoopa::SetState(int state)
 	case KOOPA_TROOPA_STATE_HOLED:
 		vx = 0;
 		ay = 0;
+		break;
+	case KOOPA_TROOPA_STATE_DEATH:
+		vx = 0;
+		vy = -KOOPATROOPA_FLY_SPEED;
+		ax = 0;
 		break;
 	}
 
