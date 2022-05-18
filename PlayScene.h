@@ -40,6 +40,8 @@ public:
 	virtual void Unload();
 
 	LPGAMEOBJECT GetPlayer() { return player; }
+	LPHUD GetHUD() { return hud; }
+	LPMAP GetMap() { return map; }
 	vector<LPGAMEOBJECT> GetObjects();
 	void Clear();
 	void PurgeDeletedObjects();

@@ -74,14 +74,19 @@ class CHUD : public CGameObject {
 	int world;
 	int levelSpeedBar = 0;;
 	ULONGLONG running_start;
+	int coin;
+	
 public:
 	CHUD();
 	virtual void Render();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
-
+	
 	void RenderNumber(int number, float x, float y);
+	void RenderNumberCoin(int coin);
 	int GetLevelSpeedBar(float vx);
 	void RenderSpeedBar(int lv);
+
+	void CoinPlus() { coin++; }
 };
 typedef CHUD* LPHUD;

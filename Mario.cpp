@@ -209,6 +209,8 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
+	CHUD* hub = (CHUD*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetHUD();
+	hub->CoinPlus();
 	e->obj->Delete();
 	coin++;
 }
@@ -226,8 +228,14 @@ void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 		
 	}
 	if (brick->GetBrickType() == BRICK_TYPE_BROKEN && brick->GetState() == BRICK_STATE_BROKEN_BRICK_COIN) {
+		CHUD* hub = (CHUD*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetHUD();
+		hub->CoinPlus();
 		e->obj->Delete();
-		coin++;
+	}
+	else if (brick->GetBrickType() == BRICK_TYPE_QBRICK_COIN && brick->GetState() != BRICK_STATE_BRICK_EMPTY) {
+		CHUD* hub = (CHUD*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetHUD();
+		hub->CoinPlus();
+		brick->SetState(BRICK_STATE_BRICK_UP);
 	}
 }
 void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)

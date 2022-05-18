@@ -17,6 +17,7 @@ CHUD::CHUD() {
 	this->y = CGame::GetInstance()->GetCamY() + SCREEN_HEIGHT - HUB_HEIGHT;
 	world = 1;
 	running_start = 0;
+	coin = 0;
 }
 
 
@@ -67,12 +68,20 @@ void CHUD::Render()
 	CAnimations::GetInstance()->Get(ANI_HUB_NUMBER_1)->Render(x + TIME_WIDTH + 8, y + TIME_HEIGHT);
 	CAnimations::GetInstance()->Get(ANI_HUB_NUMBER_2)->Render(x + TIME_WIDTH + 16, y + TIME_HEIGHT);
 	//Coin
-	CAnimations::GetInstance()->Get(ANI_HUB_NUMBER_0)->Render(x + COUNT_COIN_WIDTH, y - COUNT_COIN_HEIGHT);
-	CAnimations::GetInstance()->Get(ANI_HUB_NUMBER_1)->Render(x + COUNT_COIN_WIDTH + 8, y - COUNT_COIN_HEIGHT);
+	RenderNumberCoin(this->coin);
+	/*CAnimations::GetInstance()->Get(ANI_HUB_NUMBER_0)->Render(x + COUNT_COIN_WIDTH, y - COUNT_COIN_HEIGHT);
+	CAnimations::GetInstance()->Get(ANI_HUB_NUMBER_1)->Render(x + COUNT_COIN_WIDTH + 8, y - COUNT_COIN_HEIGHT);*/
 	//item stack
 	CAnimations::GetInstance()->Get(ANI_ITEM_STACK_1)->Render(x + ITEM_WIDTH, y);
 	CAnimations::GetInstance()->Get(ANI_ITEM_STACK_2)->Render(x + ITEM_WIDTH + 24, y);
 	CAnimations::GetInstance()->Get(ANI_ITEM_STACK_3)->Render(x + ITEM_WIDTH + 48, y);
+}
+void CHUD::RenderNumberCoin(int coin) {
+	int donVi, hangChuc;
+	donVi = coin % 10;
+	hangChuc = coin / 10;
+	RenderNumber(hangChuc, x + COUNT_COIN_WIDTH, y - COUNT_COIN_HEIGHT);
+	RenderNumber(donVi, x + COUNT_COIN_WIDTH + 8, y - COUNT_COIN_HEIGHT);
 }
 void CHUD::RenderNumber(int number, float x, float y) {
 	switch (number)
