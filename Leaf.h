@@ -1,6 +1,6 @@
 #pragma once
 #include "GameObject.h"
-
+#include "Mario.h"
 #define LEAF_GRAVITY 0.002f
 #define LEAF_SPEED_X 0.05f
 #define LEAF_SPEED_Y 0.03f
@@ -32,6 +32,8 @@ class CLeaf : public CGameObject
 	virtual void OnNoCollision(DWORD dt);
 
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
+
+	virtual void OnCollisionWithMario(LPCOLLISIONEVENT e);
 public:
 	CLeaf(float x, float y);
 	virtual void SetState(int state);

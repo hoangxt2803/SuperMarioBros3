@@ -62,10 +62,15 @@ void CLeaf::OnNoCollision(DWORD dt)
 
 };
 
+void CLeaf::OnCollisionWithMario(LPCOLLISIONEVENT e) {
+	CMario* mario = dynamic_cast<CMario*>(e->obj);
+	mario->MarioLevelUp();
+	this->Delete();
+}
+
 void CLeaf::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	if (!e->obj->IsBlocking()) return;
-	else return;
 	if (e->ny != 0)
 	{
 		vy = 0;
@@ -74,6 +79,8 @@ void CLeaf::OnCollisionWith(LPCOLLISIONEVENT e)
 	{
 		vx = -vx;
 	}
+	if (dynamic_cast<CMario*>(e->obj))
+		OnCollisionWithMario(e);
 }
 
 void CLeaf::Render()
