@@ -6,6 +6,7 @@
 #include "PlayScene.h"
 #include "Brick.h"
 #include "PSwitch.h"
+#include "BrickEffect.h"
 CKoopa::CKoopa(float x, float y, int type, int level) :CGameObject(x, y)
 {
 	this->level = level;
@@ -114,10 +115,28 @@ void CKoopa::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 void CKoopa::OnCollisionWithBrokenBrick(LPCOLLISIONEVENT e)
 {
 	CBrick* brick = dynamic_cast<CBrick*>(e->obj);
-	if (this->state == KOOPA_TROOPA_STATE_SHELL_MOVE) {
-		if(brick->GetBrickType()== BRICK_TYPE_BROKEN_P)
-			brick->SetState(BRICK_STATE_BRICK_UP);
+	if (e->nx != 0)
+	{
+		if (this->state == KOOPA_TROOPA_STATE_SHELL_MOVE) {
+			if (brick->GetBrickType() == BRICK_TYPE_BROKEN_P)
+				brick->SetState(BRICK_STATE_BRICK_UP);
+			else if (brick->GetBrickType() == BRICK_TYPE_QBRICK_COIN
+				|| brick->GetBrickType() == BRICK_TYPE_QBRICK_1UP
+				|| brick->GetBrickType() == BRICK_TYPE_QBRICK_MUSHROOM) {
+				brick->SetState(BRICK_STATE_BRICK_UP);
+			}
+			else if (brick->GetBrickType() == BRICK_TYPE_BROKEN) {
+				CGameObject* obj = NULL;
+				float XX, YY;
+				brick->GetPosition(XX, YY);
+				obj = new CBrickEffect(XX, YY);
+				LPPLAYSCENE playscreen = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+				playscreen->AddObject(obj);
+				brick->Delete();
+			}
+		}
 	}
+	
 
 
 }
