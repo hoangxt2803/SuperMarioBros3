@@ -19,6 +19,39 @@
 #include "PiranhaPlant.h"
 #include "VenusFireTrap.h"
 
+CMario::CMario(float x, float y) : CGameObject(x, y)
+{
+	isSitting = false;
+	isKick = false;
+	isHold = false;
+	isDropShell = false;
+	isRunning = false;
+	isJumping = false;
+	isCreatedKoopa = false;
+	maxVx = 0.0f;
+	ax = 0.0f;
+	ay = MARIO_GRAVITY;
+
+	level = MARIO_LEVEL_SMALL;
+	untouchable = 0;
+	untouchable_start = -1;
+	isOnPlatform = false;
+	coin = 0;
+
+	kick_start = 0;
+	attack_start = 0;
+	fly_start = 0;
+	fall_start = 0;
+	transform_start = 0;
+	teleport_start = 0;
+	CGameObject* obj = NULL;
+	LPPLAYSCENE playscreen = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+	tail = new CTail(x, y);
+	obj = tail;
+	playscreen->AddObject(obj);
+
+
+}
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	vy += ay * dt;
@@ -27,10 +60,15 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
 
 	// reset untouchable timer if untouchable time has passed
-	if ( GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME) 
+	if (GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
 	{
 		untouchable_start = 0;
 		untouchable = 0;
+	}
+	if (GetTickCount64() - attack_start > MARIO_TAIL_ATTACK_TIME && isAttack)
+	{
+		isAttack = false;
+		//tail->SetState(TAIL_STATE_INACTIVE);
 	}
 	// event create 3 wing koopa and 1 normal koopa
 	if (!isCreatedKoopa) {
@@ -38,6 +76,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	}
 	isOnPlatform = false;
 
+	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
@@ -52,13 +91,18 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (e->ny != 0 && e->obj->IsBlocking())
 	{
 		vy = 0;
-		if (e->ny < 0) isOnPlatform = true;
+		if (e->ny < 0) {
+			isOnPlatform = true;
+			isFlying = false;
+			isFalling = false;
+		}
 	}
 	else if (e->nx != 0 && e->obj->IsBlocking())
 	{
 		vx = 0;
 	}
-
+	if (dynamic_cast<CTail*>(e->obj))
+		return;
 	if (dynamic_cast<CGoomba*>(e->obj))
 		OnCollisionWithGoomba(e);
 	else if (dynamic_cast<CKoopa*>(e->obj))
@@ -511,7 +555,16 @@ int CMario::GetAniIdRaccon()
 				}
 
 			}
-
+	if (isFlying)
+		if (vx > 0)
+			aniId = ID_ANI_MARIO_RACCON_FLY_LEFT;
+		else if(vx < 0)
+			aniId = ID_ANI_MARIO_RACCON_FLY_RIGHT;
+	if(isAttack)
+		if (nx > 0)
+			aniId = ID_ANI_MARIO_RACCON_ATTACK_RIGHT;
+		else if (nx < 0)
+			aniId = ID_ANI_MARIO_RACCON_ATTACK_LEFT;
 	if (aniId == -1) aniId = ID_ANI_MARIO_RACCON_IDLE_RIGHT;
 
 	return aniId;
@@ -529,9 +582,16 @@ void CMario::Render()
 		aniId = GetAniIdSmall();
 	else if (level == MARIO_LEVEL_RACCON)
 		aniId = GetAniIdRaccon();
-	animations->Get(aniId)->Render(x, y);
+	if (level == MARIO_LEVEL_RACCON && isAttack) {
+		if(nx>0)
+			animations->Get(aniId)->Render(x + 7, y);
+		else if(nx<0)
+			animations->Get(aniId)->Render(x - 7, y);
+	}
+	else
+		animations->Get(aniId)->Render(x, y);
 
-	//RenderBoundingBox();
+	RenderBoundingBox();
 	
 	DebugOutTitle(L"Coins: %d", coin);
 }
@@ -622,7 +682,9 @@ void CMario::SetState(int state)
 		break;
 	case MARIO_STATE_KICK:
 		isKick = true;
-		kick_start = (DWORD)GetTickCount64();
+		kick_start = GetTickCount64();
+		break;
+	case MARIO_STATE_FLYING:
 		break;
 	}
 
@@ -680,6 +742,7 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 		right = left + MARIO_SMALL_BBOX_WIDTH;
 		bottom = top + MARIO_SMALL_BBOX_HEIGHT;
 	}
+	
 }
 
 void CMario::SetLevel(int l)
@@ -733,5 +796,58 @@ void CMario::MarioLevelUp() {
 	}
 	else if (this->level == MARIO_LEVEL_BIG) {
 		SetLevel(MARIO_LEVEL_RACCON);
+	}
+}
+
+void CMario::Fly()
+{
+
+	if (level == MARIO_LEVEL_RACCON)
+	{
+		ULONGLONG current = GetTickCount64();
+		if (fly_start != 0 &&
+			current - fly_start < MARIO_FLYING_TIME)
+		{
+			this->SetState(MARIO_STATE_FLYING);
+			this->vy = -MARIO_FLYING_SPEED;
+			this->vx = 0.1f*nx;
+			this->isFlying = true;
+			this->isCanFly = false;
+		}
+		else if (isCanFly)
+		{
+			fly_start = current;
+			this->vy = -MARIO_FLYING_SPEED;
+			this->vx = 0.1f * nx;
+		}
+	}
+}
+
+void CMario::Falling()
+{
+	if (level == MARIO_LEVEL_RACCON && this->isOnPlatform == false &&
+		isFlying == false)
+	{
+		isFalling = true;
+		/*floatingTime = GetTickCount();*/
+	}
+}
+void CMario::TailAttack()
+{
+	vx = 0;
+	if (GetTickCount64() - attack_start > MARIO_TAIL_ATTACK_TIME && level == MARIO_LEVEL_RACCON)
+	{
+		isAttack = true;
+		attack_start = GetTickCount64();
+		CGame* game = CGame::GetInstance();
+		if (nx > 0)
+		{
+			tail->Attack(x, (y + 5), this->nx);
+		}
+		if (nx < 0)
+		{
+			tail->Attack(x, (y + 5),this->nx);
+		}
+
 	}
 }

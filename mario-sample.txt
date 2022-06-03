@@ -14,6 +14,8 @@ height	240
 -100	sources\textures\bbox.png
 0	sources\textures\mario.png
 1	sources\textures\mario_add.png
+2	sources\textures\effectRaccon.png
+3	sources\textures\mario_transform.png
 10	sources\textures\enemies.png
 20	sources\textures\misc.png
 21	sources\textures\leaf.png
@@ -21,7 +23,6 @@ height	240
 30	sources\textures\map1_1.png
 31	sources\textures\extra_map.png
 32	sources\textures\map11.png
-40 	sources\textures\enemies_world_1.png
 100	sources\textures\BackgroundHUD.png
 101	sources\textures\HUD.png
 102	sources\textures\HUDSpeedBar.png

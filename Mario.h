@@ -3,7 +3,7 @@
 
 #include "Animation.h"
 #include "Animations.h"
-
+#include "Tail.h"
 #include "debug.h"
 
 #define MARIO_WALKING_SPEED		0.1f
@@ -26,19 +26,19 @@
 #define MARIO_STATE_IDLE			0
 #define MARIO_STATE_WALKING_RIGHT	100
 #define MARIO_STATE_WALKING_LEFT	200
-
 #define MARIO_STATE_JUMP			300
 #define MARIO_STATE_RELEASE_JUMP    301
-
 #define MARIO_STATE_RUNNING_RIGHT	400
 #define MARIO_STATE_RUNNING_LEFT	500
-
 #define MARIO_STATE_SIT				600
 #define MARIO_STATE_SIT_RELEASE		601
-
 #define MARIO_STATE_KICK			700
-
 #define MARIO_STATE_HOLD			800
+#define MARIO_STATE_TAIL_ATTACK		900
+#define MARIO_STATE_FALLING			1000
+#define MARIO_STATE_FLYING			1100
+#define MARIO_STATE_ATTACK			1200
+#define MARIO_STATE_ATTACK_RELEASE	1201
 
 
 #pragma region ANIMATION_ID
@@ -69,6 +69,7 @@
 
 #define ID_ANI_MARIO_HOLD_WALK_RIGHT	1020
 #define ID_ANI_MARIO_HOLD_WALK_LEFT		1021
+
 #define ID_ANI_MARIO_HOLD_IDLE_RIGHT	1030
 #define ID_ANI_MARIO_HOLD_IDLE_LEFT		1031
 #define ID_ANI_MARIO_IN_PIPE		1050
@@ -103,6 +104,8 @@
 #define ID_ANI_MARIO_SMALL_HOLD_IDLE_LEFT	1811
 #define ID_ANI_MARIO_SMALL_IN_PIPE		1950
 
+#define ID_ANI_MARIO_SMALL_TO_BIG_RIGHT		1960
+#define ID_ANI_MARIO_SMALL_TO_BIG_LEFT		1961
 //RACCON
 #define ID_ANI_MARIO_RACCON_IDLE_RIGHT 2000
 #define ID_ANI_MARIO_RACCON_IDLE_LEFT 2001
@@ -141,6 +144,8 @@
 #define ID_ANI_MARIO_RACCON_ATTACK_LEFT 2951
 
 #define ID_ANI_MARIO_RACCON_IN_PIPE		2850
+
+#define ID_ANI_MARIO_BIG_TO_RACCON		2961
 #pragma endregion
 
 #define GROUND_Y 160.0f
@@ -167,21 +172,33 @@
 #define MARIO_RACCON_SITTING_BBOX_WIDTH  22
 #define MARIO_RACCON_SITTING_BBOX_HEIGHT 16
 
+
+#define MARIO_FLYING_SPEED				0.3f
 #define MARIO_UNTOUCHABLE_TIME 2500
+#define MARIO_FLYING_TIME 5000
+#define MARIO_TAIL_ATTACK_TIME 200
+#define MARIO_BIG_FORM_TRANSFORM_TIME 600
+#define MARIO_RACCOON_FORM_TRANSFORM_TIME 400
+#define MARIO_TELEPORT_TIME 300
+#define MARIO_KICK_LIMIT_TIME 250
+#define MARIO_FALLING_TIME 250
+
 
 class CMario : public CGameObject
 {
 	BOOLEAN isSitting;
-	BOOLEAN isHold;
-	BOOLEAN isDropShell;
-	BOOLEAN isKick;
-	BOOLEAN isJumping;
-	BOOLEAN isRunning;
-	BOOLEAN isCreatedKoopa;
-	BOOLEAN isFlying;
-	BOOLEAN isCanFly;
-	BOOLEAN isFalling;
-	BOOLEAN isAttack;
+	BOOLEAN isHold = false;
+	BOOLEAN isDropShell = false;
+	BOOLEAN isKick = false;
+	BOOLEAN isJumping = false;
+	BOOLEAN isRunning = false;
+	BOOLEAN isCreatedKoopa = false;
+	BOOLEAN isFlying = false;
+	BOOLEAN isCanFly = false;
+	BOOLEAN isFalling = false;
+	BOOLEAN isAttack = false;
+
+	CTail* tail;
 	float maxVx;
 	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 
@@ -192,6 +209,9 @@ class CMario : public CGameObject
 	ULONGLONG attack_start;
 	ULONGLONG kick_start;
 	ULONGLONG fly_start;
+	ULONGLONG fall_start;
+	ULONGLONG transform_start;
+	ULONGLONG teleport_start;
 	BOOLEAN isOnPlatform;
 	int coin; 
 
@@ -212,27 +232,7 @@ class CMario : public CGameObject
 	int GetAniIdRaccon();
 
 public:
-	CMario(float x, float y) : CGameObject(x, y)
-	{
-		isSitting = false;
-		isKick = false;
-		isHold = false;
-		isDropShell = false;
-		isRunning = false;
-		isJumping = false;
-		isCreatedKoopa = false;
-		maxVx = 0.0f;
-		ax = 0.0f;
-		ay = MARIO_GRAVITY; 
-
-		level = MARIO_LEVEL_SMALL;
-		untouchable = 0;
-		untouchable_start = -1;
-		isOnPlatform = false;
-		coin = 0;
-
-		kick_start = 0;
-	}
+	CMario(float x, float y);
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
 	void SetState(int state);
@@ -243,13 +243,20 @@ public:
 	}
 	void MarioLevelDown();
 	void MarioLevelUp();
+
+
+	void Sit();
+	void TailAttack();
+	void Falling();
+	void Fly();
+
 	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable==0); }
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 
 	void SetLevel(int l);
-	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
+	void StartUntouchable() { untouchable = 1; untouchable_start = (DWORD)GetTickCount64(); }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 
@@ -275,4 +282,16 @@ public:
 
 	bool GetIsOnPlatform() { return this->isOnPlatform; }
 	void SetIsOnPlatform(bool value) { this->isOnPlatform = value; }
+
+	bool GetIsFlying() { return this->isFlying; }
+	void SetIsFlying(bool value) { this->isFlying = value; }
+
+	bool GetIsCanFly() { return this->isCanFly; }
+	void SetIsCanFly(bool value) { this->isCanFly = value; }
+
+	bool GetIsFalling() { return this->isFalling; }
+	void SetIsFalling(bool value) { this->isFalling = value; }
+
+	bool GetIsAttack() { return this->isAttack; }
+	void SetIsAttack(bool value) { this->isAttack = value; }
 };

@@ -28,13 +28,14 @@ void CHUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	this->x = game->GetCamX() + HUB_WITDH;
 	this->y = game->GetCamY() + SCREEN_HEIGHT - HUB_HEIGHT;
 	int step = ((mario->GetIsOnPlatform() && mario->GetIsRunning())) ? 1 : -1;
-	if ((DWORD)GetTickCount64() - running_start >= 100) {
+	if (GetTickCount64() - running_start >= 100) {
 		levelSpeedBar += step;
-		running_start = (DWORD)GetTickCount64();
+		running_start = GetTickCount64();
 	}
 	
 	if (levelSpeedBar > 7) {
 		levelSpeedBar = 7;
+		mario->SetIsCanFly(true);
 	}
 	
 	if (levelSpeedBar < 0)

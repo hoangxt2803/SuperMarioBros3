@@ -19,13 +19,15 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_A:
 		if (mario->GetIsHold()) {
 			mario->SetIsDropShell(true);
-
 		}
 		
 		mario->SetIsRunning(true);
+		mario->TailAttack();
 		break;
 	case DIK_S:
 		mario->SetState(MARIO_STATE_JUMP);
+		mario->Falling();
+		mario->Fly();
 		break;
 	case DIK_1:
 		mario->SetLevel(MARIO_LEVEL_SMALL);

@@ -17,11 +17,13 @@ void CBrickEffect::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (state == BRICK_EFFECT_STATE_INACTIVE)
 		return;
-
-	x1++;
-	x2--;
-	y1 += 3;
-	y2 += 2;
+	float dy1, dy2;
+	dy1 = vy1 * dt;
+	dy2 = vy2 * dt;
+	x1 += 2;
+	x2 -= 2;
+	y1 += dy1;
+	y2 += dy2;
 	/*vy1 += dt * BROKEN_BRICK_EFFECT_GRAVITY;
 	vy2 += dt * BROKEN_BRICK_EFFECT_GRAVITY;*/
 	/*x += vx * dt;
@@ -30,6 +32,8 @@ void CBrickEffect::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	/*y1 += vy1 * dt;
 	y2 += vy2 * dt;*/
 	if (state == BRICK_EFFECT_STATE_APPEAR && GetTickCount64() - appear_start > BRICK_EFFECT_APPEAR_TIME) {
+	vy1 += dt * 0.002f;
+	vy2 += dt * 0.002f;
 		this->Delete();
 	}
 	CGameObject::Update(dt, coObjects);

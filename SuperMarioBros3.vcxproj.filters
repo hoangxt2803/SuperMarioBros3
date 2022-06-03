@@ -31,6 +31,12 @@
     <Filter Include="Source Files\Objects">
       <UniqueIdentifier>{33680257-5611-4d8b-a856-3cd1c1887461}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Mario">
+      <UniqueIdentifier>{a65bb13f-e183-47e9-979f-98783ca5ca0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Mario">
+      <UniqueIdentifier>{844f3452-51ef-4745-aa28-daad4eec3411}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -61,9 +67,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="KeyEventHandler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Mario.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PlayScene.h">
@@ -98,9 +101,6 @@
     </ClInclude>
     <ClInclude Include="Goomba.h">
       <Filter>Header Files\Enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="SPlatform.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Koopa.h">
       <Filter>Header Files\Enemies</Filter>
@@ -150,6 +150,15 @@
     <ClInclude Include="HUD.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Mario.h">
+      <Filter>Header Files\Mario</Filter>
+    </ClInclude>
+    <ClInclude Include="SPlatform.h">
+      <Filter>Header Files\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Tail.h">
+      <Filter>Header Files\Mario</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp">
@@ -171,9 +180,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Mario.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PlayScene.cpp">
@@ -205,9 +211,6 @@
     </ClCompile>
     <ClCompile Include="Goomba.cpp">
       <Filter>Source Files\Enemies</Filter>
-    </ClCompile>
-    <ClCompile Include="SPlatform.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Koopa.cpp">
       <Filter>Source Files\Enemies</Filter>
@@ -256,6 +259,15 @@
     </ClCompile>
     <ClCompile Include="HUD.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Mario.cpp">
+      <Filter>Source Files\Mario</Filter>
+    </ClCompile>
+    <ClCompile Include="SPlatform.cpp">
+      <Filter>Source Files\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Tail.cpp">
+      <Filter>Source Files\Mario</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
