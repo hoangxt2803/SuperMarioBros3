@@ -203,7 +203,7 @@ void CGoomba::SetState(int state)
 		vx = -GOOMBA_WALKING_SPEED;
 		break;
 	case GOOMBA_STATE_PREPARE_FLY:
-		prepare_fly_start = (DWORD)GetTickCount64();
+		prepare_fly_start = GetTickCount64();
 		isOnPlatform = false;
 		vy = -GOOMBA_PREPARE_FLY_SPEED;
 		break;
@@ -213,7 +213,7 @@ void CGoomba::SetState(int state)
 		break;
 	case GOOMBA_STATE_FLY_WALKING:
 		isOnPlatform = true;
-		walking_start = (DWORD)GetTickCount64();
+		walking_start = GetTickCount64();
 		break;
 	case GOOMBA_STATE_DEATH:
 		isOnPlatform = false;

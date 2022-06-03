@@ -44,7 +44,7 @@ void CFireBall::Render()
 		aniId = ID_ANI_FIRE_LEFT;
 	}
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 //void CFireBall::SetState(int state)
 //{

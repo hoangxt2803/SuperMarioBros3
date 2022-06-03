@@ -38,15 +38,15 @@ void CLeaf::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			vy = LEAF_SPEED_Y;
 			vx = LEAF_SPEED_X;
-			change_start = (DWORD)GetTickCount64();
+			change_start = GetTickCount64();
 		}
 		else
 		{
-			if ((DWORD)GetTickCount64() - change_start > LEAF_TIME_CHANGE)
+			if (GetTickCount64() - change_start > LEAF_TIME_CHANGE)
 			{
 				vx = -vx;
 				this->nx = -this->nx;
-				change_start = (DWORD)GetTickCount64();
+				change_start = GetTickCount64();
 			}
 
 		}

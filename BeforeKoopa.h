@@ -13,7 +13,7 @@ protected:
 	float ax;
 	float ay;
 	float oldX, oldY;
-	BOOLEAN isOnPlatform;
+	BOOLEAN isOnPlatform = false;
 
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);

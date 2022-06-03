@@ -121,7 +121,7 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			vy = -VENUS_FIRE_TRAP_SPEED;
 		}
 	}
-	if (state == VENUS_FIRE_TRAP_STATE_SHOOT && countFire > 0 && (DWORD)GetTickCount64() - fire_start > 1000) {
+	if (state == VENUS_FIRE_TRAP_STATE_SHOOT && countFire > 0 && GetTickCount64() - fire_start > 1000) {
 		SetState(VENUS_FIRE_TRAP_STATE_MOVE);
 		vy = -vy;
 		countFire = 0;
@@ -210,7 +210,7 @@ void CVenusFireTrap::SetState(int state)
 		vy = -VENUS_FIRE_TRAP_SPEED;
 		break;
 	case VENUS_FIRE_TRAP_STATE_SHOOT:
-		fire_start = (DWORD)GetTickCount64();
+		fire_start = GetTickCount64();
 		vy = 0;
 		break;
 	}

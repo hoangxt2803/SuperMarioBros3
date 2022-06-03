@@ -10,7 +10,7 @@ void CPipe::Render()
 		animations->Get(ID_ANI_PIPE_2)->Render(x, y);
 	}
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CPipe::GetBoundingBox(float& l, float& t, float& r, float& b)

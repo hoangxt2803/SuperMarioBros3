@@ -150,7 +150,7 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (level == KOOPA_TROOPA_LEVEL_WING) {
 		
 		if (isOnPlatform && level == KOOPA_TROOPA_LEVEL_WING && GetTickCount64() - fly_start > 1000) {
-			fly_start = (DWORD)GetTickCount64();
+			fly_start = GetTickCount64();
 			vy = -KOOPATROOPA_FLY_SPEED;
 			ay = KOOPA_TROOPA_GRAVITY;
 			isOnPlatform = false;
