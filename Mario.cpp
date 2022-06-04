@@ -95,6 +95,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 			isOnPlatform = true;
 			isFlying = false;
 			isFalling = false;
+			fly_start = 0;
 		}
 	}
 	else if (e->nx != 0 && e->obj->IsBlocking())
@@ -826,7 +827,7 @@ void CMario::Fly()
 void CMario::Falling()
 {
 	if (level == MARIO_LEVEL_RACCON && this->isOnPlatform == false &&
-		isFlying == false)
+		isFlying == false && isFalling)
 	{
 		isFalling = true;
 		/*floatingTime = GetTickCount();*/
