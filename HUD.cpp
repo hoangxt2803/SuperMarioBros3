@@ -46,7 +46,7 @@ void CHUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CHUD::Render()
 {
 
-	CAnimations::GetInstance()->Get(ANI_BLACK_BACKGROUND)->Render(x, y + BLACK_BACKGROUND);
+	CAnimations::GetInstance()->Get(ANI_BLACK_BACKGROUND_2)->Render(x, y + BLACK_BACKGROUND);
 	CAnimations::GetInstance()->Get(ANI_HUB)->Render(x, y);
 	//world number
 	CAnimations::GetInstance()->Get(ANI_HUB_NUMBER_1)->Render(x - WORLD_NUMBER_WIDTH, y - WORLD_NUMBER_HEIGHT);

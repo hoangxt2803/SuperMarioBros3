@@ -3,9 +3,7 @@
 #include "Textures.h"
 #include "Scene.h"
 #include "GameObject.h"
-#include "Brick.h"
 #include "Mario.h"
-#include "Goomba.h"
 #include "HUD.h"
 //#include "Koopas.h"
 
@@ -22,8 +20,7 @@ protected:
 
 	void _ParseSection_ASSETS(string line);
 	void _ParseSection_OBJECTS(string line);
-	//map
-	void _ParseSection_MAPS(string line);
+	
 	//HUD
 	void _ParseSection_HUD(string line);
 	void LoadAssets(LPCWSTR assetFile);

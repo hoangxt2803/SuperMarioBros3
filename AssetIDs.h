@@ -4,7 +4,7 @@
 // This file contains all IDs of game assets 
 //
 #define SCREEN_WIDTH 320
-#define SCREEN_HEIGHT 240
+#define SCREEN_HEIGHT 260
 #define CAMERA_MARIO 172
 
 #define MAP1_1_WIDTH	2500

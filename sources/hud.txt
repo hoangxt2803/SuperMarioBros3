@@ -2,6 +2,7 @@
 [SPRITES]
 #Black background
 60000	0	0	520	300	100
+60002	0	0	520	100	100
 #HUB
 60001	0	0	223	27	101
 #Speedbar
@@ -32,6 +33,7 @@
 [ANIMATIONS]
 #Black background
 6000	60000	100
+6040	60002	100
 #HUB
 6001	60001	100
 #Speedbar
