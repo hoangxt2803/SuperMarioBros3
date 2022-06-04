@@ -1,7 +1,7 @@
 # id	left	top	right	bottom	texture_id
 [SPRITES]
 #Black background
-60000	0	0	520	100	100
+60000	0	0	520	300	100
 #HUB
 60001	0	0	223	27	101
 #Speedbar

@@ -43,6 +43,12 @@
     <Filter Include="Source Files\WorldMap">
       <UniqueIdentifier>{4f125b00-4a30-4aa2-83f6-78fd6a336944}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Intro">
+      <UniqueIdentifier>{ee7d0e0c-19e3-4738-8ee4-725e447c16b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Intro">
+      <UniqueIdentifier>{4337d4c3-3920-43fc-93c2-74867f3f570e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -168,6 +174,12 @@
     <ClInclude Include="WorldMap.h">
       <Filter>Header Files\WorldMap</Filter>
     </ClInclude>
+    <ClInclude Include="Intro.h">
+      <Filter>Header Files\Intro</Filter>
+    </ClInclude>
+    <ClInclude Include="TreeWorldMap.h">
+      <Filter>Header Files\WorldMap</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp">
@@ -279,6 +291,12 @@
       <Filter>Source Files\Mario</Filter>
     </ClCompile>
     <ClCompile Include="WorldMap.cpp">
+      <Filter>Source Files\WorldMap</Filter>
+    </ClCompile>
+    <ClCompile Include="Intro.cpp">
+      <Filter>Source Files\Intro</Filter>
+    </ClCompile>
+    <ClCompile Include="TreeWorldMap.cpp">
       <Filter>Source Files\WorldMap</Filter>
     </ClCompile>
   </ItemGroup>
