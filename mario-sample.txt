@@ -6,9 +6,10 @@ height	240
 #id	type	file
 # type: 0: intro, 1: play scene 
 [SCENES]
-0	sources\intro.txt
-1	sources\scene01.txt
-3	sources\scene03.txt
+-1	sources\scene\intro.txt
+0	sources\scene\world_map.txt
+1	sources\scene\scene01.txt
+3	sources\scene\scene03.txt
 # id	file 
 [TEXTURES]
 -100	sources\textures\bbox.png
@@ -23,6 +24,8 @@ height	240
 30	sources\textures\map1_1.png
 31	sources\textures\extra_map.png
 32	sources\textures\map11.png
+40	sources\textures\intro.png
+50	sources\textures\world_map.png
 100	sources\textures\BackgroundHUD.png
 101	sources\textures\HUD.png
 102	sources\textures\HUDSpeedBar.png
