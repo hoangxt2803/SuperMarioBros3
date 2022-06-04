@@ -5,6 +5,7 @@
 //
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 240
+#define CAMERA_MARIO 172
 
 #define MAP1_1_WIDTH	2500
 #define MAP1_1_HEIGHT	432

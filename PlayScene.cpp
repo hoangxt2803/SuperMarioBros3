@@ -88,7 +88,7 @@ void CPlayScene::_ParseSection_ANIMATIONS(string line)
 	for (int i = 1; i < tokens.size(); i += 2)	// why i+=2 ?  sprite_id | frame_time  
 	{
 		int sprite_id = atoi(tokens[i].c_str());
-		int frame_time = atoi(tokens[i+1].c_str());
+		int frame_time = atoi(tokens[static_cast<std::vector<std::string, std::allocator<std::string>>::size_type>(i)+1].c_str());
 		ani->Add(sprite_id, frame_time);
 	}
 
@@ -336,15 +336,29 @@ void CPlayScene::Update(DWORD dt)
 
 	// Update camera to follow mario
 	float cx, cy;
+	float _cx, _cy;
+	
 	player->GetPosition(cx, cy);
 
 	CGame *game = CGame::GetInstance();
 	cx -= (float)game->GetBackBufferWidth() / 2;
-	cy -= (float)game->GetBackBufferHeight() / 2;
-
+	//cy -= (float)game->GetBackBufferHeight() / 2;
+	_cx = (float)game->GetCamX();
+	_cy = (float)game->GetCamY();
 	if (cx < 0) cx = 0;
-
-	CGame::GetInstance()->SetCamPos(cx, 260.0f /*cy*/);
+	int widthMap = map->getTotalColOfMap() * TILE_WIDTH;
+	int heightMap = map->getTotalRowOfMap() * TILE_HEIGHT;
+	if (cx > (float)(widthMap - SCREEN_WIDTH)) cx = (float)(widthMap - SCREEN_WIDTH);
+	CMario* mario = (CMario*)player;
+	float marioX, marioY;
+	mario->GetPosition(marioX, marioY);
+	if (mario->GetIsFlying() || mario->GetIsFalling() || cy + game->GetBackBufferHeight() < heightMap) {
+		cy -= (float)game->GetBackBufferHeight() / 2;
+	}
+	else
+		cy = (float)(heightMap - CAMERA_MARIO);
+	if (cy < 0) cy = 0;
+	CGame::GetInstance()->SetCamPos(cx, cy);
 	hud->Update(dt, &coObjects);
 	PurgeDeletedObjects();
 }
