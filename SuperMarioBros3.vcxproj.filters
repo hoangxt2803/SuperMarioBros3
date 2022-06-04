@@ -37,6 +37,12 @@
     <Filter Include="Source Files\Mario">
       <UniqueIdentifier>{844f3452-51ef-4745-aa28-daad4eec3411}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\WorldMap">
+      <UniqueIdentifier>{3bd2fcfb-0ebe-437f-8800-898033e9c35e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\WorldMap">
+      <UniqueIdentifier>{4f125b00-4a30-4aa2-83f6-78fd6a336944}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -159,6 +165,9 @@
     <ClInclude Include="Tail.h">
       <Filter>Header Files\Mario</Filter>
     </ClInclude>
+    <ClInclude Include="WorldMap.h">
+      <Filter>Header Files\WorldMap</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp">
@@ -268,6 +277,9 @@
     </ClCompile>
     <ClCompile Include="Tail.cpp">
       <Filter>Source Files\Mario</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldMap.cpp">
+      <Filter>Source Files\WorldMap</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
