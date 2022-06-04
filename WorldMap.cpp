@@ -7,7 +7,7 @@
 #include "Portal.h"
 #include "Utils.h"
 #include "AssetIDs.h"
-
+#include "TreeWorldMap.h"
 
 using namespace std;
 
@@ -115,7 +115,10 @@ void CWorldMap::_ParseSection_OBJECTS(string line)
 
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
-
+	case OBJECT_TYPE_TREE_WORLD_MAP:
+		obj = new CTreeWorldMap(x, y);
+		DebugOut(L"[INFO] Tree world map object has been created!\n");
+		break;
 	default:
 		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
 		return;
@@ -131,18 +134,7 @@ void CWorldMap::_ParseSection_OBJECTS(string line)
 /*
 	Parse a line in section [MAPS]
 */
-void CWorldMap::_ParseSection_MAPS(string line)
-{
-	vector<string> tokens = split(line);
 
-	if (tokens.size() < 1) return;
-	LPCWSTR path = ToLPCWSTR(tokens[0]);
-	DebugOut(L"[INFO] Start loading map from : %s \n", path);
-	/*CMap::getInstance();
-	CMap::getInstance()->LoadInfoMap(path);
-	CMap::getInstance()->LoadMapSprites(CMap::getInstance()->getIdTextureMap());*/
-
-}
 
 void CWorldMap::_ParseSection_HUD(string line)
 {
@@ -207,7 +199,6 @@ void CWorldMap::Load()
 		if (line == "[HUD]") { section = SCENE_SECTION_HUD; continue; };
 		if (line == "[ASSETS]") { section = SCENE_SECTION_ASSETS; continue; };
 		if (line == "[OBJECTS]") { section = SCENE_SECTION_OBJECTS; continue; };
-		if (line == "[MAPS]") { section = SCENE_SECTION_MAPS; continue; };
 		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }
 
 		//
@@ -218,7 +209,6 @@ void CWorldMap::Load()
 		case SCENE_SECTION_HUD: _ParseSection_HUD(line); break;
 		case SCENE_SECTION_ASSETS: _ParseSection_ASSETS(line); break;
 		case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
-		case SCENE_SECTION_MAPS: _ParseSection_MAPS(line); break;
 		}
 	}
 
@@ -262,10 +252,12 @@ void CWorldMap::Update(DWORD dt)
 
 void CWorldMap::Render()
 {
+	CAnimations::GetInstance()->Get(ANI_BLACK_BACKGROUND)->Render(50, 120);
+	hud->Render();
+	CAnimations::GetInstance()->Get(5000)->Render(155, 82);
 	//CMap::getInstance()->Render();
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
-	hud->Render();
 }
 
 /*

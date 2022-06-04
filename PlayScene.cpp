@@ -365,10 +365,11 @@ void CPlayScene::Update(DWORD dt)
 
 void CPlayScene::Render()
 {
+	hud->Render();
 	map->Render();
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
-	hud->Render();
+	
 }
 
 /*

@@ -24,5 +24,6 @@ public:
 	int getIdTextureMap() { return this->idTextureMap; }
 	int getTotalRowOfMap() { return this->totalRowOfMap; }
 	int getTotalColOfMap() { return this->totalColOfMap; }
+	~CMap();
 };
 typedef CMap* LPMAP;
