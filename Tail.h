@@ -3,6 +3,7 @@
 //  TAIL
 #define TAIL_BBOX_WIDTH					5
 #define TAIL_BBOX_HEIGHT				5
+#define TAIL_ATTACK						8
 
 #define TAIL_STATE_ATTACK				0
 #define TAIL_STATE_INACTIVE				1
