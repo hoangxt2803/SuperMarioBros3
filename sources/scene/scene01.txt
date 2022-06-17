@@ -18,7 +18,7 @@ sources/pswicth.txt
 sources/point.txt
 #
 [MAPS]
-sources/map/map1_1.txt
+sources/map/map1.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type

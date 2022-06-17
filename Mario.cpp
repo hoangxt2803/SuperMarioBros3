@@ -59,16 +59,27 @@ CMario::CMario(float x, float y, int inWorldMap) : CGameObject(x, y)
 }
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+	if (isTransformToBig && GetTickCount64() - transform_start > MARIO_BIG_FORM_TRANSFORM_TIME) {
+		isTransformToBig = false;
+	}
+	else if (isTransformToBig && GetTickCount64() - transform_start < MARIO_BIG_FORM_TRANSFORM_TIME)
+		return;
+	if (isTransformToRaccon && GetTickCount64() - transform_start > MARIO_BIG_FORM_TRANSFORM_TIME) {
+		isTransformToRaccon = false;
+	}
+	else if (isTransformToRaccon && GetTickCount64() - transform_start < MARIO_BIG_FORM_TRANSFORM_TIME)
+		return;
 	vy += ay * dt;
 	vx += ax * dt;
 
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
-	if (isFlying) {
+	/*if (isFlying) {
 		ay = MARIO_GRAVITY_FALL;
-		//vy = MARIO_RACCON_FLY_VY;
 	}
-	else
+	else {
 		ay = MARIO_GRAVITY;
+	}*/
+	
 	
 	// reset untouchable timer if untouchable time has passed
 	if (GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
@@ -658,6 +669,7 @@ void CMario::Render()
 		aniId = GetAniIdSmall();
 	else if (level == MARIO_LEVEL_RACCON)
 		aniId = GetAniIdRaccon();
+	
 	if (level == MARIO_LEVEL_RACCON && isAttack) {
 		if(nx>0)
 			animations->Get(aniId)->Render(x + 7, y);
@@ -666,6 +678,20 @@ void CMario::Render()
 	}
 	else if (isInWorldMap) {
 		aniId = ID_ANI_MARIO_IN_WORLD_MAP;
+		animations->Get(aniId)->Render(x, y);
+	}
+	else if (isTransformToBig) {
+		if (nx > 0) {
+			aniId = ID_ANI_MARIO_SMALL_TO_BIG_RIGHT;
+			animations->Get(aniId)->Render(x, y);
+		}
+		else if (nx < 0) {
+			aniId = ID_ANI_MARIO_SMALL_TO_BIG_LEFT;
+			animations->Get(aniId)->Render(x, y);
+		}
+	}
+	else if (isTransformToRaccon) {
+		aniId = ID_ANI_MARIO_BIG_TO_RACCON;
 		animations->Get(aniId)->Render(x, y);
 	}
 	else 
@@ -689,12 +715,14 @@ void CMario::SetState(int state)
 		maxVx = MARIO_RUNNING_SPEED;
 		ax = MARIO_ACCEL_RUN_X;
 		nx = 1;
+		isRunning = true;
 		break;
 	case MARIO_STATE_RUNNING_LEFT:
 		if (isSitting) break;
 		maxVx = -MARIO_RUNNING_SPEED;
 		ax = -MARIO_ACCEL_RUN_X;
 		nx = -1;
+		isRunning = true;
 		break;
 	case MARIO_STATE_WALKING_RIGHT:
 		if (isSitting) break;
@@ -719,8 +747,8 @@ void CMario::SetState(int state)
 			else
 				vy = -MARIO_JUMP_SPEED_Y;
 			ny = 1;
+			isJumping = true;
 		}
-		isJumping = true;
 		break;
 
 	case MARIO_STATE_RELEASE_JUMP:
@@ -855,11 +883,15 @@ void CMario::EventCreateKoopa() {
 void CMario::MarioLevelDown() {
 	if (level > MARIO_LEVEL_BIG)
 	{
+		isTransformToBig = true;
+		transform_start = GetTickCount64();
 		level = MARIO_LEVEL_BIG;
 		StartUntouchable();
 	}
 	else if (level > MARIO_LEVEL_SMALL)
 	{
+		isTransformToRaccon = true;
+		transform_start = GetTickCount64();
 		level = MARIO_LEVEL_SMALL;
 		StartUntouchable();
 	}
@@ -873,9 +905,13 @@ void CMario::MarioLevelDown() {
 void CMario::MarioLevelUp() {
 	if (this->level == MARIO_LEVEL_SMALL)
 	{
+		isTransformToBig = true;
+		transform_start = GetTickCount64();
 		SetLevel(MARIO_LEVEL_BIG);
 	}
 	else if (this->level == MARIO_LEVEL_BIG) {
+		isTransformToRaccon = true;
+		transform_start = GetTickCount64();
 		SetLevel(MARIO_LEVEL_RACCON);
 	}
 }
@@ -890,8 +926,8 @@ void CMario::Fly()
 			current - fly_start < MARIO_FLYING_TIME)
 		{
 			this->SetState(MARIO_STATE_FLYING);
-			this->vy = -0.2;
-			this->vx = 0.01f*nx;
+			this->vy = -0.06f;
+			this->vx = 0.1f*nx;
 			this->isFlying = true;
 			this->isCanFly = false;
 		}
@@ -939,10 +975,8 @@ void CMario::WalkDown()
 
 void CMario::Falling()
 {
-	if (level == MARIO_LEVEL_RACCON && !isOnPlatform && !isFlying)
-	{
-		isFalling = true;
-	}
+	isFalling = true;
+	vy = 0.035f;
 }
 void CMario::TailAttack()
 {

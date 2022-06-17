@@ -348,7 +348,7 @@ void CPlayScene::Update(DWORD dt)
 	_cy = (float)game->GetCamY();
 	if (cx < 0) cx = 0;
 	int widthMap = map->getTotalColOfMap() * TILE_WIDTH;
-	int heightMap = map->getTotalRowOfMap() * TILE_HEIGHT;
+	int heightMap = 27 * TILE_HEIGHT;
 	if (cx > (float)(widthMap - SCREEN_WIDTH)) cx = (float)(widthMap - SCREEN_WIDTH);
 	CMario* mario = (CMario*)player;
 	float marioX, marioY;
