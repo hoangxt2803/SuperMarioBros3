@@ -18,8 +18,10 @@
 #include "PSwitch.h"
 #include "PiranhaPlant.h"
 #include "VenusFireTrap.h"
+#include "TreeWorldMap.h"
+#include "Point.h"
 
-CMario::CMario(float x, float y) : CGameObject(x, y)
+CMario::CMario(float x, float y, int inWorldMap) : CGameObject(x, y)
 {
 	isSitting = false;
 	isKick = false;
@@ -44,13 +46,16 @@ CMario::CMario(float x, float y) : CGameObject(x, y)
 	fall_start = 0;
 	transform_start = 0;
 	teleport_start = 0;
-	CGameObject* obj = NULL;
-	LPPLAYSCENE playscreen = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
-	tail = new CTail(x, y);
-	obj = tail;
-	playscreen->AddObject(obj);
-
-
+	this->isInWorldMap = inWorldMap;
+	tail = NULL;
+	if (!isInWorldMap) {
+		CGameObject* obj = NULL;
+		LPPLAYSCENE playscreen = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+		tail = new CTail(x, y);
+		obj = tail;
+		playscreen->AddObject(obj);
+	}
+		
 }
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
@@ -58,7 +63,13 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	vx += ax * dt;
 
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
-
+	if (isFlying) {
+		ay = MARIO_GRAVITY_FALL;
+		//vy = MARIO_RACCON_FLY_VY;
+	}
+	else
+		ay = MARIO_GRAVITY;
+	
 	// reset untouchable timer if untouchable time has passed
 	if (GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
 	{
@@ -75,7 +86,16 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		EventCreateKoopa();
 	}
 	isOnPlatform = false;
-
+	LPPLAYSCENE playscreen = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+	if (playscreen->GetSceneId() == 4)
+		isInWorldMap = true;
+	else
+		isInWorldMap = false;
+	if (isInWorldMap)
+	{
+		vy = 0;
+		vx = 0;
+	}
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -88,6 +108,9 @@ void CMario::OnNoCollision(DWORD dt)
 
 void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+	if (isInWorldMap && e->obj->IsBlocking()) {
+		x = 10;
+	}
 	if (e->ny != 0 && e->obj->IsBlocking())
 	{
 		vy = 0;
@@ -95,6 +118,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 			isOnPlatform = true;
 			isFlying = false;
 			isFalling = false;
+			isJumping = false;
 			fly_start = 0;
 		}
 	}
@@ -128,6 +152,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithVenusFireTrap(e);
 	else if (dynamic_cast<CFireBall*>(e->obj))
 		OnCollisionWithFireBall(e);
+	
 	
 }
 void CMario::OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e)
@@ -163,6 +188,20 @@ void CMario::OnCollisionWithFireBall(LPCOLLISIONEVENT e)
 	if (untouchable == 0)
 	{
 		MarioLevelDown();
+	}
+}
+
+void CMario::OnCollisionWithTreeWorldMap(LPCOLLISIONEVENT e)
+{
+	if (isInWorldMap) {
+		if (nx > 0)
+			x -= 16;
+		else if (nx < 0)
+			x += 16;
+		else if (ny > 0)
+			y -= 16;
+		else if (ny < 0)
+			y += 16;
 	}
 }
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -625,15 +664,20 @@ void CMario::Render()
 		else if(nx<0)
 			animations->Get(aniId)->Render(x - 7, y);
 	}
-	else
+	else if (isInWorldMap) {
+		aniId = ID_ANI_MARIO_IN_WORLD_MAP;
 		animations->Get(aniId)->Render(x, y);
-
-	RenderBoundingBox();
+	}
+	else 
+		animations->Get(aniId)->Render(x, y);
+		
+	
+	//RenderBoundingBox();
 	
 	DebugOutTitle(L"Coins: %d", coin);
 }
 
-void CMario::SetState(int state)
+void CMario::SetState(int state) 
 {
 	// DIE is the end state, cannot be changed! 
 	if (this->state == MARIO_STATE_DIE) return; 
@@ -667,7 +711,6 @@ void CMario::SetState(int state)
 		isRunning = false;
 		break;
 	case MARIO_STATE_JUMP:
-		isJumping = true;
 		if (isSitting) break;
 		if (isOnPlatform)
 		{
@@ -677,6 +720,7 @@ void CMario::SetState(int state)
 				vy = -MARIO_JUMP_SPEED_Y;
 			ny = 1;
 		}
+		isJumping = true;
 		break;
 
 	case MARIO_STATE_RELEASE_JUMP:
@@ -846,13 +890,14 @@ void CMario::Fly()
 			current - fly_start < MARIO_FLYING_TIME)
 		{
 			this->SetState(MARIO_STATE_FLYING);
-			this->vy = -MARIO_FLYING_SPEED;
-			this->vx = 0.1f*nx;
+			this->vy = -0.2;
+			this->vx = 0.01f*nx;
 			this->isFlying = true;
 			this->isCanFly = false;
 		}
 		else if (isCanFly)
 		{
+			//power full -> isCanFly = true
 			fly_start = current;
 			this->vy = -MARIO_FLYING_SPEED;
 			this->vx = 0.1f * nx;
@@ -860,13 +905,43 @@ void CMario::Fly()
 	}
 }
 
+void CMario::WalkLeft()
+{
+	if (isInWorldMap) {
+		this->x -= 16;
+		this->nx = -1;
+	}
+}
+
+void CMario::WalkRight()
+{
+	if (isInWorldMap) {
+		this->x += 16;
+		this->nx = 1;
+	}
+}
+
+void CMario::WalkUp()
+{
+	if (isInWorldMap) {
+		this->y -= 16;
+		this->ny = -1;
+	}
+}
+
+void CMario::WalkDown()
+{
+	if (isInWorldMap) {
+		this->y += 16;
+		this->ny = 1;
+	}
+}
+
 void CMario::Falling()
 {
-	if (level == MARIO_LEVEL_RACCON && this->isOnPlatform == false &&
-		isFlying == false && isFalling)
+	if (level == MARIO_LEVEL_RACCON && !isOnPlatform && !isFlying)
 	{
 		isFalling = true;
-		/*floatingTime = GetTickCount();*/
 	}
 }
 void CMario::TailAttack()

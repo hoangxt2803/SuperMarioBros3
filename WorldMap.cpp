@@ -9,6 +9,8 @@
 #include "AssetIDs.h"
 #include "TreeWorldMap.h"
 
+#include "Mario.h"
+
 using namespace std;
 
 #define SCENE_SECTION_UNKNOWN -1
@@ -104,21 +106,25 @@ void CWorldMap::_ParseSection_OBJECTS(string line)
 
 	switch (object_type)
 	{
-	case OBJECT_TYPE_MARIO:
+	case OBJECT_TYPE_MARIO: {
 		if (player != NULL)
 		{
 			DebugOut(L"[ERROR] MARIO object was created before!\n");
 			return;
 		}
-		obj = new CMario(x, y);
+		int inWorldMap = atoi(tokens[3].c_str());
+		obj = new CMario(x, y, inWorldMap);
+		DebugOut(L"[INFO] Player object has been created!\n");
 		player = (CMario*)obj;
-
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
-	case OBJECT_TYPE_TREE_WORLD_MAP:
-		obj = new CTreeWorldMap(x, y);
+	}
+	case OBJECT_TYPE_TREE_WORLD_MAP: {
+		int type = atoi(tokens[3].c_str());
+		obj = new CTreeWorldMap(x, y, type);
 		DebugOut(L"[INFO] Tree world map object has been created!\n");
 		break;
+	}
 	default:
 		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
 		return;
@@ -236,16 +242,7 @@ void CWorldMap::Update(DWORD dt)
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return;
 
-	// Update camera to follow mario
-	float cx, cy;
 
-	player->GetPosition(cx, cy);
-
-	CGame* game = CGame::GetInstance();
-	cx -= (float)game->GetBackBufferWidth() / 2;
-	//cy -= (float)game->GetBackBufferHeight() / 2;
-	//set camera
-	CGame::GetInstance()->SetCamPos(cx, cy);
 	hud->Update(dt, &coObjects);
 	PurgeDeletedObjects();
 }
@@ -329,27 +326,25 @@ void WorldMapSceneKeyHandler::OnKeyDown(int KeyCode)
 	switch (KeyCode)
 	{
 	case DIK_DOWN: {
-		
-
+		mario->WalkDown();
 		break;
 	}
 	case DIK_UP: {
-		
-
+		mario->WalkUp();
 		break;
 	}
 	case DIK_LEFT: {
-		
-
+		mario->WalkLeft();
 		break;
 	}
 	case DIK_RIGHT: {
-		
-
+		mario->WalkRight();
 		break;
 	}
 	case DIK_S: {
 		CGame::GetInstance()->InitiateSwitchScene(1);
+		CWorldMap* WorldMapScene = (LPWORLDMAP)CGame::GetInstance()->GetCurrentScene();
+		WorldMapScene->Clear();
 		break;
 	}
 	default:
