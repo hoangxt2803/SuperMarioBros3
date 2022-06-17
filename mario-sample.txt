@@ -1,5 +1,5 @@
 [SETTINGS]
-start	1
+start	10
 width	320
 height	240
 #id	type	file
@@ -9,6 +9,7 @@ height	240
 0	sources\scene\worldmap.txt
 1	sources\scene\scene01.txt
 3	sources\scene\scene03.txt
+#WorldMap
 4	sources\scene\scene04.txt
 5	sources\scene\scene05.txt
 6	sources\scene\scene0005.txt

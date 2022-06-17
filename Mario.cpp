@@ -375,8 +375,6 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 		CHUD* hub = (CHUD*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetHUD();
 		hub->LifePlus(1);
 	}
-	isInPipe = true;
-	this->SetPosition(2105, 510);
 	e->obj->Delete();
 }
 
