@@ -170,7 +170,9 @@
     <ClInclude Include="Pipe.h" />
     <ClInclude Include="PiranhaPlant.h" />
     <ClInclude Include="Platform.h" />
+    <ClInclude Include="PlayerWorldMap.h" />
     <ClInclude Include="PlayScene.h" />
+    <ClInclude Include="Point.h" />
     <ClInclude Include="Portal.h" />
     <ClInclude Include="PSwitch.h" />
     <ClInclude Include="SampleKeyEventHandler.h" />
@@ -212,7 +214,9 @@
     <ClCompile Include="Pipe.cpp" />
     <ClCompile Include="PiranhaPlant.cpp" />
     <ClCompile Include="Platform.cpp" />
+    <ClCompile Include="PlayerWorldMap.cpp" />
     <ClCompile Include="PlayScene.cpp" />
+    <ClCompile Include="Point.cpp" />
     <ClCompile Include="Portal.cpp" />
     <ClCompile Include="PSwitch.cpp" />
     <ClCompile Include="SampleKeyEventHandler.cpp" />

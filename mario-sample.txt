@@ -1,5 +1,5 @@
 [SETTINGS]
-start	10
+start	1
 width	320
 height	240
 #id	type	file
@@ -11,6 +11,7 @@ height	240
 3	sources\scene\scene03.txt
 4	sources\scene\scene04.txt
 5	sources\scene\scene05.txt
+6	sources\scene\scene0005.txt
 # id	file 
 [TEXTURES]
 -100	sources\textures\bbox.png
@@ -22,6 +23,7 @@ height	240
 20	sources\textures\misc.png
 21	sources\textures\leaf.png
 22	sources\textures\misc2.png
+23	sources\textures\point.png
 30	sources\textures\map1_1.png
 31	sources\textures\extra_map.png
 32	sources\textures\map11.png

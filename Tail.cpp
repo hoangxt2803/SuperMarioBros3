@@ -5,6 +5,7 @@
 #include "PlayScene.h"
 #include "Koopa.h"
 #include "BrickEffect.h"
+#include "Point.h"
 void CTail::Render()
 {
 	if (state == TAIL_STATE_INACTIVE)
@@ -30,9 +31,14 @@ void CTail::OnCollisionWith(LPCOLLISIONEVENT e)
 }
 void CTail::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
-	CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
-
 	if (e->nx != 0) {
+		CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
+		CGameObject* obj = NULL;
+		LPPLAYSCENE playscreen = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+		float XX, YY;
+		goomba->GetPosition(XX, YY);
+		obj = new CPoint(XX, YY - 4, POINT_TYPE_100);
+		playscreen->AddObject(obj);
 		goomba->SetState(GOOMBA_STATE_DEATH);
 	}
 	
@@ -40,11 +46,16 @@ void CTail::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 
 void CTail::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 {
-	CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
 	if (e->nx != 0) {
+		CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
+		CGameObject* obj = NULL;
+		LPPLAYSCENE playscreen = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+		float XX, YY;
+		koopa->GetPosition(XX, YY);
+		obj = new CPoint(XX, YY - 4, POINT_TYPE_200);
+		playscreen->AddObject(obj);
 		koopa->SetState(KOOPA_TROOPA_STATE_DEATH);
-	}
-	
+	}	
 }
 
 void CTail::OnCollisionWithBrick(LPCOLLISIONEVENT e)

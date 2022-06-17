@@ -113,17 +113,18 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	switch (object_type)
 	{
-	case OBJECT_TYPE_MARIO:
-		if (player!=NULL) 
+	case OBJECT_TYPE_MARIO: {
+		if (player != NULL)
 		{
 			DebugOut(L"[ERROR] MARIO object was created before!\n");
 			return;
 		}
-		obj = new CMario(x,y); 
-		player = (CMario*)obj;  
-
+		int isInWorldMap = atoi(tokens[3].c_str());
+		obj = new CMario(x, y, isInWorldMap);
+		player = (CMario*)obj;
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
+	}
 	case OBJECT_TYPE_GOOMBA: {
 		int type = atoi(tokens[3].c_str());
 		int level = atoi(tokens[4].c_str());
@@ -352,7 +353,7 @@ void CPlayScene::Update(DWORD dt)
 	CMario* mario = (CMario*)player;
 	float marioX, marioY;
 	mario->GetPosition(marioX, marioY);
-	if (mario->GetIsFlying() || mario->GetIsFalling() || cy + game->GetBackBufferHeight() < heightMap) {
+	if (mario->GetIsFlying() || cy + game->GetBackBufferHeight() < heightMap) {
 		cy -= (float)game->GetBackBufferHeight() / 2;
 	}
 	else

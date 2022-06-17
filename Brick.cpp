@@ -65,8 +65,6 @@ void CBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			else if (this->type == BRICK_TYPE_BROKEN_P) {
 				obj = new CPSwitch(oldX, oldY);
-				// +1up 
-
 			}
 			LPPLAYSCENE playscreen = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
 			playscreen->AddObject(obj);

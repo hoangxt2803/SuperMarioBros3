@@ -1,4 +1,6 @@
 #include "Coin.h"
+#include "Point.h"
+#include "PlayScene.h"
 
 CCoin::CCoin(float x, float y) :CGameObject(x, y) {
 	this->vx = 0;
@@ -38,6 +40,11 @@ void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		y += vy * dt;
 		vy += ay * dt;
 		if (y + COIN_HEIGHT / 2 >= oldY && vy > 0) {
+			CGameObject* obj = NULL;
+			LPPLAYSCENE playscreen = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+			obj = new CPoint(x, oldY - COIN_HEIGHT/2, POINT_TYPE_100);
+			playscreen->AddObject(obj);
+
 			this->Delete();
 		}
 	}

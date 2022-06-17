@@ -168,7 +168,11 @@ void CMario::OnCollisionWithFireBall(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
 	CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
-
+	CGameObject* obj = NULL;
+	LPPLAYSCENE playscreen = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+	float goombaX, goombaY;
+	goomba->GetPosition(goombaX, goombaY);
+	
 	// jump on top >> kill Goomba and deflect a bit 
 	if (e->ny < 0)
 	{
@@ -176,11 +180,15 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 		{
 			goomba->SetState(GOOMBA_STATE_DIE);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
+			obj = new CPoint(goombaX, goombaY - 4, POINT_TYPE_100);
+			playscreen->AddObject(obj);
 		}
 		else if (goomba->GetLevel() != GOOMBA_LEVEL_NORMAL)
 		{
 			goomba->SetLevel(GOOMBA_LEVEL_NORMAL);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
+			obj = new CPoint(goombaX, goombaY - 4, POINT_TYPE_400);
+			playscreen->AddObject(obj);
 		}
 	}
 	else // hit by Goomba
@@ -198,6 +206,10 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 {
 	CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
+	CGameObject* obj = NULL;
+	LPPLAYSCENE playscreen = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+	float XX, YY;
+	koopa->GetPosition(XX, YY);
 
 	// jump on top >> kill Goomba and deflect a bit 
 	if (e->ny < 0)
@@ -206,12 +218,17 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 			koopa->SetKoopaToShell(false);
 			koopa->SetLevel(KOOPA_TROOPA_LEVEL_NORMAL);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
+			obj = new CPoint(XX, YY - 4, POINT_TYPE_200);
+			playscreen->AddObject(obj);
+
 		}
 		else if (koopa->GetState() == KOOPA_TROOPA_STATE_WALKING)
 		{
 			koopa->SetKoopaToShell(true);
 			koopa->SetState(KOOPA_TROOPA_STATE_SHELL);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
+			obj = new CPoint(XX, YY - 4, POINT_TYPE_100);
+			playscreen->AddObject(obj);
 		}
 		else if (koopa->GetState() == KOOPA_TROOPA_STATE_SHELL) {
 			koopa->SetKoopaToShell(false);
@@ -256,6 +273,7 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
 	CHUD* hub = (CHUD*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetHUD();
 	hub->CoinPlus();
+	hub->PointPlus(50);
 	e->obj->Delete();
 	coin++;
 }
@@ -273,6 +291,7 @@ void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 		if (brick->GetBrickType() == BRICK_TYPE_QBRICK_COIN && brick->GetState() != BRICK_STATE_BRICK_EMPTY) {
 			CHUD* hub = (CHUD*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetHUD();
 			hub->CoinPlus();
+			hub->PointPlus(50);
 			brick->SetState(BRICK_STATE_BRICK_UP);
 		}
 	}
@@ -280,17 +299,27 @@ void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 	if (brick->GetBrickType() == BRICK_TYPE_BROKEN && brick->GetState() == BRICK_STATE_BROKEN_BRICK_COIN) {
 		CHUD* hub = (CHUD*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetHUD();
 		hub->CoinPlus();
+		hub->PointPlus(50);
 		e->obj->Delete();
 	}
 }
 void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 {
 	CMushroom* mushroom = dynamic_cast<CMushroom*>(e->obj);
+	CGameObject* obj = NULL;
+	LPPLAYSCENE playscreen = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+	float XX, YY;
+	mushroom->GetPosition(XX, YY);
+
 	if (mushroom->GetType() == MUSHROOM_TYPE_RED) {
 		MarioLevelUp();
+		obj = new CPoint(XX, YY - 4, POINT_TYPE_1000);
+		playscreen->AddObject(obj);
+
 	}
 	else if (mushroom->GetType() == MUSHROOM_TYPE_GREEN) {
-		// +1up
+		CHUD* hub = (CHUD*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetHUD();
+		hub->LifePlus(1);
 	}
 	e->obj->Delete();
 }
@@ -303,7 +332,14 @@ void CMario::OnCollisionWithPSwitch(LPCOLLISIONEVENT e)
 }
 void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
 {
+	CLeaf* leaf = dynamic_cast<CLeaf*>(e->obj);
 	MarioLevelUp();
+	CGameObject* obj = NULL;
+	LPPLAYSCENE playscreen = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+	float XX, YY;
+	leaf->GetPosition(XX, YY);
+	obj = new CPoint(XX, YY - 4, POINT_TYPE_1000);
+	playscreen->AddObject(obj);
 	e->obj->Delete();
 }
 void CMario::OnCollisionWithEndGameEffect(LPCOLLISIONEVENT e)

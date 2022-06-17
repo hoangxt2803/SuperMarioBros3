@@ -180,6 +180,12 @@
     <ClInclude Include="TreeWorldMap.h">
       <Filter>Header Files\WorldMap</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerWorldMap.h">
+      <Filter>Header Files\WorldMap</Filter>
+    </ClInclude>
+    <ClInclude Include="Point.h">
+      <Filter>Header Files\Objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp">
@@ -298,6 +304,12 @@
     </ClCompile>
     <ClCompile Include="TreeWorldMap.cpp">
       <Filter>Source Files\WorldMap</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerWorldMap.cpp">
+      <Filter>Source Files\WorldMap</Filter>
+    </ClCompile>
+    <ClCompile Include="Point.cpp">
+      <Filter>Source Files\Objects</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

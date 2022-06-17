@@ -15,10 +15,10 @@
 #define MARIO_JUMP_SPEED_Y		0.35f
 #define MARIO_JUMP_RUN_SPEED_Y	0.4f
 
-#define MARIO_RACCON_FLY_VY		0.3f
-#define MARIO_RACCON_FALL_VY	0.3f
+#define MARIO_RACCON_FLY_VY		0.2f
+#define MARIO_RACCON_FALL_VY	0.2f
 #define MARIO_GRAVITY			0.0008f
-#define MARIO_GRAVITY_FALL			0.0003f
+#define MARIO_GRAVITY_FALL			0.0002f
 #define MARIO_JUMP_DEFLECT_SPEED  0.2f
 
 
@@ -83,26 +83,27 @@
 #define ID_ANI_MARIO_SMALL_WALKING_RIGHT 1200
 #define ID_ANI_MARIO_SMALL_WALKING_LEFT 1201
 
-#define ID_ANI_MARIO_SMALL_RUNNING_RIGHT 1300
-#define ID_ANI_MARIO_SMALL_RUNNING_LEFT 1301
+#define ID_ANI_MARIO_SMALL_RUNNING_RIGHT	1300
+#define ID_ANI_MARIO_SMALL_RUNNING_LEFT			1301
 
-#define ID_ANI_MARIO_SMALL_BRACE_RIGHT 1400
-#define ID_ANI_MARIO_SMALL_BRACE_LEFT 1401
+#define ID_ANI_MARIO_SMALL_BRACE_RIGHT		1400
+#define ID_ANI_MARIO_SMALL_BRACE_LEFT		1401
 
-#define ID_ANI_MARIO_SMALL_JUMP_WALK_RIGHT 1500
-#define ID_ANI_MARIO_SMALL_JUMP_WALK_LEFT 1501
+#define ID_ANI_MARIO_SMALL_JUMP_WALK_RIGHT	1500
+#define ID_ANI_MARIO_SMALL_JUMP_WALK_LEFT	1501
 
-#define ID_ANI_MARIO_SMALL_JUMP_RUN_RIGHT 1600
-#define ID_ANI_MARIO_SMALL_JUMP_RUN_LEFT 1601
+#define ID_ANI_MARIO_SMALL_JUMP_RUN_RIGHT	1600
+#define ID_ANI_MARIO_SMALL_JUMP_RUN_LEFT	1601
 
-#define ID_ANI_MARIO_SMALL_KICK_RIGHT	1700	
-#define ID_ANI_MARIO_SMALL_KICK_LEFT	1701
+#define ID_ANI_MARIO_SMALL_KICK_RIGHT		1700	
+#define ID_ANI_MARIO_SMALL_KICK_LEFT		1701
 
 #define ID_ANI_MARIO_SMALL_HOLD_WALK_RIGHT	1800	
 #define ID_ANI_MARIO_SMALL_HOLD_WALK_LEFT	1801
 #define ID_ANI_MARIO_SMALL_HOLD_IDLE_RIGHT	1810	
 #define ID_ANI_MARIO_SMALL_HOLD_IDLE_LEFT	1811
-#define ID_ANI_MARIO_SMALL_IN_PIPE		1950
+#define ID_ANI_MARIO_SMALL_IN_PIPE			1950
+#define ID_ANI_MARIO_IN_WORLD_MAP		1951
 
 #define ID_ANI_MARIO_SMALL_TO_BIG_RIGHT		1960
 #define ID_ANI_MARIO_SMALL_TO_BIG_LEFT		1961
@@ -197,6 +198,7 @@ class CMario : public CGameObject
 	BOOLEAN isCanFly = false;
 	BOOLEAN isFalling = false;
 	BOOLEAN isAttack = false;
+	BOOLEAN isInWorldMap = false;
 
 	CTail* tail;
 	float maxVx;
@@ -227,12 +229,13 @@ class CMario : public CGameObject
 	void OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e);
 	void OnCollisionWithVenusFireTrap(LPCOLLISIONEVENT e);
 	void OnCollisionWithFireBall(LPCOLLISIONEVENT e);
+	void OnCollisionWithTreeWorldMap(LPCOLLISIONEVENT e);
 	int GetAniIdBig();
 	int GetAniIdSmall();
 	int GetAniIdRaccon();
 
 public:
-	CMario(float x, float y);
+	CMario(float x, float y, int isInWorldMap);
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
 	void SetState(int state);
@@ -244,11 +247,14 @@ public:
 	void MarioLevelDown();
 	void MarioLevelUp();
 
-
-	void Sit();
 	void TailAttack();
 	void Falling();
 	void Fly();
+	//Mario in world map
+	void WalkLeft();
+	void WalkRight();
+	void WalkUp();
+	void WalkDown();
 
 	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable==0); }
 
@@ -294,4 +300,7 @@ public:
 
 	bool GetIsAttack() { return this->isAttack; }
 	void SetIsAttack(bool value) { this->isAttack = value; }
+
+	bool GetIsInWorldMap() { return this->isAttack; }
+	void SetIsInWorldMap(bool value) { this->isAttack = value; }
 };
