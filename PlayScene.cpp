@@ -2,6 +2,7 @@
 #include <fstream>
 #include "AssetIDs.h"
 
+#include "TelePort.h"
 #include "PlayScene.h"
 #include "Utils.h"
 #include "Textures.h"
@@ -180,6 +181,18 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float b = (float)atof(tokens[4].c_str());
 		int scene_id = atoi(tokens[5].c_str());
 		obj = new CPortal(x, y, r, b, scene_id);
+
+		DebugOut(L"Created portal\n");
+		break;
+	}
+	case OBJECT_TYPE_TELEPORT:
+	{
+		int teleX = atoi(tokens[3].c_str());
+		int teleY = atoi(tokens[4].c_str());
+		int type = atoi(tokens[4].c_str());
+		obj = new CTelePort(x, y, (float)teleX, (float)teleY,type);
+
+		DebugOut(L"Created portal\n");
 		break;
 	}
 	
@@ -340,25 +353,35 @@ void CPlayScene::Update(DWORD dt)
 	float _cx, _cy;
 	
 	player->GetPosition(cx, cy);
-
+	CMario* mario = (CMario*)player;
 	CGame *game = CGame::GetInstance();
 	cx -= (float)game->GetBackBufferWidth() / 2;
 	//cy -= (float)game->GetBackBufferHeight() / 2;
 	_cx = (float)game->GetCamX();
 	_cy = (float)game->GetCamY();
-	if (cx < 0) cx = 0;
-	int widthMap = map->getTotalColOfMap() * TILE_WIDTH;
-	int heightMap = 27 * TILE_HEIGHT;
-	if (cx > (float)(widthMap - SCREEN_WIDTH)) cx = (float)(widthMap - SCREEN_WIDTH);
-	CMario* mario = (CMario*)player;
-	float marioX, marioY;
-	mario->GetPosition(marioX, marioY);
-	if (mario->GetIsFlying() || cy + game->GetBackBufferHeight() < heightMap) {
-		cy -= (float)game->GetBackBufferHeight() / 2;
-	}
-	else
+	if (mario->GetIsInPipe()) {
+		int heightMap = 40 * TILE_HEIGHT;
+		if (cx < 1968) cx = 1968;
+		if (cx > (float)(2479 - SCREEN_WIDTH)) cx = (float)(2479 - SCREEN_WIDTH);
 		cy = (float)(heightMap - CAMERA_MARIO);
-	if (cy < 0) cy = 0;
+		if (cy < 426) cy = 426;
+		
+	}
+	if(!mario->GetIsInPipe()) {
+		if (cx < 0) cx = 0;
+		int widthMap = map->getTotalColOfMap() * TILE_WIDTH;
+		int heightMap = 27 * TILE_HEIGHT;
+		if (cx > (float)(widthMap - SCREEN_WIDTH)) cx = (float)(widthMap - SCREEN_WIDTH);
+		CMario* mario = (CMario*)player;
+		float marioX, marioY;
+		mario->GetPosition(marioX, marioY);
+		if (mario->GetIsFlying() || cy + game->GetBackBufferHeight() < heightMap) {
+			cy -= (float)game->GetBackBufferHeight() / 2;
+		}
+		else
+			cy = (float)(heightMap - CAMERA_MARIO);
+		if (cy < 0) cy = 0;
+	}
 	CGame::GetInstance()->SetCamPos(cx, cy);
 	hud->Update(dt, &coObjects);
 	PurgeDeletedObjects();

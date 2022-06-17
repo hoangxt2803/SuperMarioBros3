@@ -25,9 +25,16 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		mario->TailAttack();
 		break;
 	case DIK_S:
-		mario->SetState(MARIO_STATE_JUMP);
-		mario->Falling();
-		mario->Fly();
+		if (mario->GetLevel() == MARIO_LEVEL_RACCON && mario->GetIsRunning()) {
+			mario->Fly();
+		}
+		else if (mario->GetLevel() == MARIO_LEVEL_RACCON && !mario->GetIsOnPlatform() && !mario->GetIsFlying() && !mario->GetIsFalling()) {
+
+			mario->Falling();
+		}
+		else
+			mario->SetState(MARIO_STATE_JUMP);
+		
 		break;
 	case DIK_1:
 		mario->SetLevel(MARIO_LEVEL_SMALL);

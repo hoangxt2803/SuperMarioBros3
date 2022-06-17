@@ -180,6 +180,7 @@
     <ClInclude Include="SPlatform.h" />
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="Tail.h" />
+    <ClInclude Include="TelePort.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="TileMap.h" />
@@ -224,6 +225,7 @@
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="Tail.cpp" />
+    <ClCompile Include="TelePort.cpp" />
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="TileMap.cpp" />
     <ClCompile Include="TreeWorldMap.cpp" />
