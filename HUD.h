@@ -76,6 +76,9 @@ class CHUD : public CGameObject {
 	int levelSpeedBar = 0;;
 	ULONGLONG running_start;
 	int coin;
+	int point;
+	int life;
+	int time;
 	
 public:
 	CHUD();
@@ -85,9 +88,14 @@ public:
 	
 	void RenderNumber(int number, float x, float y);
 	void RenderNumberCoin(int coin);
+	void RenderNumberLife(int point);
+	void RenderNumberPoint(int coin);
+	void RenderNumberTime(int coin);
 	int GetLevelSpeedBar(float vx);
 	void RenderSpeedBar(int lv);
 
 	void CoinPlus() { coin++; }
+	void PointPlus(int point);
+	void LifePlus(int life) { this->life += life; }
 };
 typedef CHUD* LPHUD;

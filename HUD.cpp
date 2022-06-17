@@ -18,6 +18,9 @@ CHUD::CHUD() {
 	world = 1;
 	running_start = 0;
 	coin = 0;
+	point = 0;
+	life = 3;
+	time = 300;
 }
 
 
@@ -45,7 +48,7 @@ void CHUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CHUD::Render()
 {
-
+	
 	CAnimations::GetInstance()->Get(ANI_BLACK_BACKGROUND_2)->Render(x, y + BLACK_BACKGROUND);
 	CAnimations::GetInstance()->Get(ANI_HUB)->Render(x, y);
 	//world number
@@ -57,17 +60,20 @@ void CHUD::Render()
 	CAnimations::GetInstance()->Get(ANI_HUB_NUMBER_0)->Render(x - LIFE1_WIDTH, y + LIFE1_HEIGHT);
 	CAnimations::GetInstance()->Get(ANI_HUB_NUMBER_3)->Render(x - LIFE2_WIDTH, y + LIFE2_HEIGHT);
 	//score
-	CAnimations::GetInstance()->Get(ANI_HUB_NUMBER_0)->Render(x - SCORE_WIDTH, y + SCORE_HEIGHT);
+	RenderNumberPoint(point);
+	/*CAnimations::GetInstance()->Get(ANI_HUB_NUMBER_0)->Render(x - SCORE_WIDTH, y + SCORE_HEIGHT);
 	CAnimations::GetInstance()->Get(ANI_HUB_NUMBER_1)->Render(x - SCORE_WIDTH + 8, y + LIFE1_HEIGHT);
 	CAnimations::GetInstance()->Get(ANI_HUB_NUMBER_2)->Render(x - SCORE_WIDTH + 16, y + LIFE1_HEIGHT);
 	CAnimations::GetInstance()->Get(ANI_HUB_NUMBER_3)->Render(x - SCORE_WIDTH + 24, y + LIFE1_HEIGHT);
 	CAnimations::GetInstance()->Get(ANI_HUB_NUMBER_4)->Render(x - SCORE_WIDTH + 32, y + LIFE1_HEIGHT);
 	CAnimations::GetInstance()->Get(ANI_HUB_NUMBER_5)->Render(x - SCORE_WIDTH + 40, y + LIFE1_HEIGHT);
-	CAnimations::GetInstance()->Get(ANI_HUB_NUMBER_6)->Render(x - SCORE_WIDTH + 48, y + LIFE1_HEIGHT);
+	CAnimations::GetInstance()->Get(ANI_HUB_NUMBER_6)->Render(x - SCORE_WIDTH + 48, y + LIFE1_HEIGHT);*/
+
 	//Time
-	CAnimations::GetInstance()->Get(ANI_HUB_NUMBER_0)->Render(x + TIME_WIDTH, y + TIME_HEIGHT);
+	RenderNumberTime(this->time);
+	/*CAnimations::GetInstance()->Get(ANI_HUB_NUMBER_0)->Render(x + TIME_WIDTH, y + TIME_HEIGHT);
 	CAnimations::GetInstance()->Get(ANI_HUB_NUMBER_1)->Render(x + TIME_WIDTH + 8, y + TIME_HEIGHT);
-	CAnimations::GetInstance()->Get(ANI_HUB_NUMBER_2)->Render(x + TIME_WIDTH + 16, y + TIME_HEIGHT);
+	CAnimations::GetInstance()->Get(ANI_HUB_NUMBER_2)->Render(x + TIME_WIDTH + 16, y + TIME_HEIGHT);*/
 	//Coin
 	RenderNumberCoin(this->coin);
 	/*CAnimations::GetInstance()->Get(ANI_HUB_NUMBER_0)->Render(x + COUNT_COIN_WIDTH, y - COUNT_COIN_HEIGHT);
@@ -83,6 +89,37 @@ void CHUD::RenderNumberCoin(int coin) {
 	hangChuc = coin / 10;
 	RenderNumber(hangChuc, x + COUNT_COIN_WIDTH, y - COUNT_COIN_HEIGHT);
 	RenderNumber(donVi, x + COUNT_COIN_WIDTH + 8, y - COUNT_COIN_HEIGHT);
+}
+void CHUD::RenderNumberLife(int lift)
+{
+}
+void CHUD::RenderNumberPoint(int point)
+{
+	int donVi, hangChuc, hangTram, hangNgan, hangChucNgan, hangTramNgan, hangTrieu;
+	donVi = point % 10;
+	hangChuc = point % 100 / 10;
+	hangTram = point % 1000 / 100;
+	hangNgan = point % 10000 / 1000;
+	hangChucNgan = point % 100000 / 10000;
+	hangTramNgan = point % 1000000 / 100000;
+	hangTrieu = point % 10000000 / 1000000;
+	RenderNumber(hangTrieu, x - SCORE_WIDTH, y + SCORE_HEIGHT);
+	RenderNumber(hangTramNgan, x - SCORE_WIDTH + 8, y + LIFE1_HEIGHT);
+	RenderNumber(hangChucNgan, x - SCORE_WIDTH + 16, y + LIFE1_HEIGHT);
+	RenderNumber(hangNgan, x - SCORE_WIDTH + 24, y + LIFE1_HEIGHT);
+	RenderNumber(hangTram, x - SCORE_WIDTH + 32, y + LIFE1_HEIGHT);
+	RenderNumber(hangChuc, x - SCORE_WIDTH + 40, y + LIFE1_HEIGHT);
+	RenderNumber(donVi, x - SCORE_WIDTH + 48, y + LIFE1_HEIGHT);
+}
+void CHUD::RenderNumberTime(int time)
+{
+	int donVi, hangChuc, hangTram;
+	donVi = time % 10;
+	hangChuc = time % 100 / 10;
+	hangTram = time % 1000 / 100;
+	RenderNumber(hangTram, x + TIME_WIDTH, y + TIME_HEIGHT);
+	RenderNumber(hangChuc, x + TIME_WIDTH + 8, y + TIME_HEIGHT);
+	RenderNumber(donVi, x + TIME_WIDTH + 16, y + TIME_HEIGHT);
 }
 void CHUD::RenderNumber(int number, float x, float y) {
 	switch (number)
@@ -121,6 +158,7 @@ void CHUD::RenderNumber(int number, float x, float y) {
 		break;
 	}
 }
+
 int CHUD::GetLevelSpeedBar(float v) {
 	if (abs(v) < SPEED_FLY / 7)
 		levelSpeedBar = SPEED_BAR_LEVEL_0;
@@ -168,4 +206,12 @@ void CHUD::RenderSpeedBar(int lv) {
 	default:
 		break;
 	}
+}
+
+void CHUD::PointPlus(int value)
+{
+
+	DebugOut(L"[ERROR] value %d=\n", value);
+	 this->point += value;
+	 DebugOut(L"[ERROR] point %d \n", this->point);
 }

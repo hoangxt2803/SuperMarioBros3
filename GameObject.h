@@ -24,8 +24,8 @@ protected:
 	float vx;
 	float vy;
 
-	int nx;	 
-	int ny;
+	int nx = 0;	 
+	int ny = 0;
 
 	int state;
 
