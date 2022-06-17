@@ -20,6 +20,7 @@
 #include "VenusFireTrap.h"
 #include "TreeWorldMap.h"
 #include "Point.h"
+#include "TelePort.h"
 
 CMario::CMario(float x, float y, int inWorldMap) : CGameObject(x, y)
 {
@@ -69,16 +70,19 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	}
 	else if (isTransformToRaccon && GetTickCount64() - transform_start < MARIO_BIG_FORM_TRANSFORM_TIME)
 		return;
+	if (isFalling && GetTickCount64() - fall_start > MARIO_FALLING_TIME) {
+		isFalling = false;
+	}
 	vy += ay * dt;
 	vx += ax * dt;
 
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
-	/*if (isFlying) {
+	if (isFlying || isFalling) {
 		ay = MARIO_GRAVITY_FALL;
 	}
 	else {
 		ay = MARIO_GRAVITY;
-	}*/
+	}
 	
 	
 	// reset untouchable timer if untouchable time has passed
@@ -145,8 +149,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithKoopa(e);
 	else if (dynamic_cast<CCoin*>(e->obj))
 		OnCollisionWithCoin(e);
-	else if (dynamic_cast<CPortal*>(e->obj))
-		OnCollisionWithPortal(e);
+	else if (dynamic_cast<CTelePort*>(e->obj))
+		OnCollisionWithTelePort(e);
 	else if (dynamic_cast<CBrick*>(e->obj))
 		OnCollisionWithBrick(e);
 	else if (dynamic_cast<CMushroom*>(e->obj))
@@ -371,6 +375,8 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 		CHUD* hub = (CHUD*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetHUD();
 		hub->LifePlus(1);
 	}
+	isInPipe = true;
+	this->SetPosition(2105, 510);
 	e->obj->Delete();
 }
 
@@ -399,10 +405,10 @@ void CMario::OnCollisionWithEndGameEffect(LPCOLLISIONEVENT e)
 }
 
 
-void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
+void CMario::OnCollisionWithTelePort(LPCOLLISIONEVENT e)
 {
-	CPortal* p = (CPortal*)e->obj;
-	CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
+	isInPipe = true;
+	this->SetPosition(2105, 510);
 }
 
 //
@@ -682,11 +688,11 @@ void CMario::Render()
 	}
 	else if (isTransformToBig) {
 		if (nx > 0) {
-			aniId = ID_ANI_MARIO_SMALL_TO_BIG_RIGHT;
+			aniId = ID_ANI_MARIO_SMALL_TO_BIG_LEFT;
 			animations->Get(aniId)->Render(x, y);
 		}
 		else if (nx < 0) {
-			aniId = ID_ANI_MARIO_SMALL_TO_BIG_LEFT;
+			aniId = ID_ANI_MARIO_SMALL_TO_BIG_RIGHT;
 			animations->Get(aniId)->Render(x, y);
 		}
 	}
@@ -926,8 +932,8 @@ void CMario::Fly()
 			current - fly_start < MARIO_FLYING_TIME)
 		{
 			this->SetState(MARIO_STATE_FLYING);
-			this->vy = -0.06f;
-			this->vx = 0.1f*nx;
+			this->vy = -MARIO_FLYING_SPEED;
+			this->vx = 0.001f*nx;
 			this->isFlying = true;
 			this->isCanFly = false;
 		}
@@ -976,7 +982,8 @@ void CMario::WalkDown()
 void CMario::Falling()
 {
 	isFalling = true;
-	vy = 0.035f;
+	vy = 0.0035f;
+	fall_start = GetTickCount64();
 }
 void CMario::TailAttack()
 {

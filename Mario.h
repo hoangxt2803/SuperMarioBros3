@@ -201,6 +201,7 @@ class CMario : public CGameObject
 	BOOLEAN isInWorldMap = false;
 	BOOLEAN isTransformToBig = false;
 	BOOLEAN isTransformToRaccon = false;
+	BOOLEAN isInPipe = false;
 
 	CTail* tail;
 	float maxVx;
@@ -221,7 +222,7 @@ class CMario : public CGameObject
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
-	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
+	void OnCollisionWithTelePort(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
 	void OnCollisionWithBrick(LPCOLLISIONEVENT e);
 	void OnCollisionWithMushroom(LPCOLLISIONEVENT e);
@@ -305,4 +306,9 @@ public:
 
 	bool GetIsInWorldMap() { return this->isAttack; }
 	void SetIsInWorldMap(bool value) { this->isAttack = value; }
+
+	bool GetIsInPipe() { return this->isInPipe; }
+	void SetIsInPipe(bool value) { this->isInPipe = value; 
+	DebugOut(L"isInPipe %d", value);
+	}
 };

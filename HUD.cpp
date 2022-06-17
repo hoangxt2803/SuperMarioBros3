@@ -210,8 +210,5 @@ void CHUD::RenderSpeedBar(int lv) {
 
 void CHUD::PointPlus(int value)
 {
-
-	DebugOut(L"[ERROR] value %d=\n", value);
 	 this->point += value;
-	 DebugOut(L"[ERROR] point %d \n", this->point);
 }
