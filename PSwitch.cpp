@@ -66,7 +66,7 @@ void CPSwitch::Render()
 	else if (state == P_SWITCH_STATE_ACTIVATED)
 		aniId = ID_ANI_P_SWITCH_ACTIVATED;
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CPSwitch::SetState(int state)
