@@ -7,6 +7,7 @@
 #include "Brick.h"
 #include "PSwitch.h"
 #include "BrickEffect.h"
+#include "AssetIDs.h"
 CKoopa::CKoopa(float x, float y, int type, int level) :CGameObject(x, y)
 {
 	this->level = level;
@@ -146,6 +147,10 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vy += ay * dt;
 	vx += ax * dt;
+	if (y > DELETE_POSITION_Y) {
+		this->Delete();
+		DebugOut(L"[INFO] Koopa deleted\n");
+	}
 	//wing koopa
 	if (level == KOOPA_TROOPA_LEVEL_WING) {
 		
@@ -365,6 +370,7 @@ void CKoopa::SetState(int state)
 	case KOOPA_TROOPA_STATE_DEATH:
 		vx = 0;
 		vy = -KOOPATROOPA_FLY_SPEED;
+		ay = KOOPA_TROOPA_GRAVITY;
 		ax = 0;
 		break;
 	}

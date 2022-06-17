@@ -1,4 +1,5 @@
 #include "Leaf.h"
+#include "AssetIDs.h"
 CLeaf::CLeaf(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
@@ -24,6 +25,10 @@ void CLeaf::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vy += ay * dt;
 	vx += ax * dt;
+	if (y > DELETE_POSITION_Y) {
+		this->Delete();
+		DebugOut(L"[INFO] Leaf deleted\n");
+	}
 	if (GetState() == LEAF_STATE_INACTIVE)
 	{
 		if (this->y <= positionY) {

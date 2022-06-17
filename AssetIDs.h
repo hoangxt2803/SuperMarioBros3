@@ -10,6 +10,10 @@
 #define MAP1_1_WIDTH	2500
 #define MAP1_1_HEIGHT	432
 
+#define CAM_X_EXTRA_1	2479
+#define CAM_X_EXTRA_2	1968
+#define CAM_Y_EXTRA	432
+#define DELETE_POSITION_Y	432
 #define ID_TEX_MARIO 0
 #define ID_TEX_ENEMY 10
 #define ID_TEX_MISC 20

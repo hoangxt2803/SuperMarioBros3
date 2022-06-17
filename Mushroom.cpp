@@ -1,4 +1,5 @@
 #include "Mushroom.h"
+#include "AssetIDs.h"
 CMushroom::CMushroom(float x, float y, int type) :CGameObject(x, y)
 {
 	this->ax = 0;
@@ -24,6 +25,9 @@ void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vy += ay * dt;
 	vx += ax * dt;
+	if (y > DELETE_POSITION_Y) {
+		this->Delete();
+	}
 	if (GetState() == MUSHROOM_STATE_INACTIVE) {
 
 		if (this->y <= positionY) {

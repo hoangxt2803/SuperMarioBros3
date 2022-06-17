@@ -361,10 +361,10 @@ void CPlayScene::Update(DWORD dt)
 	_cy = (float)game->GetCamY();
 	if (mario->GetIsInPipe()) {
 		int heightMap = 40 * TILE_HEIGHT;
-		if (cx < 1968) cx = 1968;
-		if (cx > (float)(2479 - SCREEN_WIDTH)) cx = (float)(2479 - SCREEN_WIDTH);
+		if (cx < CAM_X_EXTRA_2) cx = CAM_X_EXTRA_2;
+		if (cx > (float)(CAM_X_EXTRA_1 - SCREEN_WIDTH)) cx = (float)(CAM_X_EXTRA_1 - SCREEN_WIDTH);
 		cy = (float)(heightMap - CAMERA_MARIO);
-		if (cy < 426) cy = 426;
+		if (cy < CAM_Y_EXTRA) cy = CAM_Y_EXTRA;
 		
 	}
 	if(!mario->GetIsInPipe()) {

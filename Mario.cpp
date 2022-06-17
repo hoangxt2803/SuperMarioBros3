@@ -73,6 +73,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	if (isFalling && GetTickCount64() - fall_start > MARIO_FALLING_TIME) {
 		isFalling = false;
 	}
+	if (y > DELETE_POSITION_Y) {
+		SetState(MARIO_STATE_DIE);
+	}
 	vy += ay * dt;
 	vx += ax * dt;
 
@@ -646,7 +649,7 @@ int CMario::GetAniIdRaccon()
 				}
 
 			}
-	if (isFlying)
+	if (isFlying || isFalling)
 		if (vx > 0)
 			aniId = ID_ANI_MARIO_RACCON_FLY_LEFT;
 		else if(vx < 0)
@@ -788,10 +791,10 @@ void CMario::SetState(int state)
 		break;
 
 	case MARIO_STATE_DIE:
-
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
 		vx = 0;
 		ax = 0;
+		CGame::GetInstance()->InitiateSwitchScene(4);
 		break;
 	case MARIO_STATE_KICK:
 		isKick = true;
@@ -887,14 +890,14 @@ void CMario::EventCreateKoopa() {
 void CMario::MarioLevelDown() {
 	if (level > MARIO_LEVEL_BIG)
 	{
-		isTransformToBig = true;
+		isTransformToRaccon = true;
 		transform_start = GetTickCount64();
 		level = MARIO_LEVEL_BIG;
 		StartUntouchable();
 	}
 	else if (level > MARIO_LEVEL_SMALL)
 	{
-		isTransformToRaccon = true;
+		isTransformToBig = true;
 		transform_start = GetTickCount64();
 		level = MARIO_LEVEL_SMALL;
 		StartUntouchable();

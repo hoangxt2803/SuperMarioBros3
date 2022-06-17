@@ -98,7 +98,10 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		return;
 	vy += ay * dt;
 	vx += ax * dt;
-
+	if (y > DELETE_POSITION_Y) {
+		this->Delete();
+		DebugOut(L"[INFO] Gomba deleted\n");
+	}
 	if (isOnPlatform && (state == GOOMBA_STATE_DIE) && (GetTickCount64() - die_start > GOOMBA_DIE_TIMEOUT))
 	{
 		isDeleted = true;
