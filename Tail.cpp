@@ -10,7 +10,7 @@ void CTail::Render()
 {
 	if (state == TAIL_STATE_INACTIVE)
 		return;
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CTail::OnNoCollision(DWORD dt)

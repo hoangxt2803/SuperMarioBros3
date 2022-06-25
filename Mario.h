@@ -12,11 +12,11 @@
 #define MARIO_ACCEL_WALK_X	0.0005f
 #define MARIO_ACCEL_RUN_X	0.0007f
 
-#define MARIO_JUMP_SPEED_Y		0.32f
+#define MARIO_JUMP_SPEED_Y		0.35f
 #define MARIO_JUMP_RUN_SPEED_Y	0.4f
 
-#define MARIO_RACOON_FALL_VY		0.05f
-#define MARIO_RACOON_FLY_VY			 -0.06f
+#define MARIO_RACOON_FALL_VY		0.2f
+#define MARIO_RACOON_FLY_VY			 0.2f
 #define MARIO_GRAVITY			0.0008f
 #define MARIO_GRAVITY_FALL			0.0002f
 #define MARIO_JUMP_DEFLECT_SPEED  0.2f
@@ -159,7 +159,7 @@
 #define	MARIO_LEVEL_RACCON	3
 
 #define MARIO_BIG_BBOX_WIDTH  14
-#define MARIO_BIG_BBOX_HEIGHT 24
+#define MARIO_BIG_BBOX_HEIGHT 26
 #define MARIO_BIG_SITTING_BBOX_WIDTH  14
 #define MARIO_BIG_SITTING_BBOX_HEIGHT 16
 
@@ -169,14 +169,14 @@
 #define MARIO_SMALL_BBOX_HEIGHT 12
 
 #define MARIO_RACCON_BBOX_WIDTH  22
-#define MARIO_RACCON_BBOX_HEIGHT 24
+#define MARIO_RACCON_BBOX_HEIGHT 26
 #define MARIO_RACCON_SITTING_BBOX_WIDTH  22
 #define MARIO_RACCON_SITTING_BBOX_HEIGHT 16
 
 
 #define MARIO_FLYING_SPEED				0.3f
 #define MARIO_UNTOUCHABLE_TIME 2500
-#define MARIO_FLYING_TIME 10000
+#define MARIO_FLYING_TIME 5000
 #define MARIO_TAIL_ATTACK_TIME 200
 #define MARIO_BIG_FORM_TRANSFORM_TIME 600
 #define MARIO_RACCOON_FORM_TRANSFORM_TIME 400
@@ -236,7 +236,7 @@ class CMario : public CGameObject
 	int GetAniIdBig();
 	int GetAniIdSmall();
 	int GetAniIdRaccon();
-
+	 
 public:
 	CMario(float x, float y, int isInWorldMap);
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
@@ -309,6 +309,6 @@ public:
 
 	bool GetIsInPipe() { return this->isInPipe; }
 	void SetIsInPipe(bool value) { this->isInPipe = value; 
-	DebugOut(L"isInPipe %d", value);
+	//DebugOut(L"isInPipe %d", value);
 	}
 };

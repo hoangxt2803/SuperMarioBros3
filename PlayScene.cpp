@@ -123,7 +123,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int isInWorldMap = atoi(tokens[3].c_str());
 		obj = new CMario(x, y, isInWorldMap);
 		player = (CMario*)obj;
-		DebugOut(L"[INFO] Player object has been created!\n");
+		//DebugOut(L"[INFO] Player object has been created!\n");
 		break;
 	}
 	case OBJECT_TYPE_GOOMBA: {
@@ -182,7 +182,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int scene_id = atoi(tokens[5].c_str());
 		obj = new CPortal(x, y, r, b, scene_id);
 
-		DebugOut(L"Created portal\n");
+		///DebugOut(L"Created portal\n");
 		break;
 	}
 	case OBJECT_TYPE_TELEPORT:
@@ -192,7 +192,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int type = atoi(tokens[4].c_str());
 		obj = new CTelePort(x, y, (float)teleX, (float)teleY,type);
 
-		DebugOut(L"Created portal\n");
+		//DebugOut(L"Created portal\n");
 		break;
 	}
 	
@@ -239,7 +239,7 @@ void CPlayScene::_ParseSection_MAPS(string line)
 
 	if (tokens.size() < 1) return;
 	LPCWSTR path = ToLPCWSTR(tokens[0]);
-	DebugOut(L"[INFO] Start loading map from : %s \n", path);
+	//DebugOut(L"[INFO] Start loading map from : %s \n", path);
 	map = new CMap(path);
 	map->LoadInfoMap(path);
 	map->LoadMapSprites(map->getIdTextureMap());
@@ -257,7 +257,7 @@ void CPlayScene::_ParseSection_HUD(string line)
 }
 void CPlayScene::LoadAssets(LPCWSTR assetFile)
 {
-	DebugOut(L"[INFO] Start loading assets from : %s \n", assetFile);
+	//DebugOut(L"[INFO] Start loading assets from : %s \n", assetFile);
 
 	ifstream f;
 	f.open(assetFile);
@@ -287,12 +287,12 @@ void CPlayScene::LoadAssets(LPCWSTR assetFile)
 
 	f.close();
 
-	DebugOut(L"[INFO] Done loading assets from %s\n", assetFile);
+	//DebugOut(L"[INFO] Done loading assets from %s\n", assetFile);
 }
 
 void CPlayScene::Load()
 {
-	DebugOut(L"[INFO] Start loading scene from : %s \n", sceneFilePath);
+	//DebugOut(L"[INFO] Start loading scene from : %s \n", sceneFilePath);
 
 	ifstream f;
 	f.open(sceneFilePath);
@@ -326,7 +326,7 @@ void CPlayScene::Load()
 
 	f.close();
 
-	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
+	//DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
 }
 
 void CPlayScene::Update(DWORD dt)
@@ -360,6 +360,7 @@ void CPlayScene::Update(DWORD dt)
 	_cx = (float)game->GetCamX();
 	_cy = (float)game->GetCamY();
 	if (mario->GetIsInPipe()) {
+		CGame::GetInstance()->SetCamPos(2110,510);
 		int heightMap = 40 * TILE_HEIGHT;
 		if (cx < CAM_X_EXTRA_2) cx = CAM_X_EXTRA_2;
 		if (cx > (float)(CAM_X_EXTRA_1 - SCREEN_WIDTH)) cx = (float)(CAM_X_EXTRA_1 - SCREEN_WIDTH);
@@ -423,7 +424,7 @@ void CPlayScene::Unload()
 	objects.clear();
 	player = NULL;
 
-	DebugOut(L"[INFO] Scene %d unloaded! \n", id);
+	//DebugOut(L"[INFO] Scene %d unloaded! \n", id);
 }
 
 bool CPlayScene::IsGameObjectDeleted(const LPGAMEOBJECT& o) { return o == NULL; }

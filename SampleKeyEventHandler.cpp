@@ -51,6 +51,11 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_6:
 		mario->SetPosition(2688, 320);
 		break;
+	case DIK_7: {
+		mario->SetPosition(2110, 510);
+		mario->SetIsInPipe(true);
+		break; 
+	}
 	case DIK_0:
 		mario->SetState(MARIO_STATE_DIE);
 		break;

@@ -103,7 +103,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	if (!isCreatedKoopa) {
 		EventCreateKoopa();
 	}
-	isOnPlatform = false;
+	
 	LPPLAYSCENE playscreen = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
 	if (playscreen->GetSceneId() == 4)
 		isInWorldMap = true;
@@ -114,6 +114,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		vy = 0;
 		vx = 0;
 	}
+	//isOnPlatform = false;
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -348,7 +349,6 @@ void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 		if (brick->GetBrickType() == BRICK_TYPE_QBRICK_COIN && brick->GetState() != BRICK_STATE_BRICK_EMPTY) {
 			CHUD* hub = (CHUD*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetHUD();
 			hub->CoinPlus();
-			hub->PointPlus(50);
 			brick->SetState(BRICK_STATE_BRICK_UP);
 		}
 	}
@@ -705,9 +705,9 @@ void CMario::Render()
 		animations->Get(aniId)->Render(x, y);
 		
 	
-	//RenderBoundingBox();
+	RenderBoundingBox();
 	
-	DebugOutTitle(L"Coins: %d", coin);
+	//DebugOutTitle(L"Coins: %d", coin);
 }
 
 void CMario::SetState(int state) 
@@ -755,6 +755,7 @@ void CMario::SetState(int state)
 				vy = -MARIO_JUMP_SPEED_Y;
 			ny = 1;
 			isJumping = true;
+			isOnPlatform = false;
 		}
 		break;
 
@@ -801,6 +802,7 @@ void CMario::SetState(int state)
 		kick_start = GetTickCount64();
 		break;
 	case MARIO_STATE_FLYING:
+		isOnPlatform = false;
 		break;
 	}
 
@@ -904,7 +906,7 @@ void CMario::MarioLevelDown() {
 	}
 	else
 	{
-		DebugOut(L">>> Mario DIE >>> \n");
+		//DebugOut(L">>> Mario DIE >>> \n");
 		SetState(MARIO_STATE_DIE);
 	}
 }
