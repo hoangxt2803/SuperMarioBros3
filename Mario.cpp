@@ -34,7 +34,7 @@ CMario::CMario(float x, float y, int inWorldMap) : CGameObject(x, y)
 	maxVx = 0.0f;
 	ax = 0.0f;
 	ay = MARIO_GRAVITY;
-
+	isAuto = false;
 	level = MARIO_LEVEL_SMALL;
 	untouchable = 0;
 	untouchable_start = -1;
@@ -77,6 +77,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		if (y > DELETE_POSITION_Y) {
 			SetState(MARIO_STATE_DIE);
 		}
+	}
+	if (isAuto && isOnPlatform) {
+		vx = MARIO_WALKING_SPEED;
+		SetState(MARIO_STATE_WALKING_RIGHT);
 	}
 	vy += ay * dt;
 	vx += ax * dt;
@@ -408,6 +412,7 @@ void CMario::OnCollisionWithEndGameEffect(LPCOLLISIONEVENT e)
 {
 	CEndGameEffect* end = (CEndGameEffect*)e->obj;
 	end->SetIsCollected(true);
+	isAuto = true;
 }
 
 

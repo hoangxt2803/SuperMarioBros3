@@ -202,6 +202,8 @@ class CMario : public CGameObject
 	BOOLEAN isTransformToBig = false;
 	BOOLEAN isTransformToRaccon = false;
 	BOOLEAN isInPipe = false;
+	BOOLEAN isAuto = false;
+
 
 	CTail* tail;
 	float maxVx;
@@ -308,7 +310,12 @@ public:
 	void SetIsInWorldMap(bool value) { this->isAttack = value; }
 
 	bool GetIsInPipe() { return this->isInPipe; }
-	void SetIsInPipe(bool value) { this->isInPipe = value; 
+	void SetIsInPipe(bool value) { this->isInPipe = value; }
 	//DebugOut(L"isInPipe %d", value);
+
+	bool GetIsAuto() { return this->isAuto; }
+	void SetIsAuto(bool value) {
+		this->isAuto = value;
 	}
+	
 };

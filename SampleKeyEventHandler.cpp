@@ -10,7 +10,9 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 {
 	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 	CMario* mario = (CMario *)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer(); 
-
+	if (mario->GetIsAuto()) {
+		return;
+	}
 	switch (KeyCode)
 	{
 	case DIK_DOWN:
