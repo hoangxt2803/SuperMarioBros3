@@ -4,6 +4,7 @@
 #include "Map.h"
 
 #include "AssetIDs.h"
+#include "debug.h"
 CMap::CMap() {
 	totalRowOfMap = 0;
 	totalColOfMap = 0;
@@ -60,15 +61,18 @@ void CMap::LoadInfoMap(LPCWSTR filePath) {
 
 		// background
 		in >> totalColOfMap >> totalRowOfMap >> tileSizeX >> tileSizeY >> totalRowOfTileSet >> totalColOfTileSet >> totalSprites >> idTextureMap >> totalTiles;
-
+		mapTiles.resize(totalRowOfMap);
 		for (int i = 0; i < totalRowOfMap; i++)
 		{
+			mapTiles[i].resize(totalColOfMap);
 			for (int j = 0; j < totalColOfMap; j++)
 			{
-				int id;
+				in >> mapTiles.at(i).at(j);
+				/*int id;
 				in >> id;
 				CTileMap* tile = new CTileMap(id, i, j);
-				tiles.push_back(tile);
+				tiles.push_back(tile);*/
+				
 			}
 		}
 		in.close();
@@ -76,7 +80,21 @@ void CMap::LoadInfoMap(LPCWSTR filePath) {
 
 }
 void CMap::Render() {
-	for (int i = 0; i < totalTiles; i++) {
+	/*for (int i = 0; i < totalTiles; i++) {
 		tiles[i]->Render();
+	}*/
+	float cam_x, cam_y;
+	CGame::GetInstance()->GetCamPos(cam_x, cam_y);
+	for (int i = cam_y / TILE_HEIGHT; i < ((cam_y + SCREEN_HEIGHT) / TILE_HEIGHT); i++)
+	{
+		for (int j = cam_x / TILE_WIDTH; j < ((cam_x + SCREEN_WIDTH) / TILE_WIDTH); j++)
+		{
+			if (mapTiles[i][j] >= 0)
+			{
+				float x = j * TILE_WIDTH;
+				float y = i * TILE_HEIGHT;
+				sprites->Get(mapTiles.at(i).at(j))->Draw(x, y);
+			}
+		}
 	}
 }

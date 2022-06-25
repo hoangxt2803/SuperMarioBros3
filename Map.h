@@ -2,6 +2,7 @@
 #include "TileMap.h"
 #include"Textures.h"
 #include "Sprites.h"
+#include <vector>
 
 class CMap {
 	int totalRowOfMap, totalColOfMap;
@@ -15,6 +16,7 @@ class CMap {
 	LPTILEMAP tile;
 	CSprites* sprites;
 	vector<LPTILEMAP> tiles;
+	vector<vector<int>> mapTiles;
 public:
 	CMap();
 	CMap(LPCWSTR filePath);
