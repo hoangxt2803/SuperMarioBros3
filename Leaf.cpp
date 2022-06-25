@@ -27,7 +27,7 @@ void CLeaf::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vx += ax * dt;
 	if (y > DELETE_POSITION_Y) {
 		this->Delete();
-		DebugOut(L"[INFO] Leaf deleted\n");
+		//DebugOut(L"[INFO] Leaf deleted\n");
 	}
 	if (GetState() == LEAF_STATE_INACTIVE)
 	{

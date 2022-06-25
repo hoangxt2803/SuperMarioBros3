@@ -125,7 +125,7 @@ void CIntro::_ParseSection_OBJECTS(string line)
 
 void CIntro::LoadAssets(LPCWSTR assetFile)
 {
-	DebugOut(L"[INFO] Start loading assets from : %s \n", assetFile);
+	//DebugOut(L"[INFO] Start loading assets from : %s \n", assetFile);
 
 	ifstream f;
 	f.open(assetFile);
@@ -155,12 +155,12 @@ void CIntro::LoadAssets(LPCWSTR assetFile)
 
 	f.close();
 
-	DebugOut(L"[INFO] Done loading assets from %s\n", assetFile);
+	//DebugOut(L"[INFO] Done loading assets from %s\n", assetFile);
 }
 
 void CIntro::Load()
 {
-	DebugOut(L"[INFO] Start loading scene from : %s \n", sceneFilePath);
+	//DebugOut(L"[INFO] Start loading scene from : %s \n", sceneFilePath);
 
 	ifstream f;
 	f.open(sceneFilePath);
@@ -190,7 +190,7 @@ void CIntro::Load()
 
 	f.close();
 
-	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
+	//DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
 }
 
 void CIntro::Update(DWORD dt)
@@ -253,7 +253,7 @@ void CIntro::Unload()
 
 	objects.clear();
 
-	DebugOut(L"[INFO] Scene %d unloaded! \n", id);
+	//DebugOut(L"[INFO] Scene %d unloaded! \n", id);
 }
 
 bool CIntro::IsGameObjectDeleted(const LPGAMEOBJECT& o) { return o == NULL; }

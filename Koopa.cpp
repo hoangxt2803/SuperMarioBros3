@@ -149,7 +149,7 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vx += ax * dt;
 	if (y > DELETE_POSITION_Y) {
 		this->Delete();
-		DebugOut(L"[INFO] Koopa deleted\n");
+		//DebugOut(L"[INFO] Koopa deleted\n");
 	}
 	//wing koopa
 	if (level == KOOPA_TROOPA_LEVEL_WING) {

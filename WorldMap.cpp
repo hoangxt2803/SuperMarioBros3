@@ -114,15 +114,15 @@ void CWorldMap::_ParseSection_OBJECTS(string line)
 		}
 		int inWorldMap = atoi(tokens[3].c_str());
 		obj = new CMario(x, y, inWorldMap);
-		DebugOut(L"[INFO] Player object has been created!\n");
+		//DebugOut(L"[INFO] Player object has been created!\n");
 		player = (CMario*)obj;
-		DebugOut(L"[INFO] Player object has been created!\n");
+		///DebugOut(L"[INFO] Player object has been created!\n");
 		break;
 	}
 	case OBJECT_TYPE_TREE_WORLD_MAP: {
 		int type = atoi(tokens[3].c_str());
 		obj = new CTreeWorldMap(x, y, type);
-		DebugOut(L"[INFO] Tree world map object has been created!\n");
+		//DebugOut(L"[INFO] Tree world map object has been created!\n");
 		break;
 	}
 	default:
@@ -153,7 +153,7 @@ void CWorldMap::_ParseSection_HUD(string line)
 }
 void CWorldMap::LoadAssets(LPCWSTR assetFile)
 {
-	DebugOut(L"[INFO] Start loading assets from : %s \n", assetFile);
+	//DebugOut(L"[INFO] Start loading assets from : %s \n", assetFile);
 
 	ifstream f;
 	f.open(assetFile);
@@ -183,12 +183,12 @@ void CWorldMap::LoadAssets(LPCWSTR assetFile)
 
 	f.close();
 
-	DebugOut(L"[INFO] Done loading assets from %s\n", assetFile);
+	//DebugOut(L"[INFO] Done loading assets from %s\n", assetFile);
 }
 
 void CWorldMap::Load()
 {
-	DebugOut(L"[INFO] Start loading scene from : %s \n", sceneFilePath);
+	//DebugOut(L"[INFO] Start loading scene from : %s \n", sceneFilePath);
 
 	ifstream f;
 	f.open(sceneFilePath);
@@ -220,7 +220,7 @@ void CWorldMap::Load()
 
 	f.close();
 
-	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
+	//DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
 }
 
 void CWorldMap::Update(DWORD dt)
@@ -285,7 +285,7 @@ void CWorldMap::Unload()
 	objects.clear();
 	player = NULL;
 
-	DebugOut(L"[INFO] Scene %d unloaded! \n", id);
+	//DebugOut(L"[INFO] Scene %d unloaded! \n", id);
 }
 
 bool CWorldMap::IsGameObjectDeleted(const LPGAMEOBJECT& o) { return o == NULL; }
