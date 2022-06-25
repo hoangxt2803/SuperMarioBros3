@@ -109,7 +109,7 @@ void CKoopa::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 		}
 		else if (koopa->GetLevel() == KOOPA_TROOPA_LEVEL_NORMAL)
 		{
-			koopa->SetState(KOOPA_TROOPA_STATE_DEATH);
+			koopa->SetState(KOOPA_TROOPA_STATE_SHELL);
 		}
 	}
 }
@@ -333,8 +333,8 @@ void CKoopa::SetState(int state)
 	{
 	case KOOPA_TROOPA_STATE_SHELL:
 		release_start = GetTickCount64();
-		if (isKoopaToShell == true)
-			y += (KOOPA_TROOPA_BBOX_HEIGHT - KOOPA_TROOPA_BBOX_HEIGHT_SHELL) / 2;
+		/*if (isKoopaToShell == true)
+			y += (KOOPA_TROOPA_BBOX_HEIGHT - KOOPA_TROOPA_BBOX_HEIGHT_SHELL) / 2;*/
 		vx = 0;
 		vy = 0;
 		break;
@@ -369,7 +369,7 @@ void CKoopa::SetState(int state)
 		break;
 	case KOOPA_TROOPA_STATE_DEATH:
 		vx = 0;
-		vy = -KOOPATROOPA_FLY_SPEED;
+		vy = 0;
 		ay = KOOPA_TROOPA_GRAVITY;
 		ax = 0;
 		break;
