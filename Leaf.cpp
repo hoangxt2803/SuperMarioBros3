@@ -94,7 +94,7 @@ void CLeaf::Render()
 	aniId = ID_ANI_LEAF_LEFT;
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CLeaf::SetState(int state)

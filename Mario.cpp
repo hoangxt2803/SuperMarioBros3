@@ -73,8 +73,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	if (isFalling && GetTickCount64() - fall_start > MARIO_FALLING_TIME) {
 		isFalling = false;
 	}
-	if (y > DELETE_POSITION_Y) {
-		SetState(MARIO_STATE_DIE);
+	if (!isInPipe) {
+		if (y > DELETE_POSITION_Y) {
+			SetState(MARIO_STATE_DIE);
+		}
 	}
 	vy += ay * dt;
 	vx += ax * dt;
@@ -383,9 +385,12 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithPSwitch(LPCOLLISIONEVENT e)
 {
-	CPSwitch* pswitch = dynamic_cast<CPSwitch*>(e->obj);
-	if(pswitch->GetState()== P_SWITCH_STATE_APPEAR)
-		pswitch->SetState(P_SWITCH_STATE_ACTIVATED);
+	if (e->ny < 0) {
+		CPSwitch* pswitch = dynamic_cast<CPSwitch*>(e->obj);
+		if (pswitch->GetState() == P_SWITCH_STATE_APPEAR)
+			pswitch->SetState(P_SWITCH_STATE_ACTIVATED);
+	}
+	
 }
 void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
 {
@@ -705,7 +710,7 @@ void CMario::Render()
 		animations->Get(aniId)->Render(x, y);
 		
 	
-	RenderBoundingBox();
+	//RenderBoundingBox();
 	
 	//DebugOutTitle(L"Coins: %d", coin);
 }
