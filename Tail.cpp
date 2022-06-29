@@ -10,7 +10,7 @@ void CTail::Render()
 {
 	if (state == TAIL_STATE_INACTIVE)
 		return;
-	//RenderBoundingBox();
+	RenderBoundingBox();
 }
 
 void CTail::OnNoCollision(DWORD dt)
@@ -54,7 +54,7 @@ void CTail::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 		koopa->GetPosition(XX, YY);
 		obj = new CPoint(XX, YY - 4, POINT_TYPE_200);
 		playscreen->AddObject(obj);
-		koopa->SetState(KOOPA_TROOPA_STATE_DEATH);
+		koopa->SetState(KOOPA_TROOPA_STATE_SHELL);
 	}	
 }
 
