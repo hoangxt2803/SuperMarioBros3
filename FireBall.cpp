@@ -1,5 +1,6 @@
 #include "FireBall.h"
 #include "AssetIDs.h"
+#include "Mario.h"
 CFireBall::CFireBall(float x, float y, int nx, int ny) :CGameObject(x, y)
 {
 	oldX = x;
@@ -19,6 +20,9 @@ void CFireBall::GetBoundingBox(float& left, float& top, float& right, float& bot
 
 void CFireBall::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	bool _isTransFormMario = CMario::isTranFormMario;
+	if (_isTransFormMario == true)
+		return;
 	/*if(state == FIRE_STATE_INACTIVE)
 		return;*/
 	x += vx * dt;

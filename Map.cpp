@@ -115,9 +115,9 @@ void CMap::Render() {
 	}*/
 	float cam_x, cam_y;
 	CGame::GetInstance()->GetCamPos(cam_x, cam_y);
-	for (int i = (int)cam_y / TILE_HEIGHT; i < (int)((cam_y + SCREEN_HEIGHT) / TILE_HEIGHT); i++)
+	for (int i = (int)cam_y / TILE_HEIGHT; i < ((cam_y + SCREEN_HEIGHT) / TILE_HEIGHT); i++)
 	{
-		for (int j = (int)cam_x / TILE_WIDTH; j < (int)((cam_x + SCREEN_WIDTH) / TILE_WIDTH); j++)
+		for (int j = (int)cam_x / TILE_WIDTH; j < ((cam_x + SCREEN_WIDTH) / TILE_WIDTH); j++)
 		{
 			if (mapTiles[i][j] >= 0)
 			{

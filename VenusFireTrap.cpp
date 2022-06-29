@@ -76,6 +76,9 @@ void CVenusFireTrap::Appear() {
 }
 void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	bool _isTransFormMario = CMario::isTranFormMario;
+	if (_isTransFormMario == true)
+		return;
 	LPPLAYSCENE playscreen = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
 	CMario* mario = (CMario*)playscreen->GetPlayer();
 	

@@ -204,7 +204,7 @@ class CMario : public CGameObject
 	BOOLEAN isInPipe = false;
 	BOOLEAN isAuto = false;
 
-
+	
 	CTail* tail;
 	float maxVx;
 	float ax;				// acceleration on x 
@@ -240,6 +240,7 @@ class CMario : public CGameObject
 	int GetAniIdRaccon();
 	 
 public:
+	static bool isTranFormMario;
 	CMario(float x, float y, int isInWorldMap);
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();

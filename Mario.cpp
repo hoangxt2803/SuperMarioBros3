@@ -21,7 +21,7 @@
 #include "TreeWorldMap.h"
 #include "Point.h"
 #include "TelePort.h"
-
+bool CMario::isTranFormMario = false;
 CMario::CMario(float x, float y, int inWorldMap) : CGameObject(x, y)
 {
 	isSitting = false;
@@ -62,11 +62,13 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	if (isTransformToBig && GetTickCount64() - transform_start > MARIO_BIG_FORM_TRANSFORM_TIME) {
 		isTransformToBig = false;
+		isTranFormMario = false;
 	}
 	else if (isTransformToBig && GetTickCount64() - transform_start < MARIO_BIG_FORM_TRANSFORM_TIME)
 		return;
 	if (isTransformToRaccon && GetTickCount64() - transform_start > MARIO_BIG_FORM_TRANSFORM_TIME) {
 		isTransformToRaccon = false;
+		isTranFormMario = false;
 	}
 	else if (isTransformToRaccon && GetTickCount64() - transform_start < MARIO_BIG_FORM_TRANSFORM_TIME)
 		return;
@@ -925,11 +927,13 @@ void CMario::MarioLevelUp() {
 	if (this->level == MARIO_LEVEL_SMALL)
 	{
 		isTransformToBig = true;
+		isTranFormMario = true;
 		transform_start = GetTickCount64();
 		SetLevel(MARIO_LEVEL_BIG);
 	}
 	else if (this->level == MARIO_LEVEL_BIG) {
 		isTransformToRaccon = true;
+		isTranFormMario = true;
 		transform_start = GetTickCount64();
 		SetLevel(MARIO_LEVEL_RACCON);
 	}

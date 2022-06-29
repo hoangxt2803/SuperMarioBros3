@@ -93,6 +93,9 @@ void CGoomba::Appear(bool isActive) {
 }
 void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	bool _isTransFormMario = CMario::isTranFormMario;
+	if (_isTransFormMario == true)
+		return;
 	Appear(this->isActive);
 	if (!this->isActive)
 		return;

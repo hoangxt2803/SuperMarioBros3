@@ -26,7 +26,9 @@ CBrick::CBrick(float x, float y, int type, int state) :CGameObject(x, y) {
 void CBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
-	
+	bool _isTransFormMario = CMario::isTranFormMario;
+	if (_isTransFormMario == true)
+		return;
 	// mario press PSwitch
 	if (this->type == BRICK_TYPE_BROKEN) {
 		bool _isTransForm = CBrick::isTranForm;

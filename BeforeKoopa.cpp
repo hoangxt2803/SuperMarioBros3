@@ -1,4 +1,5 @@
 #include "BeforeKoopa.h"
+#include "Mario.h"
 CBeforeKoopa::CBeforeKoopa(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
@@ -39,6 +40,9 @@ void CBeforeKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CBeforeKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	bool _isTransFormMario = CMario::isTranFormMario;
+	if (_isTransFormMario == true)
+		return;
 	vy += ay * dt;
 	vx += ax * dt;
 	if (y > oldY) {

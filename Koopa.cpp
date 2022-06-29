@@ -145,6 +145,9 @@ void CKoopa::OnCollisionWithBrokenBrick(LPCOLLISIONEVENT e)
 
 void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	bool _isTransFormMario = CMario::isTranFormMario;
+	if (_isTransFormMario == true)
+		return;
 	vy += ay * dt;
 	vx += ax * dt;
 	if (y > DELETE_POSITION_Y) {
