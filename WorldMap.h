@@ -5,6 +5,7 @@
 #include "GameObject.h"
 #include "Mario.h"
 #include "HUD.h"
+#include "Map.h"
 //#include "Koopas.h"
 
 
@@ -14,13 +15,15 @@ protected:
 	// A play scene has to have player, right? 
 	LPGAMEOBJECT player;
 	LPHUD hud;
+	LPMAP map;
 	vector<LPGAMEOBJECT> objects;
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);
 
 	void _ParseSection_ASSETS(string line);
 	void _ParseSection_OBJECTS(string line);
-	
+	//map
+	void _ParseSection_MAPS(string line);
 	//HUD
 	void _ParseSection_HUD(string line);
 	void LoadAssets(LPCWSTR assetFile);

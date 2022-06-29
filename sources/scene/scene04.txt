@@ -3,6 +3,9 @@
 sources/hud.txt
 sources/worldmap.txt
 #
+[MAPS]
+sources/world_map/world_map.txt
+#
 [OBJECTS]
 #TREE
 12	51	18	1

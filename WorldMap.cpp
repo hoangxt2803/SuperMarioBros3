@@ -31,6 +31,7 @@ CWorldMap::CWorldMap(int id, LPCWSTR filePath) :
 	hud = NULL;
 	player = NULL;
 	key_handler = new WorldMapSceneKeyHandler(this);
+	map = NULL;
 }
 
 void CWorldMap::_ParseSection_SPRITES(string line)
@@ -137,6 +138,18 @@ void CWorldMap::_ParseSection_OBJECTS(string line)
 	objects.push_back(obj);
 }
 
+void CWorldMap::_ParseSection_MAPS(string line)
+{
+	vector<string> tokens = split(line);
+
+	if (tokens.size() < 1) return;
+	LPCWSTR path = ToLPCWSTR(tokens[0]);
+	//DebugOut(L"[INFO] Start loading map from : %s \n", path);
+	map = new CMap(path);
+	map->LoadInfoWorldMap(path);
+	map->LoadMapSprites(map->getIdTextureMap());
+}
+
 /*
 	Parse a line in section [MAPS]
 */
@@ -205,6 +218,7 @@ void CWorldMap::Load()
 		if (line == "[HUD]") { section = SCENE_SECTION_HUD; continue; };
 		if (line == "[ASSETS]") { section = SCENE_SECTION_ASSETS; continue; };
 		if (line == "[OBJECTS]") { section = SCENE_SECTION_OBJECTS; continue; };
+		if (line == "[MAPS]") { section = SCENE_SECTION_MAPS; continue; };
 		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }
 
 		//
@@ -215,6 +229,7 @@ void CWorldMap::Load()
 		case SCENE_SECTION_HUD: _ParseSection_HUD(line); break;
 		case SCENE_SECTION_ASSETS: _ParseSection_ASSETS(line); break;
 		case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
+		case SCENE_SECTION_MAPS: _ParseSection_MAPS(line); break;
 		}
 	}
 
@@ -251,7 +266,8 @@ void CWorldMap::Render()
 {
 	CAnimations::GetInstance()->Get(ANI_BLACK_BACKGROUND)->Render(50, 120);
 	hud->Render();
-	CAnimations::GetInstance()->Get(5000)->Render(155, 82);
+	map->RenderWorldMap(50, 18);
+	//CAnimations::GetInstance()->Get(5000)->Render(155, 82);
 	//CMap::getInstance()->Render();
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();

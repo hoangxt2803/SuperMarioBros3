@@ -1,9 +1,9 @@
+#pragma once
 #include <Windows.h>
 #include "TileMap.h"
 #include"Textures.h"
 #include "Sprites.h"
 #include <vector>
-
 class CMap {
 	int totalRowOfMap, totalColOfMap;
 	int tileSizeX, tileSizeY;
@@ -22,7 +22,9 @@ public:
 	CMap(LPCWSTR filePath);
 	void LoadMapSprites(int idTextureMap);
 	void LoadInfoMap(LPCWSTR filePath);
+	void LoadInfoWorldMap(LPCWSTR filePath);
 	void Render();
+	void RenderWorldMap(float x, float y);
 	int getIdTextureMap() { return this->idTextureMap; }
 	int getTotalRowOfMap() { return this->totalRowOfMap; }
 	int getTotalColOfMap() { return this->totalColOfMap; }

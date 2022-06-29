@@ -25,7 +25,7 @@ using namespace std;
 CIntro::CIntro(int id, LPCWSTR filePath) :
 	CScene(id, filePath)
 {
-	
+	map = NULL;
 	key_handler = new IntroSceneKeyHandler(this);
 }
 
@@ -50,6 +50,18 @@ void CIntro::_ParseSection_SPRITES(string line)
 	}
 
 	CSprites::GetInstance()->Add(ID, l, t, r, b, tex);
+}
+
+void CIntro::_ParseSection_MAPS(string line)
+{
+	vector<string> tokens = split(line);
+
+	if (tokens.size() < 1) return;
+	LPCWSTR path = ToLPCWSTR(tokens[0]);
+	//DebugOut(L"[INFO] Start loading map from : %s \n", path);
+	map = new CMap(path);
+	map->LoadInfoWorldMap(path);
+	map->LoadMapSprites(map->getIdTextureMap());
 }
 
 void CIntro::_ParseSection_ASSETS(string line)
@@ -176,6 +188,7 @@ void CIntro::Load()
 		if (line[0] == '#') continue;	// skip comment lines	
 		if (line == "[ASSETS]") { section = SCENE_SECTION_ASSETS; continue; };
 		if (line == "[OBJECTS]") { section = SCENE_SECTION_OBJECTS; continue; };
+		if (line == "[MAPS]") { section = SCENE_SECTION_MAPS; continue; };
 		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }
 
 		//
@@ -185,6 +198,7 @@ void CIntro::Load()
 		{
 		case SCENE_SECTION_ASSETS: _ParseSection_ASSETS(line); break;
 		case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
+		case SCENE_SECTION_MAPS: _ParseSection_MAPS(line); break;
 		}
 	}
 
@@ -218,8 +232,9 @@ void CIntro::Update(DWORD dt)
 void CIntro::Render()
 {
 	
-	CAnimations::GetInstance()->Get(5100)->Render((float)152, 111);
-	CAnimations::GetInstance()->Get(5101)->Render((float)162, 125);
+	//CAnimations::GetInstance()->Get(5100)->Render((float)152, 111);
+	//CAnimations::GetInstance()->Get(5101)->Render((float)162, 125);
+	map->RenderWorldMap(0,0);
 	//CMap::getInstance()->Render();
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render(); 

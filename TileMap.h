@@ -6,7 +6,7 @@ class CTileMap {
 	int indexY;
 
 public:
-	void Render();
+	void Render(float x, float y);
 	int GetId() { return this->id; }
 	CTileMap(int id, int x, int y);
 	~CTileMap() {}

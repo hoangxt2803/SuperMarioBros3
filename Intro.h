@@ -5,16 +5,19 @@
 #include "GameObject.h"
 #include "Mario.h"
 #include "HUD.h"
+#include "Map.h"
 //#include "Koopas.h"
 
 
 class CIntro : public CScene
 {
 protected:
+	LPMAP map;
 	vector<LPGAMEOBJECT> objects;
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);
-
+	//map
+	void _ParseSection_MAPS(string line);
 	void _ParseSection_ASSETS(string line);
 	void _ParseSection_OBJECTS(string line);
 	void LoadAssets(LPCWSTR assetFile);

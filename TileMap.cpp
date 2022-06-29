@@ -1,10 +1,10 @@
 #include "TileMap.h"
 #include "AssetIDs.h"
 
-void CTileMap::Render() {
+void CTileMap::Render(float x, float y) {
 	CSprites* sprites = CSprites::GetInstance();
 
-	sprites->Get(id)->Draw((float)indexY * TILE_HEIGHT, (float)indexX * TILE_WIDTH);
+	sprites->Get(id)->Draw(x+(float)indexY * TILE_HEIGHT,y+ (float)indexX * TILE_WIDTH);
 }
 
 

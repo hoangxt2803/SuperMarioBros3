@@ -1,5 +1,7 @@
 # list of object assets to load in this scene
 [ASSETS]
 sources/intro.txt
+[MAPS]
+sources/intro/intro.txt
 [OBJECTS]
 
