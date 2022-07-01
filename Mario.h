@@ -222,7 +222,6 @@ class CMario : public CGameObject
 	ULONGLONG teleport_start;
 	BOOLEAN isOnPlatform;
 	int coin; 
-	void OnCollisionWithPipe(LPCOLLISIONEVENT e);
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
 	void OnCollisionWithTelePort(LPCOLLISIONEVENT e);

@@ -161,10 +161,6 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithKoopa(e);
 	else if (dynamic_cast<CCoin*>(e->obj))
 		OnCollisionWithCoin(e);
-	else if (dynamic_cast<CTelePort*>(e->obj))
-		OnCollisionWithTelePort(e);
-	else if (dynamic_cast<CPipe*>(e->obj))
-		OnCollisionWithPipe(e);
 	else if (dynamic_cast<CBrick*>(e->obj))
 		OnCollisionWithBrick(e);
 	else if (dynamic_cast<CMushroom*>(e->obj))
@@ -231,14 +227,6 @@ void CMario::OnCollisionWithTreeWorldMap(LPCOLLISIONEVENT e)
 			y -= 16;
 		else if (ny < 0)
 			y += 16;
-	}
-}
-void CMario::OnCollisionWithPipe(LPCOLLISIONEVENT e)
-{
-	CPipe* pipe = dynamic_cast<CPipe*>(e->obj);
-	if (this->isSitting && pipe->GetIsTepePort() == PIPE_TELEPORT && pipe->GetType() == PIPE_TYPE_1) {
-		SetPosition(2110, 510);
-		//this->SetIsInPipe(true);
 	}
 }
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -427,12 +415,6 @@ void CMario::OnCollisionWithEndGameEffect(LPCOLLISIONEVENT e)
 	isAuto = true;
 }
 
-
-void CMario::OnCollisionWithTelePort(LPCOLLISIONEVENT e)
-{
-	isInPipe = true;
-	this->SetPosition(2105, 510);
-}
 
 //
 // Get animation ID for small Mario
