@@ -103,12 +103,10 @@ void CKoopa::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 {
 	CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
 	if (this->state == KOOPA_TROOPA_STATE_SHELL_MOVE) {
-		if (koopa->GetLevel() == KOOPA_TROOPA_LEVEL_WING)
+		if (koopa->GetLevel() == KOOPA_TROOPA_LEVEL_WING || koopa->GetLevel() == KOOPA_TROOPA_LEVEL_NORMAL)
 		{
+
 			koopa->SetLevel(KOOPA_TROOPA_LEVEL_NORMAL);
-		}
-		else if (koopa->GetLevel() == KOOPA_TROOPA_LEVEL_NORMAL)
-		{
 			koopa->SetState(KOOPA_TROOPA_STATE_SHELL);
 		}
 	}
