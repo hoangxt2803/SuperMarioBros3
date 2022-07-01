@@ -7,7 +7,7 @@
 #include "Goomba.h"
 #include "Coin.h"
 #include "Portal.h"
-
+#include "Pipe.h"
 #include "Collision.h"
 #include "Koopa.h"
 #include "Brick.h"
@@ -163,6 +163,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithCoin(e);
 	else if (dynamic_cast<CTelePort*>(e->obj))
 		OnCollisionWithTelePort(e);
+	else if (dynamic_cast<CPipe*>(e->obj))
+		OnCollisionWithPipe(e);
 	else if (dynamic_cast<CBrick*>(e->obj))
 		OnCollisionWithBrick(e);
 	else if (dynamic_cast<CMushroom*>(e->obj))
@@ -229,6 +231,14 @@ void CMario::OnCollisionWithTreeWorldMap(LPCOLLISIONEVENT e)
 			y -= 16;
 		else if (ny < 0)
 			y += 16;
+	}
+}
+void CMario::OnCollisionWithPipe(LPCOLLISIONEVENT e)
+{
+	CPipe* pipe = dynamic_cast<CPipe*>(e->obj);
+	if (this->isSitting && pipe->GetIsTepePort() == PIPE_TELEPORT && pipe->GetType() == PIPE_TYPE_1) {
+		SetPosition(2110, 510);
+		//this->SetIsInPipe(true);
 	}
 }
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -783,7 +793,10 @@ void CMario::SetState(int state)
 			state = MARIO_STATE_IDLE;
 			isSitting = true;
 			vx = 0; vy = 0.0f;
-			y +=MARIO_SIT_HEIGHT_ADJUST;
+			if( level == MARIO_LEVEL_BIG)
+				y += MARIO_SIT_HEIGHT_ADJUST_BIG;
+			else
+				y += MARIO_SIT_HEIGHT_ADJUST_RACCON;
 		}
 		break;
 
@@ -792,7 +805,10 @@ void CMario::SetState(int state)
 		{
 			isSitting = false;
 			state = MARIO_STATE_IDLE;
-			y -= MARIO_SIT_HEIGHT_ADJUST;
+			if (level == MARIO_LEVEL_BIG)
+				y -= MARIO_SIT_HEIGHT_ADJUST_BIG;
+			else
+				y -= MARIO_SIT_HEIGHT_ADJUST_RACCON;
 		}
 		break;
 
