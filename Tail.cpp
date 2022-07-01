@@ -107,7 +107,7 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (state == TAIL_STATE_INACTIVE)
 		return;
-	if (((x >= oldX + TAIL_ATTACK) && nx > 0) || ((x <= oldX - TAIL_ATTACK) && nx < 0)) {
+	if (((x >= oldX + TAIL_ATTACK*2) && nx > 0) || ((x <= oldX - TAIL_ATTACK*2) && nx < 0)) {
 		this->SetState(TAIL_STATE_INACTIVE);
 	}
 	CGameObject::Update(dt, coObjects);
