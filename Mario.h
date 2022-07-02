@@ -6,6 +6,9 @@
 #include "Tail.h"
 #include "debug.h"
 
+#define TELEPORT_MAP_1_X		2110
+#define TELEPORT_MAP_1_Y		510
+
 #define MARIO_WALKING_SPEED		0.1f
 #define MARIO_RUNNING_SPEED		0.2f
 
@@ -204,7 +207,7 @@ class CMario : public CGameObject
 	BOOLEAN isTransformToRaccon = false;
 	BOOLEAN isInPipe = false;
 	BOOLEAN isAuto = false;
-
+	BOOLEAN isCanInPipe = false;
 	
 	CTail* tail;
 	float maxVx;
@@ -222,9 +225,10 @@ class CMario : public CGameObject
 	ULONGLONG teleport_start;
 	BOOLEAN isOnPlatform;
 	int coin; 
+	
+	void OnCollisionWithPipe(LPCOLLISIONEVENT e);
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
-	void OnCollisionWithTelePort(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
 	void OnCollisionWithBrick(LPCOLLISIONEVENT e);
 	void OnCollisionWithMushroom(LPCOLLISIONEVENT e);

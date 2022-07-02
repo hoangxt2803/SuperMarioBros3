@@ -214,7 +214,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_PIPE: {
 		int type = atoi(tokens[3].c_str());
-		obj = new CPipe(x, y, type);
+		int isTelePort = atoi(tokens[4].c_str());
+		obj = new CPipe(x, y, type, isTelePort);
 		break;
 	}
 

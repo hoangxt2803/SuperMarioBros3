@@ -10,14 +10,20 @@
 #define PIPE_BBOX_HEIGHT 16
 #define PIPE_TYPE_1	1
 #define PIPE_TYPE_2	2
+#define PIPE_TELEPORT	1
 class CPipe : public CGameObject {
 	int type;
+	int isTelePort;
 	virtual int IsBlocking() { return 1; }
 public:
-	CPipe(float x, float y, int type) : CGameObject(x, y) {
+	CPipe(float x, float y, int type, int isTelePort) : CGameObject(x, y) {
 		this->type = type;
+		this->isTelePort = isTelePort;
 	}
+
 	void Render();
 	void Update(DWORD dt) {}
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
+	int GetType() { return this->type; }
+	int GetIsTepePort() { return this->isTelePort; }
 };

@@ -31,6 +31,7 @@ CMario::CMario(float x, float y, int inWorldMap) : CGameObject(x, y)
 	isRunning = false;
 	isJumping = false;
 	isCreatedKoopa = false;
+	isCanInPipe = false;
 	maxVx = 0.0f;
 	ax = 0.0f;
 	ay = MARIO_GRAVITY;
@@ -79,6 +80,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		if (y > DELETE_POSITION_Y) {
 			SetState(MARIO_STATE_DIE);
 		}
+	}
+	if (isCanInPipe) {
+		this->SetPosition(TELEPORT_MAP_1_X, TELEPORT_MAP_1_Y);
+		isCanInPipe = false;
+		isInPipe = true;
 	}
 	if (isAuto && isOnPlatform) {
 		vx = MARIO_WALKING_SPEED;
@@ -153,14 +159,17 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	{
 		vx = 0;
 	}
-	if (dynamic_cast<CTail*>(e->obj))
-		return;
+	if (this->isSitting) {
+		
+	}
 	if (dynamic_cast<CGoomba*>(e->obj))
 		OnCollisionWithGoomba(e);
 	else if (dynamic_cast<CKoopa*>(e->obj))
 		OnCollisionWithKoopa(e);
 	else if (dynamic_cast<CCoin*>(e->obj))
 		OnCollisionWithCoin(e);
+	else if (dynamic_cast<CPipe*>(e->obj))
+		OnCollisionWithPipe(e);
 	else if (dynamic_cast<CBrick*>(e->obj))
 		OnCollisionWithBrick(e);
 	else if (dynamic_cast<CMushroom*>(e->obj))
@@ -227,6 +236,13 @@ void CMario::OnCollisionWithTreeWorldMap(LPCOLLISIONEVENT e)
 			y -= 16;
 		else if (ny < 0)
 			y += 16;
+	}
+}
+void CMario::OnCollisionWithPipe(LPCOLLISIONEVENT e)
+{
+	CPipe* pipe = dynamic_cast<CPipe*>(e->obj);
+	if (this->isSitting && pipe->GetIsTepePort() == PIPE_TELEPORT && pipe->GetType() == PIPE_TYPE_1) {
+		isCanInPipe = true;
 	}
 }
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -344,6 +360,8 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 {
 	CBrick* brick = dynamic_cast<CBrick*>(e->obj);
+
+	this->SetPosition(10, 310);
 	if (e->ny > 0)
 	{
 		if (brick->GetBrickType() == BRICK_TYPE_QBRICK_1UP || brick->GetBrickType() == BRICK_TYPE_QBRICK_MUSHROOM || brick->GetBrickType() == BRICK_TYPE_QBRICK_COIN) {
@@ -373,7 +391,6 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 	LPPLAYSCENE playscreen = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
 	float XX, YY;
 	mushroom->GetPosition(XX, YY);
-
 	if (mushroom->GetType() == MUSHROOM_TYPE_RED) {
 		MarioLevelUp();
 		obj = new CPoint(XX, YY - 4, POINT_TYPE_1000);
